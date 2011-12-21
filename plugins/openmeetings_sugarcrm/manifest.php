@@ -12,7 +12,7 @@
 		  ),
 		  'readme'=>'',
 		  'key'=>'openmeetings',
-		  'author' => 'Eugen Schwert @ Webbase-Design.de',
+		  'author' => 'eugen.schwert@googlemail.com',
 		  'description' => 'Integrate Openmeeting in SugarCRM',
 		  'icon' => '',
 		  'is_uninstallable' => true,
