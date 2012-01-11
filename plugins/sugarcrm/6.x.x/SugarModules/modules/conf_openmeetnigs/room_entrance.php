@@ -55,12 +55,12 @@ if ($openmeetings_gateway->openmeetings_loginuser()) {
 												
 		if (!empty($roomhash)) {
 
-			$iframe_d = "http://".$system_config->settings[info_openmeetings_url].":".
-					$system_config->settings[info_openmeetings_http_port].
+			$iframe_d = "http://".$system_config->settings['info_openmeetings_url'].":".
+					$system_config->settings['info_openmeetings_http_port'].
 					"/openmeetings/?" .
 					"scopeRoomId=" . $_REQUEST['roomid'] .
 					"&secureHash=" .$roomhash.								
-					"&language=".$system_config->settings[info_openmeetings_language].
+					"&language=".$system_config->settings['info_openmeetings_language'].
 					"&lzproxied=solo";					
 					
 					

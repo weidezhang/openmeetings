@@ -1,58 +1,69 @@
 <?php
 if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 
-require_once('lib/nusoap.php');
+require_once('lib/openmeetings_rest_service.php');
 
 
 class openmeetings_gateway {
 	
 	var $session_id = "";
+	
+	function var_to_str($in)
+	{
+	   if(is_bool($in))
+	   {
+	      if($in)
+	         return "true";
+	      else
+	         return "false";
+	   }
+	   else
+	      return $in;
+	}	
+
 
 	/**
 	 * TODO: Get Error Service and show detailed Error Message
 	 */
+	
 	function openmeetings_loginuser() {
 		global $current_user;
 		global $system_config;
 
-		$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", "wsdl");
-		$client_userService->setUseCurl(true);
-		//echo "Client inited"."<br/>";
-		$err = $client_userService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}  
+		$restService = new openmeetings_rest_service();		
 	
-		$result = $client_userService->call('getSession');
-		if ($client_userService->fault) {
+		$response = $restService->call("http://".$system_config->settings['info_openmeetings_url'].":".$system_config->settings['info_openmeetings_http_port']."/openmeetings/services/UserService/getSession");
+				
+		// Confirm that the request was transmitted to the OpenMeetings!
+		if(!$response->asXML()) {  
+   			die("Request to OpenMeetings og! OpenMeetings Service failed and no response was returned.");  
+		}  		
+		
+		if ($restService->getError()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
-				$this->session_id = $result["return"]["session_id"];
-				//echo '<h2>Result</h2><pre>'; printf(); echo '</pre>';
-				$params = array(
-	    			'SID' => $this->session_id,
-	    			'username' => $system_config->settings[info_openmeetings_username],
-	    			'userpass' => $system_config->settings[info_openmeetings_password]
-				);
-							
-				$result = $client_userService->call('loginUser',$params);
-				//echo '<h2>Params</h2><pre>'; print_r($params); echo '</pre>';
-				if ($client_userService->fault) {
+				$this->session_id = $sid = $response->children('ns', true)->return->children('ax23', true)->session_id;
+								
+				$username = $system_config->settings['info_openmeetings_username'];
+				$userpass = $system_config->settings['info_openmeetings_password'];
+				$result = $restService->call('http://localhost:5080/openmeetings/services/UserService/loginUser?SID='.$this->session_id.'&username='.$username.'&userpass='.$userpass);
+				
+				if ($restService->getError()) {
 					echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 				} else {
-					$err = $client_userService->getError();
+					$err = $restService->getError();
 					if ($err) {
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} else {
 						//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
-						$returnValue = $result["return"];	
+						$returnValue = $result->children('ns', true)->return[0];
+						//print_r($result->children('ns', true)->return[0]);
+						//exit;	
 						//echo '<h2>returnValue</h2><pre>'; printf($returnValue); echo '</pre>';		
 					}
 				}
@@ -65,128 +76,46 @@ class openmeetings_gateway {
 		}
 	}
 
-	/**
-	 * TODO: Check Error handling
-	 * 
-	 * @deprecated this method is deprecated
-	 * 
-	 */
-	function openmeetings_createroom($openmeetings,$roomtypes_id) {
-		global $current_user;
-		global $system_config;
-
-	
-		//		echo $CFG->openmeetings_red5host."<br/>";
-		//		echo $CFG->openmeetings_red5port."<br/>";	
-		//		foreach ($CFG as $key => $value){
-		//    		echo "KEY: ".$key." Value: ".$value."<br/>";
-		//    	}
-    	$course_name = 'MOODLE_COURSE_ID_'.$openmeetings->course.'_NAME_'.$openmeetings->name;
-    	//echo "CourseName: ".$course_name."<br/>";	
-		
-		//echo $client_userService."<br/>";
-	    
-	 	$client_roomService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
-		
-		$err = $client_roomService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}  
-		$params = array(
-			'SID' => $this->session_id,
-			'name' => $course_name,
-			'roomtypes_id' => $roomtypes_id,
-			'comment' => 'Created by SOAP-Gateway for Moodle Platform',
-			'numberOfPartizipants' => 4,
-			'ispublic' => true,
-			'videoPodWidth' => 270, 
-			'videoPodHeight' => 280,
-			'videoPodXPosition' => 2, 
-			'videoPodYPosition' => 2, 
-			'moderationPanelXPosition' => 400, 
-			'showWhiteBoard' => true, 
-			'whiteBoardPanelXPosition' => 276, 
-			'whiteBoardPanelYPosition' => 2, 
-			'whiteBoardPanelHeight' => 592, 
-			'whiteBoardPanelWidth' => 660, 
-			'showFilesPanel' => true, 
-			'filesPanelXPosition' => 2, 
-			'filesPanelYPosition' => 284, 
-			'filesPanelHeight' => 310, 
-			'filesPanelWidth' => 270
-		);
-		$result = $client_roomService->call('addRoom',$params);
-		if ($client_roomService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $client_roomService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
-			}
-		}   
-		return -1;
-	}
 	
 	function openmeetings_createroomwithmod($openmeetings) {
 		global $current_user;
 		global $system_config;
 		
-	    	
-	 	$client_roomService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
-		echo $client_userService."<br/>";
-		$err = $client_roomService->getError();
+		$restService = new openmeetings_rest_service();	
+		//echo $restService."<br/>";
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  
+					
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/RoomService/addRoomWithModerationQuestionsAndAudioType?" .
+							"SID=".$this->session_id.
+							"&name=".$openmeetings->name.
+							"&roomtypes_id=".$openmeetings->roomtypes_id.
+							"&comment=".$openmeetings->comment.
+							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
+							"&ispublic=".$openmeetings->ispublic.
+							"&appointment=".$openmeetings->appointment.
+							"&isDemoRoom=".$openmeetings->isDemoRoom.
+							"&demoTime=".$openmeetings->demoTime.
+							"&isModeratedRoom=".$openmeetings->isModeratedRoom.
+							"&allowUserQuestions=true" .
+							"&isAudioOnly=false");
 		
-		//$isModeratedRoom = true;
-		#if ($openmeetings->is_moderated_room == 1) {
-		#	$isModeratedRoom = true;
-		#}
-		/*
-		$params = array(
-			'SID' => $this->session_id,
-			'name' => 'SUGARCM_ROOM',
-			'roomtypes_id' => 1,
-			'comment' => 'Created by SOAP-Gateway for SUGARCM Platform',
-			'numberOfPartizipants' => 100,
-			'ispublic' => false,
-			'appointment' => false, 
-			'isDemoRoom' => false, 
-			'demoTime' => 0, 
-			'isModeratedRoom' => $isModeratedRoom
-		);
-		*/
-		$params = array(
-			'SID' => $this->session_id,
-			'name' => $openmeetings->name,
-			'roomtypes_id' => $openmeetings->roomtypes_id,
-			'comment' => $openmeetings->comment,
-			'numberOfPartizipants' => $openmeetings->numberOfPartizipants,
-			'ispublic' => $openmeetings->ispublic,
-			'appointment' => $openmeetings->appointment, 
-			'isDemoRoom' => $openmeetings->isDemoRoom, 
-			'demoTime' => $openmeetings->demoTime, 
-			'isModeratedRoom' => $openmeetings->isModeratedRoom
-		);
-
-		$result = $client_roomService->call('addRoomWithModeration',$params);
-		if ($client_roomService->fault) {
+		//$result = $client_roomService->call('addRoomWithModeration',$params);
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_roomService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				return $result->children('ns', true)->return[0]; //$result["return"];
 			}
 		}   
 		return -1;
@@ -196,47 +125,46 @@ class openmeetings_gateway {
 		global $current_user;
 		global $system_config;
 			    	
-	 	$client_roomService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
-		//echo $client_roomService."<br/>";
-		$err = $client_roomService->getError();
+		$restService = new openmeetings_rest_service();				
+		//echo $client_roomService."<br/>";		
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  		
 		
-		$params = array(
-			'SID' => $this->session_id,
-			'name' => $openmeetings->name,
-			'roomtypes_id' => $openmeetings->roomtypes_id,
-			'comment' => $openmeetings->comment,
-			'numberOfPartizipants' => $openmeetings->numberOfPartizipants,
-			'ispublic' => $openmeetings->ispublic,
-			'appointment' => $openmeetings->appointment, 
-			'isDemoRoom' => $openmeetings->isDemoRoom, 
-			'demoTime' => $openmeetings->demoTime, 
-			'isModeratedRoom' => $openmeetings->isModeratedRoom,
-			
-			'externalRoomType'=> $openmeetings->externalRoomType,
-            'allowUserQuestions'=> $openmeetings->allowUserQuestions,
-            'isAudioOnly'=> $openmeetings->isAudioOnly,
-            //'waitForRecording'=> $openmeetings->waitForRecording, 
-           // 'allowRecording'=> $openmeetings->allowRecording,
-            //'hideTopBar'=> $openmeetings->hideTopBar
-			
-			
-		);
-
-		$result = $client_roomService->call('addRoomWithModerationExternalTypeAndAudioType',$params); 
-		if ($client_roomService->fault) {
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" .
+							"SID=".$this->session_id.
+							"&name=".urlencode($openmeetings->name).
+							"&roomtypes_id=".$openmeetings->roomtypes_id.
+							"&comment=".urlencode($openmeetings->comment).
+							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
+							"&ispublic=".$this->var_to_str($openmeetings->ispublic).
+							"&appointment=".$this->var_to_str($openmeetings->appointment).
+							"&isDemoRoom=".$this->var_to_str($openmeetings->isDemoRoom).
+							"&demoTime=".$openmeetings->demoTime.
+							"&isModeratedRoom=".$this->var_to_str($openmeetings->isModeratedRoom).
+							"&externalRoomType=".$openmeetings->externalRoomType.
+							"&allowUserQuestions=" .$this->var_to_str($openmeetings->allowUserQuestions).
+							"&isAudioOnly=".$this->var_to_str($openmeetings->isAudioOnly).
+							"&waitForRecording=false".
+							"&allowRecording=".$this->var_to_str($openmeetings->allowRecording).
+							"&hideTopBar=false");
+		
+				
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_roomService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				//return $result["return"];
+				return $result->children('ns', true)->return[0];
 			}
 		}   
 		return -1;
@@ -244,83 +172,90 @@ class openmeetings_gateway {
 	
 	function updateRoomWithModerationAndQuestions($openmeetings) {
 		global $current_user;
-		global $system_config;
-		
-	 	$client_roomService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
+		global $system_config;		
+	 	
+		$restService = new openmeetings_rest_service();
 		//echo $client_roomService."<br/>";
-		$err = $client_roomService->getError();
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  
+						
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?" .
+							"SID=".$this->session_id.
+							"&room_id=".$openmeetings->room_id.
+							"&name=".urlencode($openmeetings->name).
+							"&roomtypes_id=".$openmeetings->roomtypes_id.
+							"&comment=".urlencode($openmeetings->comment).
+							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
+							"&ispublic=".$this->var_to_str($openmeetings->ispublic).
+							"&appointment=".$this->var_to_str($openmeetings->appointment).
+							"&isDemoRoom=".$this->var_to_str($openmeetings->isDemoRoom).
+							"&demoTime=".$openmeetings->demoTime.
+							"&isModeratedRoom=".$this->var_to_str($openmeetings->isModeratedRoom).
+							"&allowUserQuestions=".$this->var_to_str($openmeetings->allowUserQuestions));
 		
-		$params = array(
-			'SID' => $this->session_id,
-			'room_id' => $openmeetings->room_id,
-			'name' => $openmeetings->name,
-			'roomtypes_id' => $openmeetings->roomtypes_id,
-			'comment' => $openmeetings->comment,
-			'numberOfPartizipants' => $openmeetings->numberOfPartizipants,
-			'ispublic' => $openmeetings->ispublic,
-			'appointment' => $openmeetings->appointment, 
-			'isDemoRoom' => $openmeetings->isDemoRoom, 
-			'demoTime' => $openmeetings->demoTime, 
-			'isModeratedRoom' => $openmeetings->isModeratedRoom,
-			'allowUserQuestions' => $openmeetings->allowUserQuestions
-			
-		);
-
-		$result = $client_roomService->call('updateRoomWithModerationAndQuestions',$params);
-		if ($client_roomService->fault) {
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 			//print_r($params);
 			//exit();
 		} else {
-			$err = $client_roomService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';				
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];				
+				//return $result["return"];
+				return $result->children('ns', true)->return[0];				
 			}
 		}   
 		return -1;
-		
-		echo "$params". $params;
-			exit();
+				
 	}
 	
 	function deleteRoom($openmeetings) {		
 		global $current_user;
 		global $system_config;
-			    	
-	 	$client_roomService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
+		
 		//echo $client_roomService."<br/>";
-		$err = $client_roomService->getError();
+		$restService = new openmeetings_rest_service();		
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  		
-		
+		/*
 		$params = array(
 			'SID' => $this->session_id,
 			'rooms_id' => $openmeetings->room_id
 			
 		);
-		
-		
+				
 		$result = $client_roomService->call('deleteRoom',$params);
-		if ($client_roomService->fault) {
+		*/
+		
+		
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/RoomService/deleteRoom?" .
+							"SID=".$this->session_id.
+							"&rooms_id=".$openmeetings->room_id);
+		
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_roomService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				//return $result["return"];
+				return $result->children('ns', true)->return[0];
 			}
 		}   
 		return -1;
@@ -337,9 +272,9 @@ class openmeetings_gateway {
 	    	global $current_user;
 		global $system_config;
 
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
+	 	$restService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
 		
-		$err = $client_userService->getError();
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
@@ -353,11 +288,11 @@ class openmeetings_gateway {
 			'profilePictureUrl' => $profilePictureUrl,
 			'email' => $email
 		);
-		$result = $client_userService->call('setUserObject',$params);
+		$result = $restService->call('setUserObject',$params);
 		if ($client_roomService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
@@ -383,9 +318,9 @@ class openmeetings_gateway {
 	    	global $current_user;
 		global $system_config;
 
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
+	 	$restService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
 		
-		$err = $client_userService->getError();
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
@@ -401,11 +336,11 @@ class openmeetings_gateway {
 			'externalUserId' => $userId,
 			'externalUserType' => $systemType
 		);
-		$result = $client_userService->call('setUserObjectWithExternalUser',$params);
+		$result = $restService->call('setUserObjectWithExternalUser',$params);
 		if ($client_roomService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
@@ -426,41 +361,45 @@ class openmeetings_gateway {
 			$room_id, 
 			$becomeModeratorAsInt, 
 			$showAudioVideoTestAsInt) {
-	    	global $current_user;
+				
+	    global $current_user;
 		global $system_config;
-
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/UserService?wsdl", true);
-		
-		$err = $client_userService->getError();
+	
+		$restService = new openmeetings_rest_service();		
+	
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?" .
+							"SID=".$this->session_id.
+							"&username=".$username.
+							"&firstname=".$firstname.
+							"&lastname=".$lastname.
+							"&profilePictureUrl=".$profilePictureUrl.
+							"&email=".$email.
+							"&externalUserId=".$externalUserId.
+							"&externalUserType=".$externalUserType.
+							"&room_id=".$room_id.
+							"&becomeModeratorAsInt=".$becomeModeratorAsInt.
+							"&showAudioVideoTestAsInt=".$showAudioVideoTestAsInt);
+			
+				
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  
-		$params = array(
-			'SID' => $this->session_id,
-			'username' => $username,
-			'firstname' => $firstname,
-			'lastname' => $lastname,
-			'profilePictureUrl' => $profilePictureUrl,
-			'email' => $email,
-			'externalUserId' => $externalUserId,
-			'externalUserType' => $externalUserType,
-			'room_id' => $room_id,
-			'becomeModeratorAsInt' => $becomeModeratorAsInt,
-			'showAudioVideoTestAsInt'=> $showAudioVideoTestAsInt
-			
-		);
-		$result = $client_userService->call('setUserObjectAndGenerateRoomHashByURL',$params);
-		if ($client_userService->fault) {
+		
+		if ($restService->getError()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				return $result->children('ns', true)->return[0];
+				
 			}
 		}   
 		return -1;
@@ -470,9 +409,9 @@ class openmeetings_gateway {
 	    	global $current_user;
 		global $system_config;
 
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
+	 	$restService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
 		
-		$err = $client_userService->getError();
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
@@ -497,11 +436,11 @@ class openmeetings_gateway {
 			'language_id' => $language_id,
 			'sendMail' => $sendMail			
 		);
-		$result = $client_userService->call('sendInvitationHash', $params);
-		if ($client_userService->fault) {
+		$result = $restService->call('sendInvitationHash', $params);
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
@@ -516,9 +455,9 @@ class openmeetings_gateway {
 	    	global $current_user;
 		global $system_config;
 
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
+	 	$restService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
 		
-		$err = $client_userService->getError();
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
@@ -541,11 +480,11 @@ class openmeetings_gateway {
 			'language_id' => $language_id,
 			'sendMail' => $sendMail				
 		);
-		$result = $client_userService->call('sendInvitationHash', $params);
-		if ($client_userService->fault) {
+		$result = $restService->call('sendInvitationHash', $params);
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
@@ -557,40 +496,42 @@ class openmeetings_gateway {
 	}
 
 function getInvitationHash($username, $room_id, $isPasswordProtected, $invitationpass, $valid, $validFromDate, $validFromTime, $validToDate, $validToTime) {
-	    	global $current_user;
+	    global $current_user;
 		global $system_config;
 
-		//echo "room_id";
-	 	$client_userService = new nusoap_client("http://".$system_config->settings[info_openmeetings_url].":".$system_config->settings[info_openmeetings_http_port]."/openmeetings/services/RoomService?wsdl", true);
-		
-		$err = $client_userService->getError();
+		$restService = new openmeetings_rest_service();		
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}  
-		$params = array(
-			'SID' => $this->session_id,
-			'username' => $username,			
-			'room_id' => $room_id,			
-			'isPasswordProtected' => $isPasswordProtected,
-			'invitationpass' => $invitationpass,
-			'valid'=> $valid,
-			'validFromDate' => $validFromDate,
-			'validFromTime' => $validFromTime,
-			'validToDate' => $validToDate,
-			'validToTime' => $validToTime		
-		);
-		$result = $client_userService->call('getInvitationHash', $params);
-		if ($client_userService->fault) {
+		
+		$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].
+					":".$system_config->settings['info_openmeetings_http_port'].
+					"/openmeetings/services/RoomService/getInvitationHash?" .
+							"SID=".$this->session_id.
+							"&username=".urlencode($username).
+							"&room_id=".$room_id.
+							"&isPasswordProtected=".$this->var_to_str($isPasswordProtected).
+							"&invitationpass=".$invitationpass.
+							"&valid=".$valid.
+							"&validFromDate=".$validFromDate.
+							"&validFromTime=".$validFromTime.
+							"&validToDate=".$validToDate.
+							"&validToTime=".$validToTime);
+		
+		
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_userService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				//return $result["return"];
+				return $result->children('ns', true)->return[0];
 			}
 		}   
 		return -1;

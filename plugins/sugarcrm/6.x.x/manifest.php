@@ -53,7 +53,7 @@
           'name' => 'openmeetings',
           'published_date' => '2011-09-04 14:40:38',
           'type' => 'module',
-          'version' => '1.2.0',
+          'version' => '1.2.1',
           'remove_tables' => 'prompt',
           );
 $installdefs = array (
