@@ -184,7 +184,7 @@ class openmeetings_gateway {
 							"&ispublic=false".
 							"&appointment=false".
 							"&isDemoRoom=false".
-							"&demoTime=0".$openmeetings->demoTime.
+							"&demoTime=0".
 							"&isModeratedRoom=".$isModeratedRoom);
 
 		if ($restService->fault) {
