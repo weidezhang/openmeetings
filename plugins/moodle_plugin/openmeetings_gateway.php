@@ -127,7 +127,6 @@ class openmeetings_gateway {
 							"&allowUserQuestions=true" .
 							"&isAudioOnly=false");
 
-		//$result = $client_roomService->call('addRoomWithModeration',$params);
 		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
@@ -142,48 +141,103 @@ class openmeetings_gateway {
 		return -1;
 	}
 
-	function openmeetings_createRoomWithModAndType($openmeetings) {
-		global $USER, $CFG;
+	function openmeetings_updateRoomWithModeration($openmeetings) {
 
+		global $CFG;
+
+		$restService = new openmeetings_rest_service();
+		//echo $restService."<br/>";
+		$err = $restService->getError();
+		if ($err) {
+			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			exit();
+		}
 		$course_name = 'MOODLE_COURSE_ID_'.$openmeetings->course.'_NAME_'.$openmeetings->name;
 			
-		$client_roomService = new nusoap_client($this->getUrl()."/services/RoomService?wsdl", true);
-		$client_roomService->soap_defencoding = 'utf-8';
+		$isModeratedRoom = false;
+		if ($openmeetings->is_moderated_room == 1) {
+			$isModeratedRoom = true;
+		}
+
+		$params = array(
+				'SID' => $this->session_id,
+				'room_id' => $openmeetings->room_id,
+				'name' => $course_name,
+				'roomtypes_id' => $openmeetings->type,
+				'comment' => 'Created by SOAP-Gateway for Moodle Platform',
+				'numberOfPartizipants' => $openmeetings->max_user,
+				'ispublic' => 0,
+				'appointment' => 0,
+				'isDemoRoom' => 0,
+				'demoTime' => 0,
+				'isModeratedRoom' => $isModeratedRoom
+		);
 			
-		$err = $client_roomService->getError();
+		$result = $restService->call($this->getUrl()."/services/RoomService/updateRoomWithModeration?" .
+							"SID=".$this->session_id.
+							"&room_id=".$openmeetings->room_id.
+							"&name=".$course_name.
+							"&roomtypes_id=".$openmeetings->type.
+							"&comment="."Created by SOAP-Gateway for Moodle Platform".
+							"&numberOfPartizipants=".$openmeetings->max_user.
+							"&ispublic=false".
+							"&appointment=false".
+							"&isDemoRoom=false".
+							"&demoTime=0".$openmeetings->demoTime.
+							"&isModeratedRoom=".$isModeratedRoom);
+
+		if ($restService->fault) {
+			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
+		} else {
+			$err = $restService->getError();
+			if ($err) {
+				echo '<h2>Error</h2><pre>' . $err . '</pre>';
+			} else {
+				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
+				return $result->children('ns', true)->return[0]; //$result["return"];
+			}
+		}
+		return -1;
+	}
+
+
+	function openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname,
+	$profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording) {
+		global $CFG;
+
+		$restService = new openmeetings_rest_service();
+		//echo $restService."<br/>";
+		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
 
-		$isModeratedRoom = false;
-		if ($openmeetings->is_moderated_room == 1) {
-			$isModeratedRoom = true;
-		}
-		
-		$result = $restService->call($this->getUrl()."/services/RoomService/addRoomWithModerationAndExternalType?" .
-									"SID=".$this->session_id.
-									"&name=". $course_name.
-									"&roomtypes_id=".$openmeetings->type.
-									"&comment="."Created by SOAP-Gateway for Moodle Platform".
-									"&numberOfPartizipants=".$openmeetings->max_user.
-									"&ispublic=false".
-									"&appointment=false".
-									"&isDemoRoom=false".
-									"&demoTime=0".
-									"&isModeratedRoom=".$isModeratedRoom.
-									"&externalRoomType=moodle");
+		$result = $restService->call($this->getUrl()."/services/UserService/setUserObjectAndGenerateRoomHashByURLAndRecFlag?" .
+							"SID=".$this->session_id.
+							"&username=".$username.
+							"&firstname=".$firstname.
+							"&lastname=".$lastname.
+							"&profilePictureUrl=".$profilePictureUrl.
+							"&email=".$email.
+							"&externalUserId=".$userId.
+							"&externalUserType=".$systemType.
+							"&room_id=".$room_id.
+							"&becomeModeratorAsInt=".$becomeModerator.
+							"&showAudioVideoTestAsInt=1".
+							"&allowRecording=".$allowRecording);
 
-		if ($client_roomService->fault) {
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
-			$err = $client_roomService->getError();
+			$err = $restService->getError();
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result->children('ns', true)->return[0];
+				return $result->children('ns', true)->return[0]; //$result["return"];
 			}
 		}
 		return -1;
