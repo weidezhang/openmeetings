@@ -1,38 +1,22 @@
     <?php
 /*********************************************************************************
- * SugarCRM Community Edition is a customer relationship management program developed by
- * SugarCRM, Inc. Copyright (C) 2004-2011 SugarCRM Inc.
- * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Affero General Public License version 3 as published by the
- * Free Software Foundation with the addition of the following permission added
- * to Section 15 as permitted in Section 7(a): FOR ANY PART OF THE COVERED WORK
- * IN WHICH THE COPYRIGHT IS OWNED BY SUGARCRM, SUGARCRM DISCLAIMS THE WARRANTY
- * OF NON INFRINGEMENT OF THIRD PARTY RIGHTS.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with
- * this program; if not, see http://www.gnu.org/licenses or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301 USA.
- * 
- * You can contact SugarCRM, Inc. headquarters at 10050 North Wolfe Road,
- * SW2-130, Cupertino, CA 95014, USA. or at email address contact@sugarcrm.com.
- * 
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- * 
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "Powered by
- * SugarCRM" logo. If the display of the logo is not reasonably feasible for
- * technical reasons, the Appropriate Legal Notices must display the words
- * "Powered by SugarCRM".
- ********************************************************************************/
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License") +  you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*  ********************************************************************************/
 
 
     $manifest = array (
@@ -53,7 +37,7 @@
           'name' => 'openmeetings',
           'published_date' => '2011-09-04 14:40:38',
           'type' => 'module',
-          'version' => '1.2.1',
+          'version' => '1.2.2',
           'remove_tables' => 'prompt',
           );
 $installdefs = array (
@@ -61,11 +45,11 @@ $installdefs = array (
   /*
   'logic_hooks' => array(
 	array(
-		'module' => 'conf_openmeetnigs',
+		'module' => 'openmeetings',
 		'hook' => 'before_save',
 		'order' => 1,
 		'description' => 'Get room_id form OpenMeetings',
-		'file' => 'modules/conf_openmeetnigs/openmeetings_gateway/openmeetingsRoomManagament.php',
+		'file' => 'modules/openmeetings/openmeetings_gateway/openmeetingsRoomManagament.php',
 		'class' => 'openmeetingsRoomManagament',
 		'function' => 'createRoomWithMod',
 	),
@@ -74,9 +58,9 @@ $installdefs = array (
   array (
     0 => 
     array (
-      'module' => 'conf_openmeetnigs',
-      'class' => 'conf_openmeetnigs',
-      'path' => 'modules/conf_openmeetnigs/conf_openmeetnigs.php',
+      'module' => 'openmeetings',
+      'class' => 'openmeetings',
+      'path' => 'modules/openmeetings/openmeetings.php',
       'tab' => true,
     ),
   ),
@@ -88,15 +72,15 @@ $installdefs = array (
   array (
     0 => 
     array (
-      'from' => '<basepath>/SugarModules/relationships/layoutdefs/conf_openmeetnigs_meetings_conf_openmeetnigs.php',
-      'to_module' => 'conf_openmeetnigs',
+      'from' => '<basepath>/SugarModules/relationships/layoutdefs/openmeetings_meetings_openmeetings.php',
+      'to_module' => 'openmeetings',
     ),
   ),
   'relationships' => 
   array (
     0 => 
     array (
-      'meta_data' => '<basepath>/SugarModules/relationships/relationships/conf_openmeetnigs_meetingsMetaData.php',
+      'meta_data' => '<basepath>/SugarModules/relationships/relationships/openmeetings_meetingsMetaData.php',
     ),
   ),
   'image_dir' => '<basepath>/icons',
@@ -104,8 +88,8 @@ $installdefs = array (
   array (
     0 => 
     array (
-      'from' => '<basepath>/SugarModules/modules/conf_openmeetnigs',
-      'to' => 'modules/conf_openmeetnigs',
+      'from' => '<basepath>/SugarModules/modules/openmeetings',
+      'to' => 'modules/openmeetings',
     ),    
     1 => 
     array (
@@ -135,7 +119,7 @@ $installdefs = array (
     6 =>
     array (
       'from' => '<basepath>/SugarModules/logic_hooks.php',
-      'to' => 'custom/modules/conf_openmeetnigs/logic_hooks.php',
+      'to' => 'custom/modules/openmeetings/logic_hooks.php',
     ), 
     8 =>
     array (
@@ -153,8 +137,8 @@ $installdefs = array (
     ),
     1 => 
     array (
-      'from' => '<basepath>/SugarModules/relationships/language/conf_openmeetnigs.php',
-      'to_module' => 'conf_openmeetnigs',
+      'from' => '<basepath>/SugarModules/relationships/language/openmeetings.php',
+      'to_module' => 'openmeetings',
       'language' => 'en_us',
     ),
     2 => 
@@ -174,13 +158,13 @@ $installdefs = array (
   array (
     0 => 
     array (
-      'from' => '<basepath>/SugarModules/relationships/vardefs/conf_openmeetnigs_meetings_Meetings.php',
+      'from' => '<basepath>/SugarModules/relationships/vardefs/openmeetings_meetings_Meetings.php',
       'to_module' => 'Meetings',
     ),
     1 => 
     array (
-      'from' => '<basepath>/SugarModules/relationships/vardefs/conf_openmeetnigs_meetings_conf_openmeetnigs.php',
-      'to_module' => 'conf_openmeetnigs',
+      'from' => '<basepath>/SugarModules/relationships/vardefs/openmeetings_meetings_openmeetings.php',
+      'to_module' => 'openmeetings',
     ),
   ),
   'layoutfields' => 

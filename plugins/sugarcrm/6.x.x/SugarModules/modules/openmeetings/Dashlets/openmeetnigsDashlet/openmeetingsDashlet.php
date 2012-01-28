@@ -1,4 +1,5 @@
 <?php
+if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 /*********************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -17,22 +18,22 @@
 * specific language governing permissions and limitations
 * under the License.
 *  ********************************************************************************/
-// created: 20010-10-06 11:53:13
-$mod_strings = array_merge($mod_strings,
-    array(
-  'VALUE' => 'OPENMEETINGS admin', 
-  'LBL_OPENMEETINGS_PASS' => 'Password', 
-  'LBL_OPENMEETINGS_ROOMNAME' => 'Roomname',
-  'LBL_OPENMEETINGS_STARTADHOC' => 'My OpenMeetings Room',  
-  'OPENMEETINGS_USERNAME'=>'Username',     
-   'OPENMEETINGS_LINK_EDIT'=>'Openmeetings Account',
-   'OPENMEETINGS_URL'=>'Openmeetings web address', 
-   'OPENMEETINGS_HTTP_PORT'=>'OpenMeetings/Red5 server http Port',   
-   'OPENMEETINGS_LANGUAGE'=>'Conference Language',
-   'OPENMEETINGS_HTTP_PORT'=>'OpenMeetings/Red5 server http Port',
-   'OPENMEETINGS_ACC_SETT'=>'Openmeetings Account Login',         
-   )
-  );
 
+require_once('include/Dashlets/DashletGeneric.php');
+require_once('modules/openmeetings/openmeetings.php');
 
-?>
+class openmeetingsDashlet extends DashletGeneric { 
+    function openmeetingsDashlet($id, $def = null) {
+		global $current_user, $app_strings;
+		require('modules/openmeetings/metadata/dashletviewdefs.php');
+
+        parent::DashletGeneric($id, $def);
+
+        if(empty($def['title'])) $this->title = translate('LBL_HOMEPAGE_TITLE', 'openmeetings');
+
+        $this->searchFields = $dashletData['openmeetingsDashlet']['searchFields'];
+        $this->columns = $dashletData['openmeetingsDashlet']['columns'];
+
+        $this->seedBean = new openmeetings();        
+    }
+}

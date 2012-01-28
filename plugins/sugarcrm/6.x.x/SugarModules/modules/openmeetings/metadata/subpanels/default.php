@@ -1,4 +1,5 @@
 <?php
+if(!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
 /*********************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -17,22 +18,38 @@
 * specific language governing permissions and limitations
 * under the License.
 *  ********************************************************************************/
-// created: 20010-10-06 11:53:13
-$mod_strings = array_merge($mod_strings,
-    array(
-  'VALUE' => 'OPENMEETINGS admin', 
-  'LBL_OPENMEETINGS_PASS' => 'Password', 
-  'LBL_OPENMEETINGS_ROOMNAME' => 'Roomname',
-  'LBL_OPENMEETINGS_STARTADHOC' => 'My OpenMeetings Room',  
-  'OPENMEETINGS_USERNAME'=>'Username',     
-   'OPENMEETINGS_LINK_EDIT'=>'Openmeetings Account',
-   'OPENMEETINGS_URL'=>'Openmeetings web address', 
-   'OPENMEETINGS_HTTP_PORT'=>'OpenMeetings/Red5 server http Port',   
-   'OPENMEETINGS_LANGUAGE'=>'Conference Language',
-   'OPENMEETINGS_HTTP_PORT'=>'OpenMeetings/Red5 server http Port',
-   'OPENMEETINGS_ACC_SETT'=>'Openmeetings Account Login',         
-   )
-  );
 
+
+$module_name='openmeetings';
+$subpanel_layout = array(
+	'top_buttons' => array(
+		array('widget_class' => 'SubPanelTopCreateButton'),
+		array('widget_class' => 'SubPanelTopSelectButton', 'popup_module' => $module_name),
+	),
+
+	'where' => '',
+
+	'list_fields' => array(
+		'name'=>array(
+	 		'vname' => 'LBL_NAME',
+			'widget_class' => 'SubPanelDetailViewLink',
+	 		'width' => '45%',
+		),
+		'date_modified'=>array(
+	 		'vname' => 'LBL_DATE_MODIFIED',
+	 		'width' => '45%',
+		),
+		'edit_button'=>array(
+			'widget_class' => 'SubPanelEditButton',
+		 	'module' => $module_name,
+	 		'width' => '4%',
+		),
+		'remove_button'=>array(
+			'widget_class' => 'SubPanelRemoveButton',
+		 	'module' => $module_name,
+			'width' => '5%',
+		),
+	),
+);
 
 ?>
