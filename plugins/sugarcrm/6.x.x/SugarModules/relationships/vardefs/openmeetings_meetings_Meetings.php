@@ -18,8 +18,8 @@
 * under the License.
 *  ********************************************************************************/
 // created: 2011-09-04 16:40:38
-$dictionary["Meeting"]["fields"]["conf_opemeetnigs_meetings"] = array (
-  'name' => 'conf_opemeetnigs_meetings',
+$dictionary["Meeting"]["fields"]["openmeetings_meetings"] = array (
+  'name' => 'openmeetings_meetings',
   'type' => 'link',
   'relationship' => 'openmeetings_meetings',
   'source' => 'non-db',
@@ -33,7 +33,7 @@ $dictionary["Meeting"]["fields"]["conf_opeigs_meetings_name"] = array (
   'vname' => 'LBL_openmeetings_MEETINGS_FROM_openmeetings_TITLE',
   'save' => true,
   'id_name' => 'conf_op0b58nigs_ida',
-  'link' => 'conf_opemeetnigs_meetings',
+  'link' => 'openmeetings_meetings',
   'table' => 'openmeetings',
   'module' => 'openmeetings',
   'rname' => 'name',

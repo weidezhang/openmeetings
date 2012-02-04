@@ -253,7 +253,7 @@ class openmeetingsRoomManagament {
 		//echo $_REQUEST['send_invites'];
 	//print_r($focus);
 		//print_r($focus->conf_op0b58nigs_ida);
-		//print_r($focus->conf_opemeetnigs_meetings->beans[$focus->conf_op0b58nigs_ida]->room_link);	
+		//print_r($focus->openmeetings_meetings->beans[$focus->conf_op0b58nigs_ida]->room_link);	
 		//exit;
 			
 		//echo "</pre>";
@@ -302,7 +302,7 @@ echo '</pre>';
 		if (!empty($focus->conf_op0b58nigs_ida) && isset($_REQUEST['send_invites']) && $_REQUEST['send_invites'] == 1){
 			
 			//work in sugar 2.3
-			//$room_id = 	$focus->conf_opemeetnigs_meetings->beans[$focus->conf_op0b58nigs_ida]->room_id;	
+			//$room_id = 	$focus->openmeetings_meetings->beans[$focus->conf_op0b58nigs_ida]->room_id;	
 			
 			$sql = "select room_id from openmeetings where id = '" . $focus->conf_op0b58nigs_ida ."'";
 

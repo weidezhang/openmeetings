@@ -17,12 +17,25 @@
 * specific language governing permissions and limitations
 * under the License.
 *  ********************************************************************************/
-// created: 2011-09-04 16:40:38
-$dictionary["openmeetings"]["fields"]["conf_opemeetnigs_meetings"] = array (
-  'name' => 'conf_opemeetnigs_meetings',
-  'type' => 'link',
-  'relationship' => 'openmeetings_meetings',
-  'source' => 'non-db',
-  'side' => 'right',
-  'vname' => 'LBL_openmeetings_MEETINGS_FROM_MEETINGS_TITLE',
+ // created: 2011-09-04 16:40:38
+$layout_defs["openmeetings"]["subpanel_setup"]['openmeetings_meetings'] = array (
+  'order' => 100,
+  'module' => 'Meetings',
+  'subpanel_name' => 'default',
+  'sort_order' => 'asc',
+  'sort_by' => 'id',
+  'title_key' => 'LBL_openmeetings_MEETINGS_FROM_MEETINGS_TITLE',
+  'get_subpanel_data' => 'openmeetings_meetings',
+  'top_buttons' => 
+  array (
+    0 => 
+    array (
+      'widget_class' => 'SubPanelTopButtonQuickCreate',
+    ),
+    1 => 
+    array (
+      'widget_class' => 'SubPanelTopSelectButton',
+      'mode' => 'MultiSelect',
+    ),
+  ),
 );
