@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfiguration;
-import org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationService;
-import org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationServiceImpl;
+import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.openmeetings.jira.plugin.ao.omrooms.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +43,7 @@ public class AdminServlet extends HttpServlet
     private TemplateRenderer templateRenderer;
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
    
-
-    //private final ActiveObjects ao;
-    private final AdminConfigurationService adminOmConfigurationService;
-    final PluginSettingsFactory pluginSettingsFactory;
+    private OmPluginSettings omPluginSettings;    
     
     private static final String NEW_BROWSER_TEMPLATE = "/templates/adminnew.vm";
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/adminedit.vm";
@@ -59,15 +54,15 @@ public class AdminServlet extends HttpServlet
 //    }
     
     public AdminServlet(com.atlassian.jira.user.util.UserManager jiraUserManager, 
-				    		TemplateRenderer templateRenderer,
-				    		AdminConfigurationService adminOmConfigurationService,
-				    		UserManager userManager, PluginSettingsFactory pluginSettingsFactory)
+				    		TemplateRenderer templateRenderer,				    		
+				    		UserManager userManager,
+				    		OmPluginSettings omPluginSettings)
     {
-        this.userManager = userManager;              
-        this.adminOmConfigurationService = checkNotNull(adminOmConfigurationService);
+        this.userManager = userManager;
         this.templateRenderer = templateRenderer;
         this.jiraUserManager = jiraUserManager;
-        this.pluginSettingsFactory = pluginSettingsFactory;
+        //this.pluginSettingsFactory = pluginSettingsFactory;
+        this.omPluginSettings = omPluginSettings;
        
         
     }
@@ -96,48 +91,33 @@ public class AdminServlet extends HttpServlet
         } else if ("y".equals(request.getParameter("edit"))) {
             // Renders edit.vm template if the "edit" parameter is passed
      
-            // Retrieve issue with the specified key
-        	AdminConfiguration omConfig =  adminOmConfigurationService.get(request.getParameter("key"));// req.getParameter("key"));
-            Map<String, Object> context = Maps.newHashMap();
-            context.put("omConfig", omConfig);
-            response.setContentType("text/html;charset=utf-8");
-            // Render the template with the issue inside the context
-            templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, response.getWriter());
-        } else {
-//            // Render the list of issues (list.vm) if no params are passed in
-//            List<Issue> issues = getIssues(request);
+//            // Retrieve issue with the specified key
+//        	AdminConfiguration omConfig =  adminOmConfigurationService.get(request.getParameter("key"));// req.getParameter("key"));
 //            Map<String, Object> context = Maps.newHashMap();
-//            context.put("issues", issues);
+//            context.put("omConfig", omConfig);
 //            response.setContentType("text/html;charset=utf-8");
-//            // Pass in the list of issues as the context
-//            templateRenderer.render(LIST_BROWSER_TEMPLATE, context, response.getWriter());
-        	 //Retrieve issue with the specified key
-        	//String url = getSomeInfo("url").toString();
-        	
-//        	String url = request.getParameter("url"); 
-//        	String port = request.getParameter("port");        	
-//        	String userpass = request.getParameter("userpass"); 
-//        	String omusername = request.getParameter("username"); 
-//        	String key = request.getParameter("key");
-        	
+//            // Render the template with the issue inside the context
+//            templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, response.getWriter());
+        } else {
+        	        	
         	String url; 
         	String port;         	
         	String userpass;
         	String omusername;
         	String key; 
         	
-        	if( getSomeInfo("url").equals(null)){
+        	if( omPluginSettings.getSomeInfo("url") == null){
         		url = "localhost"; 
 	        	port = "5080";         	
 	        	userpass = "admin";  
 	        	omusername = "admin"; 
 	        	key = "Jira";        		
         	}else{
-	        	url = (String)getSomeInfo("url"); 
-	        	port = (String)getSomeInfo("port");         	
-	        	userpass = (String)getSomeInfo("userpass");  
-	        	omusername = (String)getSomeInfo("username"); 
-	        	key = (String)getSomeInfo("key"); 
+	        	url = (String)omPluginSettings.getSomeInfo("url"); 
+	        	port = (String)omPluginSettings.getSomeInfo("port");         	
+	        	userpass = (String)omPluginSettings.getSomeInfo("userpass");  
+	        	omusername = (String)omPluginSettings.getSomeInfo("username"); 
+	        	key = (String)omPluginSettings.getSomeInfo("key"); 
         	}
         	
             Map<String, Object> context = Maps.newHashMap();
@@ -151,41 +131,7 @@ public class AdminServlet extends HttpServlet
             response.setContentType("text/html;charset=utf-8");
             // Render the template with the issue inside the context
             templateRenderer.render(OM_CONFIG_TEMPLATE, context, response.getWriter());
-        }
-        /////////////
-       // response.setContentType("text/html;charset=utf-8");
-        //renderer.render("admin.vm", response.getWriter());
-        
-//        final PrintWriter w = response.getWriter();
-//        w.write("<h1>Test Admin Key-Values</h1>");
-// 
-//        
-//     // the form to post more TODOs
-//        w.write("<form method=\"post\">");
-//        w.write("<input type=\"text\" name=\"url\" size=\"25\"/>");
-//        w.write("<input type=\"text\" name=\"port\" size=\"25\"/>");
-//        w.write("<input type=\"text\" name=\"username\" size=\"25\"/>");
-//        w.write("<input type=\"text\" name=\"userpass\" size=\"25\"/>");
-//        w.write("<input type=\"text\" name=\"key\" size=\"25\"/>");
-//        w.write("&nbsp;&nbsp;");
-//        w.write("<input type=\"submit\" name=\"submit\" value=\"Add\"/>");
-//        w.write("</form>");
-//        
-// 
-//        w.write("<ol>");
-// 
-//        //getSomeInfo("url");
-//            w.printf("<li> %s </li>", getSomeInfo("url"));
-//            w.printf("<li><%2$s> %s </%2$s></li>", getSomeInfo("port"), true ? "strong" : "strong");
-//            w.printf("<li> %s </li>", getSomeInfo("userpass"));
-//            w.printf("<li> %s </li>", getSomeInfo("username"));
-//            w.printf("<li> %s </li>", getSomeInfo("key"));
-//       
-// 
-//        w.write("</ol>");
-//        w.write("<script language='javascript'>document.forms[0].elements[0].focus();</script>");
-// 
-//        w.close();
+        }     
 
     }
     
@@ -205,11 +151,11 @@ public class AdminServlet extends HttpServlet
         	String username = request.getParameter("username"); 
         	String key = request.getParameter("key");
         	
-        	storeSomeInfo("url", url);
-        	storeSomeInfo("port", port);
-        	storeSomeInfo("userpass", userpass);
-        	storeSomeInfo("username", username);
-        	storeSomeInfo("key", key);
+        	omPluginSettings.storeSomeInfo("url", url);
+        	omPluginSettings.storeSomeInfo("port", port);
+        	omPluginSettings.storeSomeInfo("userpass", userpass);
+        	omPluginSettings.storeSomeInfo("username", username);
+        	omPluginSettings.storeSomeInfo("key", key);
         	
             
             response.sendRedirect(request.getContextPath() + "/plugins/servlet/openmeetingsadmin");
@@ -242,22 +188,22 @@ public class AdminServlet extends HttpServlet
 	    return jiraUserManager.getUser(userManager.getRemoteUsername(req));
 	}
     
-    public void storeSomeInfo(String key, String value) {
-        // createGlobalSettings is nice and fast, so there's no need to cache it (it's memoised when necessary).
-        pluginSettingsFactory.createGlobalSettings().put("openmeetings:" + key, value);
-        
-    }
- 
-    public Object getSomeInfo(String key) {
-        return pluginSettingsFactory.createGlobalSettings().get("openmeetings:" + key);
-    }
- 
-    public void storeSomeInfo(String projectKey, String key, String value) {
-        // createSettingsForKey is nice and fast, so there's no need to cache it (it's memoised when necessary).
-        pluginSettingsFactory.createSettingsForKey(projectKey).put("openmeetings:" + key, value);
-    }
- 
-    public Object getSomeInfo(String projectKey, String key) {
-        return pluginSettingsFactory.createSettingsForKey(projectKey).get("openmeetings:" + key);
-    }
+//    public void storeSomeInfo(String key, String value) {
+//        // createGlobalSettings is nice and fast, so there's no need to cache it (it's memoised when necessary).
+//        pluginSettingsFactory.createGlobalSettings().put("openmeetings:" + key, value);
+//        
+//    }
+// 
+//    public Object getSomeInfo(String key) {
+//        return pluginSettingsFactory.createGlobalSettings().get("openmeetings:" + key);
+//    }
+// 
+//    public void storeSomeInfo(String projectKey, String key, String value) {
+//        // createSettingsForKey is nice and fast, so there's no need to cache it (it's memoised when necessary).
+//        pluginSettingsFactory.createSettingsForKey(projectKey).put("openmeetings:" + key, value);
+//    }
+// 
+//    public Object getSomeInfo(String projectKey, String key) {
+//        return pluginSettingsFactory.createSettingsForKey(projectKey).get("openmeetings:" + key);
+//    }
 }

@@ -5,9 +5,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.openmeetings.jira.plugin.ao.omrooms.Room;
 import org.openmeetings.jira.plugin.ao.omrooms.RoomService;
+import org.openmeetings.jira.plugin.gateway.OmGateway;
+import org.xml.sax.SAXException;
 
 import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.bc.issue.IssueService;
@@ -26,15 +30,18 @@ public final class RoomsServlet extends HttpServlet
 {
     private final RoomService roomService;
     private TemplateRenderer templateRenderer;
+    private OmGateway omGateway;
     
     private static final String LIST_BROWSER_TEMPLATE = "/templates/omrooms/list.vm";
     private static final String NEW_BROWSER_TEMPLATE = "/templates/omrooms/new.vm";
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/omrooms/edit.vm";
  
-    public RoomsServlet(RoomService roomService, TemplateRenderer templateRenderer)
+    public RoomsServlet(RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway)
     {
         this.roomService = checkNotNull(roomService);
         this.templateRenderer = templateRenderer;
+        this.omGateway = omGateway;
+        
     }
  
     @Override
@@ -130,6 +137,19 @@ public final class RoomsServlet extends HttpServlet
         	String name = req.getParameter("roomname");
         	Long numberOfParticipent = Long.valueOf(req.getParameter("numberOfParticipent"));  
         	Long roomType = Long.valueOf(req.getParameter("roomType")); 
+        	
+//        	try {
+//				omGateway.loginUser();
+//			} catch (XPathExpressionException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (SAXException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (ParserConfigurationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
         	
         	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, name, numberOfParticipent, roomType);
             //roomService.add(description, true, true, true, "name", 4L, 1L);

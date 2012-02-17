@@ -30,16 +30,8 @@
   <web-item key="create_room_link" name="Create Room Web Site" section="my_links_link/my_links_section" weight="10">
     <label>Create Room</label>
     <link linkId="create_room_link" absolute="false">/plugins/servlet/openmeetingsrooms?new=y</link>/&gt;
-  </web-item>
-  <web-item key="test_link" name="Test Web Site" section="my_links_link/my_links_section" weight="10">
-    <label>Test CRUD</label>
-    <link linkId="test_link" absolute="false">/plugins/servlet/openmeetingscrud</link>/&gt;
-  </web-item>
+  </web-item>  
   
-  <servlet name="Openmeetings CRUD" i18n-name-key="openmeetings-crud.name" key="openmeetings-crud" class="org.openmeetings.jira.plugin.servlet.OpenmeetingsCRUD">
-    <description key="openmeetings-crud.description">The Openmeetings CRUD Plugin</description>
-    <url-pattern>/openmeetingscrud</url-pattern>
-  </servlet>
   <servlet name="Openmeetings admin" i18n-name-key="openmeetings-admin.name" key="openmeetings-admin" class="org.openmeetings.jira.plugin.servlet.AdminServlet">
     <description key="openmeetings-admin.description">The Openmeetings Admin Plugin</description>
     <url-pattern>/openmeetingsadmin</url-pattern>
@@ -62,8 +54,7 @@
   
 	<!--AO to persist chosen admin configuration -->
 	<ao key="openmeetings-ao-module">
-	    <description>The module configuring the Active Objects service used by JIRA-OPENMEETINGS plugin</description>
-	    <entity>org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfiguration</entity>
+	    <description>The module configuring the Active Objects service used by JIRA-OPENMEETINGS plugin</description>	    
 	    <entity>org.openmeetings.jira.plugin.ao.omrooms.Room</entity>         
 	</ao>
 	
@@ -77,14 +68,14 @@
 	<component key="tx-processor" name="Transactional Annotation Processor"
 	           class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
 	    <decription>Processes @Transactional annotations.</decription>
-	</component>
-	
-	<component key="adminOmConfigurationService" name="AdminOmConfiguration Service"
-	       class="org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationServiceImpl" public="true">
-		<interface>org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationService</interface>
-	</component>
+	</component>	
 	
 	<component key="room-service" name="Room Service" class="org.openmeetings.jira.plugin.ao.omrooms.RoomServiceImpl"/>
-
-
+	
+	<component key="omPluginSettings" name="OpenMeetings Plugin Settings" class="org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings"/>
+	
+	<component key="omRestService" name="OpenMeetings REST Service" class="org.openmeetings.jira.plugin.gateway.OmRestService"/>
+	
+	<component key="omGateway" name="OpenMeetings Gateway" class="org.openmeetings.jira.plugin.gateway.OmGateway"/>
+	
 </atlassian-plugin>
