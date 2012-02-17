@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>Create Issue &mdash; Issue CRUD Tutorial</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+
+    <div class="content-body">
+        <h1>Create issue</h1>
+        <div class="create-issue-panel">
+
+            <form method="post" id="h" action="openmeetingsrooms" class="aui">
+                <div class="field-group">
+                    <label for="h-froomname">
+                        Roomname
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-froomname" class="text long-field" type="text" name="roomname">
+                </div>
+                <div class="field-group">
+                    <label for="h-froomtype">
+                        Roomtype                        
+                    </label>
+                    <select name="roomType" id="om-roomtype" style="width: 30%;">
+                        <option value="1">Conference</option>
+                        <option value="2" #if ("$cdman.cacheTimeout" == "600000")selected#end>Interview</option>
+                        <option value="3" #if ("$cdman.cacheTimeout" == "1200000")selected#end>20</option>
+                        <option value="4" #if ("$cdman.cacheTimeout" == "1800000")selected#end>30</option>
+                        <option value="5" #if ("$cdman.cacheTimeout" == "3600000")selected#end>60</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fnr-participent">
+                        Nr. of Participent                       
+                    </label>
+                    <select name="numberOfParticipent" id="om-participent" style="width: 30%;">
+                        <option value="5" #if ("$cdman.cacheTimeout" == "300000")selected#end>5</option>
+                        <option value="10" #if ("$cdman.cacheTimeout" == "600000")selected#end>10</option>
+                        <option value="20" #if ("$cdman.cacheTimeout" == "1200000")selected#end>20</option>
+                        <option value="30" #if ("$cdman.cacheTimeout" == "1800000")selected#end>30</option>
+                        <option value="60" #if ("$cdman.cacheTimeout" == "3600000")selected#end>60</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fmoderated">
+                        Is moderated
+                    </label>
+                    <select name="isModeratedRoom" id="om-is-moderated" style="width: 30%;">
+                        <option value="false" #if ("$cdman.cacheTimeout" == "300000")selected#end>No</option>
+                        <option value="true" #if ("$cdman.cacheTimeout" == "600000")selected#end>Yes</option>                       
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-faudioonly">
+                        Is audio only
+                    </label>
+                    <select name="isAudioOnly" id="om-is-moderated" style="width: 30%;">
+                        <option value="false" #if ("$cdman.cacheTimeout" == "300000")selected#end>No</option>
+                        <option value="true" #if ("$cdman.cacheTimeout" == "600000")selected#end>Yes</option>                       
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fallow-recording">
+                        Allow Recording
+                    </label>
+                    <select name="isAllowedRecording" id="om-allow-recording" style="width: 30%;">
+                        <option value="false" #if ("$cdman.cacheTimeout" == "300000")selected#end>No</option>
+                        <option value="true" #if ("$cdman.cacheTimeout" == "600000")selected#end>Yes</option>                       
+                    </select>
+                </div>
+                <div class="buttons">
+                    <input class="button" type="submit" value="Create">&nbsp;
+                    <a href="openmeetingsrooms">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

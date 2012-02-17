@@ -1,0 +1,78 @@
+<html>
+<head>
+    <title>Edit OpenMeetings Configuration</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+
+    <div class="content-body">
+        <h1>Edit issue omConfig.getKey()</h1>
+
+        #if ($errors.size()>0)
+            <div class="aui-message error shadowed">
+                #foreach($error in $errors)
+                    <p class="title">
+                        <span class="aui-icon icon-error"></span>
+                        <strong>$error</strong>
+                    </p>
+                #end
+            </div>
+            <!-- .aui-message -->
+        #end
+
+        <div class="create-issue-panel">
+            <form method="post" id="h" action="openmeetingsconfig" class="aui">
+                <input type="hidden" name="edit" value="y">
+                <input type="hidden" name="key" value="omConfig.getKey()">
+                <div class="field-group">
+                    <label for="h-furl">
+                        URL
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-furl" class="text long-field" type="text" name="url" value="omConfig.getOmUrl()">
+                </div>
+                <div class="field-group">
+                    <label for="h-fport">
+                        Port
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <textarea id="h-fport" name="port">omConfig.getOmPort()</textarea>
+                </div>                
+                 <div class="field-group">
+                    <label for="h-fusername">
+                        User Name
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <textarea id="h-fusername" name="username">omConfig.getOmUserName()</textarea>
+                </div>                
+                <div class="field-group">
+                    <label for="h-fdescription">
+                        User Pass
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <textarea id="h-fuserpass" name="userpass">omConfig.getOmUserPass()</textarea>
+                </div>                
+                <div class="field-group">
+                    <label for="h-fdescription">
+                        Key
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <textarea id="h-fkey" name="description">omConfig.getOmKey()</textarea>
+                </div>                
+                <div class="buttons">
+                    <input class="button" type="submit" value="Update">&nbsp;
+                    <a href="openmeetingscrud">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

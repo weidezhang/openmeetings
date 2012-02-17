@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+  <plugin-info>
+    <description>${project.description}</description>
+    <version>${project.version}</version>
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    <!--<param name="configure.url">/secure/OmConfig.jspa</param>-->
+    <param name="configure.url">/plugins/servlet/openmeetingsadmin</param>
+  </plugin-info>
+ 
+  <web-section key="om_config_section" location="integrations_section"> 
+    <label key="OpenMeetings Setup"/>
+  </web-section>
+   
+  <web-item key="om_config" section="integrations_section/om_config_section">
+    <label>Server Setup</label>
+    <link linkId="admin_link" absolute="false">/plugins/servlet/openmeetingsadmin</link>
+  </web-item>
+ 
+  <web-section key="my_links_section" name="My Links Main Section" location="my_links_link" weight="10"/>
+  <web-item key="my_links_link" name="Link on My Links Main Section" section="system.top.navigation.bar" weight="47">
+    <label>OpenMeetings</label>
+    <link linkId="my_links_link"/>
+  </web-item>
+  <web-item key="website_link" name="Rooms Web Site" section="my_links_link/my_links_section" weight="10">
+    <label>Rooms</label>
+    <link linkId="rooms_link" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
+  </web-item>
+  <web-item key="create_room_link" name="Create Room Web Site" section="my_links_link/my_links_section" weight="10">
+    <label>Create Room</label>
+    <link linkId="create_room_link" absolute="false">/plugins/servlet/openmeetingsrooms?new=y</link>/&gt;
+  </web-item>
+  <web-item key="test_link" name="Test Web Site" section="my_links_link/my_links_section" weight="10">
+    <label>Test CRUD</label>
+    <link linkId="test_link" absolute="false">/plugins/servlet/openmeetingscrud</link>/&gt;
+  </web-item>
+  
+  <servlet name="Openmeetings CRUD" i18n-name-key="openmeetings-crud.name" key="openmeetings-crud" class="org.openmeetings.jira.plugin.servlet.OpenmeetingsCRUD">
+    <description key="openmeetings-crud.description">The Openmeetings CRUD Plugin</description>
+    <url-pattern>/openmeetingscrud</url-pattern>
+  </servlet>
+  <servlet name="Openmeetings admin" i18n-name-key="openmeetings-admin.name" key="openmeetings-admin" class="org.openmeetings.jira.plugin.servlet.AdminServlet">
+    <description key="openmeetings-admin.description">The Openmeetings Admin Plugin</description>
+    <url-pattern>/openmeetingsadmin</url-pattern>
+  </servlet>  
+  <servlet name="Openmeetings Rooms" i18n-name-key="openmeetings-room.name" key="openmeetings-room" class="org.openmeetings.jira.plugin.servlet.RoomsServlet">
+    <description key="openmeetings-room.description">The Openmeetings Rooms Plugin</description>
+    <url-pattern>/openmeetingsrooms</url-pattern>
+  </servlet>
+  
+  <resource type="i18n" name="i18n" location="atlassian-plugin"/>
+  
+  <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
+  <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
+  
+  <customfield-type name="Room Name Field" i18n-name-key="room-name-field.name" key="room-name-field" class="org.openmeetings.jira.plugin.jira.customfields.RoomNameField">
+    <description key="room-name-field.description">The Room Name Field Plugin</description>
+    <resource name="view" type="velocity" location="/templates/customfields/room-name-field/view.vm"/>
+    <resource name="edit" type="velocity" location="/templates/customfields/room-name-field/edit.vm"/>
+  </customfield-type> 
+  
+	<!--AO to persist chosen admin configuration -->
+	<ao key="openmeetings-ao-module">
+	    <description>The module configuring the Active Objects service used by JIRA-OPENMEETINGS plugin</description>
+	    <entity>org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfiguration</entity>
+	    <entity>org.openmeetings.jira.plugin.ao.omrooms.Room</entity>         
+	</ao>
+	
+	<component-import key="ao" name="Active Objects components"
+		interface="com.atlassian.activeobjects.external.ActiveObjects">
+		<description>Access to the Active Objects service</description>
+	</component-import>
+	 
+	<component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+	
+	<component key="tx-processor" name="Transactional Annotation Processor"
+	           class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
+	    <decription>Processes @Transactional annotations.</decription>
+	</component>
+	
+	<component key="adminOmConfigurationService" name="AdminOmConfiguration Service"
+	       class="org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationServiceImpl" public="true">
+		<interface>org.openmeetings.jira.plugin.ao.adminconfiguration.AdminConfigurationService</interface>
+	</component>
+	
+	<component key="room-service" name="Room Service" class="org.openmeetings.jira.plugin.ao.omrooms.RoomServiceImpl"/>
+
+
+</atlassian-plugin>

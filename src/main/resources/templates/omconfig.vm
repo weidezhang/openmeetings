@@ -1,0 +1,61 @@
+<html>
+<head>
+    <title>OpenMeetings Admin &mdash; </title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+    <div class="content-body">
+        <h1>OpenMeetings Configuration</h1>
+        <div class="create-issue-panel">
+            <form method="post" id="h" action="openmeetingsadmin" class="aui">
+                <div class="field-group">
+                    <label for="h-furl">
+                        URL
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-furl" class="text long-field" type="text" name="url" value="$url"></input>
+                </div>
+                <div class="field-group">
+                    <label for="h-fport">
+                        Port
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fport" class="text long-field" type="text" name="port" value=$port>
+                </div>
+                <div class="field-group">
+                    <label for="h-fusername">
+                        Username
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fusername" class="text long-field" type="text" name="username" value=$username>
+                </div>
+                <div class="field-group">
+                    <label for="h-fuserpass">
+                        Userpass
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fuserpass" class="text long-field" type="text" name="userpass" value=$userpass>
+                </div>
+                <div class="field-group">
+                    <label for="h-fkey">
+                        Key
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fkey" class="text long-field" type="text" name="key" value=$key>
+                </div>                            
+                <div class="buttons">
+                    <input class="button" type="submit" value="Save">&nbsp;
+                    <a href="/secure/AdminSummary.jspa">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

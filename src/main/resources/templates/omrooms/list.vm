@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>All Rooms &mdash; Room List</title>
+    <meta name="decorator" content="atl.general">
+    <script>
+        AJS.$(document).ready(function() {
+            jQuery('.delete-room').click(function() {
+                console.log('deleting');
+                var self = jQuery(this);
+                jQuery.ajax({
+                    type: "delete",
+                    url: "openmeetingsrooms?key=" + self.data("key"),
+                    success: function(data) {
+                        console.log('dom', self, data);
+                        self.parent().parent().remove();
+                    },
+                    error: function() {
+                        console.log('error', arguments);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+
+    <div class="content-body">
+        <h1>You've Got #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms!</h1>
+
+        #if ($errors.size()>0)
+            <div class="aui-message error shadowed">
+                #foreach($error in $errors)
+                    <p class="title">
+                        <span class="aui-icon icon-error"></span>
+                        <strong>$error</strong>
+                    </p>
+                #end
+            </div>
+            <!-- .aui-message -->
+        #end
+
+        #if ($rooms.size() > 0)
+            <div class="rooms">
+                <table class="aui">
+                    <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Roomname</th>
+                        <th>Roomtype</th>
+                        <th>Participent</th>
+                        <th>Moderator</th>
+                        <th>Audio</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach( $room in $rooms )
+                        <tr>
+                            <td>$room.getKey()</td>
+                            <td>$room.getName()</td>
+                            <td>
+                                #if($room.getRoomType())
+                            $room.getRoomType()
+                        #end
+                            </td>
+                            <td>
+                                $room.getNumberOfParticipent()
+                            </td>
+                            <td>
+                                $room.getIsModeratedRoom()
+                            </td>
+                            <td>
+                                $room.getIsAudioOnly()
+                            </td>
+                            <td>
+                                <a href="openmeetingsrooms?edit=y&key=$room.getKey()">Edit</a> &nbsp;
+                                <a href="#" class="delete-room" data-key="$room.getKey()">Delete</a>
+                            </td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+        #end
+        <form method="get" action="openmeetingsrooms" class="aui">
+            <input type="hidden" name="new" value="y">
+            <input type="submit" class="button" value="Create new room">
+        </form>
+    </div>
+</div>
+</body>
+</html>
