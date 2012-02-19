@@ -8,7 +8,7 @@ import java.util.List;
 public interface RoomService
 {
     Room add(boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
-    		String name, Long numberOfParticipent, Long roomType);
+    		String name, Long numberOfParticipent, Long roomType, Long roomId, Long createdByUserId);
     
     Room update(Integer id, boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
     		String name, Long numberOfParticipent, Long roomType);

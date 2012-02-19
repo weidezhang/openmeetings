@@ -45,9 +45,9 @@ public class AdminServlet extends HttpServlet
    
     private OmPluginSettings omPluginSettings;    
     
-    private static final String NEW_BROWSER_TEMPLATE = "/templates/adminnew.vm";
-    private static final String EDIT_BROWSER_TEMPLATE = "/templates/adminedit.vm";
-    private static final String OM_CONFIG_TEMPLATE = "/templates/omconfig.vm";
+    private static final String NEW_BROWSER_TEMPLATE = "/templates/config/adminnew.vm";
+    private static final String EDIT_BROWSER_TEMPLATE = "/templates/config/adminedit.vm";
+    private static final String OM_CONFIG_TEMPLATE = "/templates/config/omconfig.vm";
 //    public TodoServlet(ActiveObjects ao)
 //    {
 //        this.ao = checkNotNull(ao);

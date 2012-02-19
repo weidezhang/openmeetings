@@ -118,7 +118,7 @@
 	  <artifactId>google-collections</artifactId>
 	  <version>1.0</version>
 	  <scope>provided</scope>
-	</dependency>
+	</dependency>	
   </dependencies>	
   <properties>
     <amps.version>3.7.2</amps.version>

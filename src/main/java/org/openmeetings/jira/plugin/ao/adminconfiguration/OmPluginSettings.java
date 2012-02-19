@@ -19,20 +19,20 @@ public class OmPluginSettings {
  
     public void storeSomeInfo(String key, String value) {
         // createGlobalSettings is nice and fast, so there's no need to cache it (it's memoised when necessary).
-        pluginSettingsFactory.createGlobalSettings().put("my-plugin-namespace" + key, value);
+        pluginSettingsFactory.createGlobalSettings().put("openmeetings:" + key, value);
     }
  
     public Object getSomeInfo(String key) {
-        return pluginSettingsFactory.createGlobalSettings().get("my-plugin-namespace" + key);
+        return pluginSettingsFactory.createGlobalSettings().get("openmeetings:" + key);
     }
  
     public void storeSomeInfo(String projectKey, String key, String value) {
         // createSettingsForKey is nice and fast, so there's no need to cache it (it's memoised when necessary).
-        pluginSettingsFactory.createSettingsForKey(projectKey).put("my-plugin-namespace" + key, value);
+        pluginSettingsFactory.createSettingsForKey(projectKey).put("openmeetings:" + key, value);
     }
  
     public Object getSomeInfo(String projectKey, String key) {
-        return pluginSettingsFactory.createSettingsForKey(projectKey).get("my-plugin-namespace" + key);
+        return pluginSettingsFactory.createSettingsForKey(projectKey).get("openmeetings:" + key);
     }
  
      

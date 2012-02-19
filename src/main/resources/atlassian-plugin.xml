@@ -18,10 +18,13 @@
     <link linkId="admin_link" absolute="false">/plugins/servlet/openmeetingsadmin</link>
   </web-item>
  
-  <web-section key="my_links_section" name="My Links Main Section" location="my_links_link" weight="10"/>
+  <web-section key="my_links_section" name="My Links Main Section" location="my_links_link" weight="10">
+  	<condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition"/> 
+  </web-section>
   <web-item key="my_links_link" name="Link on My Links Main Section" section="system.top.navigation.bar" weight="47">
     <label>OpenMeetings</label>
     <link linkId="my_links_link"/>
+    <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition"/> 
   </web-item>
   <web-item key="website_link" name="Rooms Web Site" section="my_links_link/my_links_section" weight="10">
     <label>Rooms</label>

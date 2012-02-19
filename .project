@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
   <name>openmeetings</name>
-  <comment>This is the org.openmeetings.jira.plugin:openmeetings plugin for Atlassian JIRA. It integrates 
+  <comment>This is the OpenMeetings plugin for Atlassian JIRA. It integrates 
     OpenMeeting-Webconferncing with JIRA. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>

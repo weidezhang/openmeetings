@@ -37,4 +37,8 @@ public interface Room extends Entity
     Long getRoomId();
     
     void setRoomId(Long roomId);
+    
+    Integer getCreatedByUserId();
+    
+    void setCreatedByUserId(Long createdByUserId);
 }

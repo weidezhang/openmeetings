@@ -18,7 +18,7 @@ public final class RoomServiceImpl implements RoomService
 
     @Override
     public Room add(boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
-    		String name, Long numberOfParticipent, Long roomType)
+    		String name, Long numberOfParticipent, Long roomType, Long roomId, Long createdByUserId)
     {
         final Room room = ao.create(Room.class);
       
@@ -28,6 +28,8 @@ public final class RoomServiceImpl implements RoomService
         room.setName(name);
         room.setNumberOfParticipent(numberOfParticipent);
         room.setRoomType(roomType);
+        room.setRoomId(roomId);
+        room.setCreatedByUserId(createdByUserId);
         room.save();
         return room;
     }

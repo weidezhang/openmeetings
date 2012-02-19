@@ -1,7 +1,12 @@
 package org.openmeetings.jira.plugin.gateway;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,125 +18,124 @@ import org.xml.sax.SAXException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.representation.Form;
+
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
 
 public class OmRestService {
 	
 	private static final Logger log = LoggerFactory.getLogger(OmRestService.class);
 	
+	private URI getURI(String url) {
+		return UriBuilder.fromUri(
+				url).build();
+	}
 	
-	public String call(String request, Object param)throws IOException, ServletException, SAXException, ParserConfigurationException, XPathExpressionException
+	private  String getEncodetURI(String url) throws MalformedURLException {
+		return new URL(url).toString().replaceAll(" ","%20");
+	}
+	
+	
+	
+	public LinkedHashMap<String, Element> call(String request, Object param)throws IOException, ServletException, SAXException, ParserConfigurationException, XPathExpressionException, DocumentException
 	{
-		//String request = "http://api.search.yahoo.com/WebSearchService/V1/webSearch";
-	    HttpClient client = new HttpClient();
-	
-	    PostMethod method = new PostMethod(request);
-	
-	    // Add POST parameters
-	    
-	    method.addParameter("roomId","1");
-//	
-//	    method.addParameter("query","umbrella");
-//	
-//	    method.addParameter("results","10");	    
-	    
-	    // Send POST request
+		
+		//String request= "http://localhost:5080/openmeetings/services/UserService/getSession";
+		HttpClient client = new HttpClient();
 
-	
-	    InputStream rstream = null;
-	
+        GetMethod method = new GetMethod(getEncodetURI(request).toString());
+		int statusCode = client.executeMethod(method);
+		
+		switch (statusCode) {
 	    
-	    // Get the response body
-	
-	    try {
-			rstream = method.getResponseBodyAsStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	    int statusCode = 0;
-		try {
-			statusCode = client.executeMethod(method);
-		} catch (HttpException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    case 200: {
+	    	
+	    System.out.println("Success connection");
 
-	    
-
-	    switch (statusCode) {
-	    
-		    case 200: {
-		    	
-		    System.out.println("Success connection");
-	
-		    break;
-	
-		    }
-		    case 400: {
-	
-		    System.out.println("Bad request. The parameters passed to the service did not match as expected. The Message should tell you what was missing or incorrect."); 
-	
-		    System.out.println("Change the parameter appcd to appid and this error message will go away.");
-	
-		    break;
+	    break;
 
 	    }
+	    case 400: {
 
+	    System.out.println("Bad request. The parameters passed to the service did not match as expected. The Message should tell you what was missing or incorrect."); 
+
+	    System.out.println("Change the parameter appcd to appid and this error message will go away.");
+
+	    break;
+
+	    }
+	
 		    case 403: {
 	
 		    System.out.println("Forbidden. You do not have permission to access this resource, or are over your rate limit.");
 	
 		    break;
-
+	
 	    }
-
+	
 		    case 503: {
 	
 		    System.out.println("Service unavailable. An internal problem prevented us from returning data to you.");
 	
 		    break;
-
+	
 	    }
-
+	
 		    default: System.out.println("Your call to Yahoo! Web Services returned an unexpected  HTTP status of: " + statusCode);
+	
+	    }
+        
+        InputStream rstream = null;
 
+        rstream = method.getResponseBodyAsStream();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(rstream));
+        
+        SAXReader reader = new SAXReader();
+	    String line;
+	    Document document = null;
+	    while ((line = br.readLine()) != null) {
+	    	document = reader.read(new ByteArrayInputStream(line.getBytes("UTF-8")));
+	    	//System.out.println("line"+line);
+	    
 	    }
 	    
+        Element root = document.getRootElement(); 
+        
+        LinkedHashMap<String,Element> elementMap = new LinkedHashMap<String,Element>();       	                    
+        
+        for ( @SuppressWarnings("unchecked")
+            
+        	Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {	                
+	            Element item = i.next();            
+	            String nodeVal = item.getName();
+	            elementMap.put(nodeVal, item);
+        	}
+		
+		return elementMap;
 	    
-	 // Process response
-//        Document response = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(rstream);      
-//
-//        
-//        XPathFactory factory = XPathFactory.newInstance();
-//        XPath xPath=factory.newXPath();
-//        
-//        //Get all search Result nodes
-//        NodeList nodes = (NodeList)xPath.evaluate("/ResultSet/Result", response, XPathConstants.NODESET);
-//        int nodeCount = nodes.getLength();
-//        
-//        //iterate over search Result nodes
-//        for (int i = 0; i < nodeCount; i++) {
-//            //Get each xpath expression as a string
-//        	String title = (String)xPath.evaluate("Title", nodes.item(i), XPathConstants.STRING);
-//            String summary = (String)xPath.evaluate("Summary", nodes.item(i), XPathConstants.STRING);
-//            String url = (String)xPath.evaluate("Url", nodes.item(i), XPathConstants.STRING);
-//            //print out the Title, Summary, and URL for each search result
-//            System.out.println("Title: " + title);
-//            System.out.println("Summary: " + summary);
-//            System.out.println("URL: " + url);
-//            System.out.println("--");
-//            
-//        }
-//        System.out.println(rstream);
-		return rstream.toString();
-	    
-	}
+	}	
+	
 }

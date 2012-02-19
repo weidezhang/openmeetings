@@ -132,7 +132,7 @@
       <attribute value="jar:file:/home/eschwert/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-context/2.5.6.SEC02/spring-context-2.5.6.SEC02.jar" sourcepath="M2_REPO/org/springframework/spring-context/2.5.6.SEC02/spring-context-2.5.6.SEC02-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-context/2.5.6/spring-context-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-context/2.5.6/spring-context-2.5.6-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" sourcepath="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-beans/2.5.6/spring-beans-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-beans/2.5.6/spring-beans-2.5.6-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/atlassian/profiling/atlassian-profiling/1.8.2/atlassian-profiling-1.8.2.jar" sourcepath="M2_REPO/com/atlassian/profiling/atlassian-profiling/1.8.2/atlassian-profiling-1.8.2-sources.jar">
@@ -142,7 +142,7 @@
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.5.8/slf4j-api-1.5.8.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.5.8/slf4j-api-1.5.8-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.6/junit-4.6.jar" sourcepath="M2_REPO/junit/junit/4.6/junit-4.6-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-web/2.0.6/spring-web-2.0.6.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-web/2.5.6/spring-web-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-web/2.5.6/spring-web-2.5.6-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/atlassian/crowd/crowd-core/2.2.8/crowd-core-2.2.8.jar">
     <attributes>
       <attribute value="jar:file:/home/eschwert/.m2/repository/com/atlassian/crowd/crowd-core/2.2.8/crowd-core-2.2.8-javadoc.jar!/" name="javadoc_location"/>
@@ -164,7 +164,7 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/springframework/security/spring-security-core/2.0.4/spring-security-core-2.0.4.jar" sourcepath="M2_REPO/org/springframework/security/spring-security-core/2.0.4/spring-security-core-2.0.4-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-aop/2.0.8/spring-aop-2.0.8.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/springframework/spring-aop/2.5.6/spring-aop-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-aop/2.5.6/spring-aop-2.5.6-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-tx/2.5.6/spring-tx-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-tx/2.5.6/spring-tx-2.5.6-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/atlassian/plugins/atlassian-plugins-core/2.8.0/atlassian-plugins-core-2.8.0.jar" sourcepath="M2_REPO/com/atlassian/plugins/atlassian-plugins-core/2.8.0/atlassian-plugins-core-2.8.0-sources.jar">
     <attributes>
@@ -204,6 +204,7 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/antlr/antlr/2.7.2/antlr-2.7.2.jar" sourcepath="M2_REPO/antlr/antlr/2.7.2/antlr-2.7.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/asm/asm/3.1/asm-3.1.jar" sourcepath="M2_REPO/asm/asm/3.1/asm-3.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-orm/2.5.6.SEC02/spring-orm-2.5.6.SEC02.jar" sourcepath="M2_REPO/org/springframework/spring-orm/2.5.6.SEC02/spring-orm-2.5.6.SEC02-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-log4j12/1.5.8/slf4j-log4j12-1.5.8.jar" sourcepath="M2_REPO/org/slf4j/slf4j-log4j12/1.5.8/slf4j-log4j12-1.5.8-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/joda-time/joda-time/1.6/joda-time-1.6.jar" sourcepath="M2_REPO/joda-time/joda-time/1.6/joda-time-1.6-sources.jar">
@@ -860,4 +861,19 @@
   <classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/woodstox-core-asl/4.1.0/woodstox-core-asl-4.1.0.jar" sourcepath="M2_REPO/org/codehaus/woodstox/woodstox-core-asl/4.1.0/woodstox-core-asl-4.1.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/stax2-api/3.1.0/stax2-api-3.1.0.jar" sourcepath="M2_REPO/org/codehaus/woodstox/stax2-api/3.1.0/stax2-api-3.1.0-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-webmvc/2.5.6/spring-webmvc-2.5.6.jar" sourcepath="M2_REPO/org/springframework/spring-webmvc/2.5.6/spring-webmvc-2.5.6-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/contribs/jersey-spring/1.11/jersey-spring-1.11.jar" sourcepath="M2_REPO/com/sun/jersey/contribs/jersey-spring/1.11/jersey-spring-1.11-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/eschwert/.m2/repository/com/sun/jersey/contribs/jersey-spring/1.11/jersey-spring-1.11-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-servlet/1.11/jersey-servlet-1.11.jar" sourcepath="M2_REPO/com/sun/jersey/jersey-servlet/1.11/jersey-servlet-1.11-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/eschwert/.m2/repository/com/sun/jersey/jersey-servlet/1.11/jersey-servlet-1.11-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-server/1.11/jersey-server-1.11.jar" sourcepath="M2_REPO/com/sun/jersey/jersey-server/1.11/jersey-server-1.11-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/eschwert/.m2/repository/com/sun/jersey/jersey-server/1.11/jersey-server-1.11-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
 </classpath>

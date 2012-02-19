@@ -46,7 +46,7 @@
                 <table class="aui">
                     <thead>
                     <tr>
-                        <th>Key</th>
+                        <th>RoomId</th>
                         <th>Roomname</th>
                         <th>Roomtype</th>
                         <th>Participent</th>
@@ -58,7 +58,7 @@
                     <tbody>
                         #foreach( $room in $rooms )
                         <tr>
-                            <td>$room.getKey()</td>
+                            <td>$room.getRoomId()</td>
                             <td>$room.getName()</td>
                             <td>
                                 #if($room.getRoomType())
