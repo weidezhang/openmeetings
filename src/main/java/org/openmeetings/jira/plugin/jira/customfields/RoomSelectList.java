@@ -5,39 +5,60 @@ import org.openmeetings.jira.plugin.ao.omrooms.RoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.jira.issue.context.JiraContextNode;
-import com.atlassian.jira.issue.customfields.converters.SelectConverter;
-import com.atlassian.jira.issue.customfields.converters.StringConverter;
-import com.atlassian.jira.issue.customfields.manager.GenericConfigManager;
-import com.atlassian.jira.issue.customfields.manager.OptionsManager;
-import com.atlassian.jira.issue.customfields.option.Options;
-import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersister;
-import com.atlassian.jira.issue.customfields.persistence.PersistenceFieldType;
-import com.atlassian.jira.issue.customfields.view.CustomFieldParams;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.issue.fields.CustomField;
-import com.atlassian.jira.issue.fields.config.FieldConfig;
-import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
+//import com.atlassian.jira.issue.context.JiraContextNode;
+//import com.atlassian.jira.issue.customfields.converters.SelectConverter;
+//import com.atlassian.jira.issue.customfields.converters.StringConverter;
+//import com.atlassian.jira.issue.customfields.manager.GenericConfigManager;
+//import com.atlassian.jira.issue.customfields.manager.OptionsManager;
+//import com.atlassian.jira.issue.customfields.option.Options;
+//import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersister;
+//import com.atlassian.jira.issue.customfields.persistence.PersistenceFieldType;
+//import com.atlassian.jira.issue.customfields.view.CustomFieldParams;
+//import com.atlassian.jira.issue.Issue;
+//import com.atlassian.jira.issue.fields.CustomField;
+//import com.atlassian.jira.issue.fields.config.FieldConfig;
+//import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 
 import java.util.List;
 import java.util.Map;
 
+//import com.atlassian.jira.issue.customfields.impl.AbstractSingleFieldType;
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.impl.SelectCFType;
 import com.atlassian.jira.util.ErrorCollection;
 
-public class RoomSelectList extends SelectCFType {
-    private static final Logger log = LoggerFactory.getLogger(RoomSelectList.class);
-	//private final OptionsManager optionsManager;
-	//private static SelectConverter selectConverter;
-	private final RoomService roomService;
 
-    public RoomSelectList(CustomFieldValuePersister customFieldValuePersister, StringConverter stringConverter, SelectConverter selectConverter, OptionsManager optionsManager, GenericConfigManager genericConfigManager, RoomService roomService) {
-    super(customFieldValuePersister, stringConverter, selectConverter, optionsManager, genericConfigManager);
-    this.roomService = roomService;
-    //this.optionsManager = optionsManager;
-}
+
+import com.atlassian.jira.issue.customfields.impl.AbstractSingleFieldType;
+import com.atlassian.jira.issue.customfields.impl.FieldValidationException;
+import com.atlassian.jira.issue.customfields.impl.TextCFType;
+import com.atlassian.jira.issue.customfields.manager.GenericConfigManager;
+import com.atlassian.jira.issue.customfields.persistence.CustomFieldValuePersister;
+import com.atlassian.jira.issue.customfields.persistence.PersistenceFieldType;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.fields.config.FieldConfig;
+import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
+
+	public class RoomSelectList extends TextCFType {
+	    private static final Logger log = LoggerFactory.getLogger(RoomSelectList.class);
+		//private final OptionsManager optionsManager;
+		//private static SelectConverter selectConverter;
+		private final RoomService roomService;
+	
+//	    public RoomSelectList(CustomFieldValuePersister customFieldValuePersister, StringConverter stringConverter, SelectConverter selectConverter, OptionsManager optionsManager, GenericConfigManager genericConfigManager, RoomService roomService) {
+//	    super(customFieldValuePersister, stringConverter, selectConverter, optionsManager, genericConfigManager);
+//	    this.roomService = roomService;
+//	    //this.optionsManager = optionsManager;
+		
     
-    @Override
+	    
+		public RoomSelectList(CustomFieldValuePersister customFieldValuePersister,
+	            GenericConfigManager genericConfigManager, RoomService roomService) {
+	        super(customFieldValuePersister, genericConfigManager);
+	        this.roomService = roomService;
+	    }  
+	
+	@Override
     public Map<String, Object> getVelocityParameters(final Issue issue,
                                                      final CustomField field,
                                                      final FieldLayoutItem fieldLayoutItem) {
@@ -67,33 +88,48 @@ public class RoomSelectList extends SelectCFType {
     }
     
     @Override
-    public PersistenceFieldType getDatabaseType()
-	{
-		return PersistenceFieldType.TYPE_LIMITED_TEXT;
-	}
-    
-    @Override
-    public void validateFromParams(CustomFieldParams relevantParams, ErrorCollection errorCollectionToAddTo, FieldConfig config)
+    protected PersistenceFieldType getDatabaseType()
     {
-
+        return PersistenceFieldType.TYPE_LIMITED_TEXT;
+    } 
+    
+ 
+    @Override
+    protected Integer getObjectFromDbValue(final Object databaseValue)
+            throws FieldValidationException
+    {
+        return getSingularObjectFromString((String) databaseValue);
     }
-    
-//    @Override
-//    public Options getOptions(FieldConfig config, JiraContextNode jiraContextNode)
-//    {
-//      return this.optionsManager.getOptions(config);
-//    }
-    
-//    @Override
-//    public Object getValueFromIssue(CustomField field, Issue issue){
-//		
-//    	issue.getCustomFieldValue(field);
-//    	return issue;
-//    	
-//    }
-//    
-//    public Options getOptions(FieldConfig config, JiraContextNode jiraContextNode)
-//    {
-//      return this.optionsManager.getOptions(config);
-//    }
+ 
+    @Override
+    public Integer getSingularObjectFromString(final String string)
+            throws FieldValidationException
+    {
+        if (string == null)
+            return null;
+        try
+        {
+            final Integer decimal = new Integer(string);
+            
+            return decimal;
+        }
+        catch (NumberFormatException ex)
+        {
+            throw new FieldValidationException("Not a valid number: "+string);
+        }
+    }
+
+	@Override
+	public String getStringFromSingularObject(Object singularObject) {
+		if (singularObject == null)
+            return "";
+        // format
+        return singularObject.toString();
+	}
+
+	@Override
+	protected Object getDbValueFromObject(Object customFieldObject) {
+		// TODO Auto-generated method stub
+		return getStringFromSingularObject(customFieldObject);
+	}
 }

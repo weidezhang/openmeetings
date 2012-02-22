@@ -6,7 +6,7 @@
         <option value="">$i18n.getText("common.words.none")</option>
     #end
     #foreach ($option in $rooms)
-        <option value=$option.getRoomId()>$option.getName()</option>
+        <option #if ($value == $option.getRoomId().toString()) selected="selected"#end value=$textutils.htmlEncode($option.getRoomId().toString()) >$option.getName()</option>
     #end
 </select>
 #customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)

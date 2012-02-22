@@ -1,0 +1,8 @@
+<html>
+<head>
+    <title>Edit Issue &mdash; Issue CRUD Tutorial</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<iframe name="IframeName" src=$roomURL width='100%' height='600px'></iframe>
+</body>

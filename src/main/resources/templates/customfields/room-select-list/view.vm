@@ -1,6 +1,4 @@
 #if ($value)
- RoomURL: "$!value.toString()"
-#else
-undefined
-System.out.println("value view.vm", $value)
+##$!value.toString() 
+ <a href="$requestContext.baseUrl/plugins/servlet/openmeetingsrooms?enter=y&roomId=$textutils.htmlEncode($value.toString())">Link to room</a>
 #end

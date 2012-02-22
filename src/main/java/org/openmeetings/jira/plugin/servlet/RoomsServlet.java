@@ -36,10 +36,12 @@ public final class RoomsServlet extends HttpServlet
     private OmGateway omGateway;
     private UserManager userManager;
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
+	private String roomURL;
     
     private static final String LIST_BROWSER_TEMPLATE = "/templates/omrooms/list.vm";
     private static final String NEW_BROWSER_TEMPLATE = "/templates/omrooms/new.vm";
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/omrooms/edit.vm";
+    private static final String ENTER_BROWSER_TEMPLATE = "/templates/omrooms/enter.vm";
  
     public RoomsServlet(RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, com.atlassian.jira.user.util.UserManager jiraUserManager, UserManager userManager)
     {
@@ -109,6 +111,78 @@ public final class RoomsServlet extends HttpServlet
         	Integer id = Integer.valueOf(req.getParameter("key"));
     		roomService.delete(id);
     		res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
+        }else if("y".equals(req.getParameter("enter"))){
+        	String iframe_d;
+        	try {
+				if(omGateway.loginUser()){
+					
+//					roomId = omGateway.setUserObjectAndGenerateRoomHash(
+//							username, 
+//							firstname, 
+//							lastname, 
+//							profilePictureUrl, 
+//							email, 
+//							externalUserId, 
+//							externalUserType, 
+//							room_id, 
+//							becomeModeratorAsInt, 
+//							showAudioVideoTestAsInt);
+					Long roomId = Long.valueOf(req.getParameter("roomId"));
+					
+					String roomHash = omGateway.setUserObjectAndGenerateRoomHash( 
+							"username", 
+							"firstname", 
+							"lastname", 
+							"profilePictureUrl", 
+							"email@test.de", 
+							1L, 
+							"externalUserType", 
+							roomId, 
+							1, 
+							1);
+					
+					if(!roomHash.isEmpty()){
+						
+						String url = "localhost"; 
+				    	String port = "5080"; 
+						
+						this.roomURL = "http://"+url+":"+port+
+								"/openmeetings/?"+
+								"scopeRoomId=" + roomId +
+								"&secureHash=" +roomHash+								
+								"&language=1"+
+								"&lzproxied=solo";					
+								
+								
+//						printf("<iframe src='%s' width='%s' height='600px' />",$iframe_d,
+//								"100%");
+						
+					}
+					
+				}
+			} catch (XPathExpressionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DocumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+	        // Render the list of issues (list.vm) if no params are passed in
+	        //List<Room> rooms =  roomService.all();
+	        //List<Room> rooms =  roomService.allNotDeleted();
+	        Map<String, Object> context = Maps.newHashMap();
+	       
+			context.put("roomURL", this.roomURL);
+	        res.setContentType("text/html;charset=utf-8");
+	        // Pass in the list of rooms as the context
+	        templateRenderer.render(ENTER_BROWSER_TEMPLATE, context, res.getWriter());
         }else {
             // Render the list of issues (list.vm) if no params are passed in
             //List<Room> rooms =  roomService.all();
