@@ -4,6 +4,8 @@ import com.atlassian.activeobjects.external.ActiveObjects;
 
 import java.util.List;
 
+import net.java.ao.Query;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -30,6 +32,7 @@ public final class RoomServiceImpl implements RoomService
         room.setRoomType(roomType);
         room.setRoomId(roomId);
         room.setCreatedByUserId(createdByUserId);
+        room.setIsDeleted(false);
         room.save();
         return room;
     }
@@ -38,6 +41,12 @@ public final class RoomServiceImpl implements RoomService
     public List<Room> all()
     {
         return newArrayList(ao.find(Room.class));
+    }
+    
+    @Override
+    public List<Room> allNotDeleted()
+    {
+        return newArrayList(ao.find(Room.class, Query.select().where("IS_DELETED LIKE ?", false).limit(10)));
     }
 
 	@Override

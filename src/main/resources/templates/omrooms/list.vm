@@ -75,8 +75,8 @@
                                 $room.getIsAudioOnly()
                             </td>
                             <td>
-                                <a href="openmeetingsrooms?edit=y&key=$room.getKey()">Edit</a> &nbsp;
-                                <a href="#" class="delete-room" data-key="$room.getKey()">Delete</a>
+                                <a href="openmeetingsrooms?edit=y&key=$room.getID()">Edit</a> &nbsp;
+                                <a href="openmeetingsrooms?delete=y&key=$room.getID()" class="delete-room" data-key="$room.getID()">Delete</a>
                             </td>
                         </tr>
                         #end

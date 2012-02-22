@@ -18,4 +18,6 @@ public interface RoomService
     Room getRoom(Integer id);
 
     List<Room> all();
+    
+    List<Room> allNotDeleted();
 }

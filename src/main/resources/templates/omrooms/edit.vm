@@ -1,13 +1,13 @@
 <html>
 <head>
-    <title>Edit Issue &mdash; Issue CRUD Tutorial</title>
+    <title>Edit Room &mdash; Room Edit</title>
     <meta name="decorator" content="atl.general">
 </head>
 <body class="page-type-admin">
 <div class="content-container">
 
     <div class="content-body">
-        <h1>Edit issue $issue.getKey()</h1>
+        <h1>Edit Room $room.getName()</h1>
 
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">
@@ -21,30 +21,74 @@
             <!-- .aui-message -->
         #end
 
+                <h1>Create Room</h1>
         <div class="create-issue-panel">
 
-            <form method="post" id="h" action="openmeetingscrud" class="aui">
-                <input type="hidden" name="edit" value="y">
-                <input type="hidden" name="key" value="$issue.getKey()">
+            <form method="post" id="h" action="openmeetingsrooms" class="aui">
+            	<input type="hidden" name="edit" value="y">
+                <input type="hidden" name="key" value=$room.getID()>
                 <div class="field-group">
-                    <label for="h-fsummary">
-                        Summary
+                    <label for="h-froomname">
+                        Roomname
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <input id="h-fsummary" class="text long-field" type="text" name="summary" value="$issue.getSummary()">
+                    <input id="h-froomname" class="text long-field" type="text" name="roomname" value="$room.getName()">
                 </div>
                 <div class="field-group">
-                    <label for="h-fdescription">
-                        Description
-                        <span class="aui-icon icon-required"></span>
-                        <span class="content">required</span>
+                    <label for="h-froomtype">
+                        Roomtype                        
                     </label>
-                    <textarea id="h-fdescription" name="description">$issue.getDescription()</textarea>
+                    <select name="roomType" id="om-roomtype" style="width: 30%;">
+                        <option value="1">Conference</option>
+                        <option value="2" #if ("$room.getRoomType()" == "2")selected#end>Interview</option>
+                        <option value="3" #if ("$room.getRoomType()" == "3")selected#end>20</option>
+                        <option value="4" #if ("$room.getRoomType()" == "4")selected#end>30</option>
+                        <option value="5" #if ("$room.getRoomType()" == "5")selected#end>60</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fnr-participent">
+                        Nr. of Participent                       
+                    </label>
+                    <select name="numberOfParticipent" id="om-participent" style="width: 30%;">
+                        <option value="5" #if ("$room.getNumberOfParticipent()" == "5")selected#end>5</option>
+                        <option value="10" #if ("$room.getNumberOfParticipent()" == "10")selected#end>10</option>
+                        <option value="20" #if ("$room.getNumberOfParticipent()" == "20")selected#end>20</option>
+                        <option value="30" #if ("$room.getNumberOfParticipent()" == "30")selected#end>30</option>
+                        <option value="60" #if ("$room.getNumberOfParticipent()" == "60")selected#end>60</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fmoderated">
+                        Is moderated
+                    </label>
+                    <select name="isModeratedRoom" id="om-is-moderated" style="width: 30%;">
+                        <option value="false" #if ("$room.getIsModeratedRoom()" == "false")selected#end>No</option>
+                        <option value="true" #if ("$room.getIsModeratedRoom()" == "true")selected#end>Yes</option>                       
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-faudioonly">
+                        Is audio only
+                    </label>
+                    <select name="isAudioOnly" id="om-is-moderated" style="width: 30%;">
+                        <option value="false" #if ("$room.getIsAudioOnly()" == "false")selected#end>No</option>
+                        <option value="true" #if ("$room.getIsAudioOnly()" == "true")selected#end>Yes</option>                       
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fallow-recording">
+                        Allow Recording
+                    </label>
+                    <select name="isAllowedRecording" id="om-allow-recording" style="width: 30%;">
+                        <option value="false" #if ("$room.getIsAllowedRecording()" == "false")selected#end>No</option>
+                        <option value="true" #if ("$room.getIsAllowedRecording()" == "true")selected#end>Yes</option>                       
+                    </select>
                 </div>
                 <div class="buttons">
-                    <input class="button" type="submit" value="Update">&nbsp;
-                    <a href="openmeetingscrud">Cancel</a>
+                    <input class="button" type="submit" value="Save">&nbsp;
+                    <a href="openmeetingsrooms">Cancel</a>
                 </div>
             </form>
         </div>

@@ -1,0 +1,12 @@
+#customControlHeader ($action $customField.id $customField.name $fieldLayoutItem.required $displayParameters $auiparams)
+<select class="select" name="$customField.id" id="$customField.id">
+    #if (!$fieldLayoutItem || $fieldLayoutItem.required == false)
+        <option value="-1">$i18n.getText("common.words.none")</option>
+    #else
+        <option value="">$i18n.getText("common.words.none")</option>
+    #end
+    #foreach ($option in $rooms)
+        <option value=$option.getRoomId()>$option.getName()</option>
+    #end
+</select>
+#customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)

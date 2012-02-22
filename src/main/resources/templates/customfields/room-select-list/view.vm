@@ -1,0 +1,6 @@
+#if ($value)
+ RoomURL: "$!value.toString()"
+#else
+undefined
+System.out.println("value view.vm", $value)
+#end

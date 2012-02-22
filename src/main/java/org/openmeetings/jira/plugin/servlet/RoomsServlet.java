@@ -79,7 +79,7 @@ public final class RoomsServlet extends HttpServlet
         }else if("y".equals(req.getParameter("edit"))){
         	// Renders edit.vm template if the "edit" parameter is passed
                        
-        	Integer id = Integer.valueOf(req.getParameter("id"));        	
+        	Integer id = Integer.valueOf(req.getParameter("key"));        	
 //        	Boolean isAllowedRecording = Boolean.valueOf(req.getParameter("isAllowedRecording"));
 //        	Boolean isAudioOnly = Boolean.valueOf(req.getParameter("isAudioOnly"));
 //        	Boolean isModeratedRoom = Boolean.valueOf(req.getParameter("isModeratedRoom"));
@@ -106,41 +106,20 @@ public final class RoomsServlet extends HttpServlet
             templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, res.getWriter());
         	
         }else if("y".equals(req.getParameter("delete"))){
-        	
-        	
+        	Integer id = Integer.valueOf(req.getParameter("key"));
+    		roomService.delete(id);
+    		res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
         }else {
             // Render the list of issues (list.vm) if no params are passed in
-            List<Room> rooms =  roomService.all();
+            //List<Room> rooms =  roomService.all();
+            List<Room> rooms =  roomService.allNotDeleted();
             Map<String, Object> context = Maps.newHashMap();
             context.put("rooms", rooms);
             res.setContentType("text/html;charset=utf-8");
             // Pass in the list of rooms as the context
             templateRenderer.render(LIST_BROWSER_TEMPLATE, context, res.getWriter());
-        }
+        } 	
     	
-    	
-        
-    	final PrintWriter w = res.getWriter();
-        w.write("<h1>Rooms</h1>");
- 
-        // the form to post more TODOs
-        w.write("<form method=\"post\">");
-        w.write("<input type=\"text\" name=\"task\" size=\"25\"/>");
-        w.write("&nbsp;&nbsp;");
-        w.write("<input type=\"submit\" name=\"submit\" value=\"Add\"/>");
-        w.write("</form>");
- 
-        w.write("<ol>");
- 
-        for (Room room : roomService.all()) 
-        {
-            w.printf("<li><%2$s> %s </%2$s></li>", room.getName(), room.getIsModeratedRoom() ? "strike" : "strong");
-        }
- 
-        w.write("</ol>");
-        w.write("<script language='javascript'>document.forms[0].elements[0].focus();</script>");
- 
-        w.close();
     }
  
     @Override
@@ -158,8 +137,12 @@ public final class RoomsServlet extends HttpServlet
         	String roomName = req.getParameter("roomname");
         	Long numberOfParticipent = Long.valueOf(req.getParameter("numberOfParticipent"));  
         	Long roomType = Long.valueOf(req.getParameter("roomType")); 
-        	Integer id = Integer.valueOf(req.getParameter("id"));
-        	Long roomId = Long.valueOf(req.getParameter("roomId"));
+        	Integer id = Integer.valueOf(req.getParameter("key"));
+        	//Long roomId = Long.valueOf(req.getParameter("roomId"));
+        	
+        	//Get RoomId for updating room from DB
+        	Room room = roomService.getRoom(id);
+        	Long roomId = room.getRoomId();
         	
         	try {
 				if(omGateway.loginUser()){
@@ -188,13 +171,13 @@ public final class RoomsServlet extends HttpServlet
 				e.printStackTrace();
 			}
         	
-       	
-        	
         	roomService.update(id, isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType);
-            //roomService.add(description, true, true, true, "name", 4L, 1L);
-        	
             res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
     		
+    	}else if("y".equals(req.getParameter("delete"))){    		
+    		Integer id = Integer.valueOf(req.getParameter("key"));
+    		roomService.delete(id);
+    		res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
     	}else{
     		
         	Boolean isAllowedRecording = Boolean.valueOf(req.getParameter("isAllowedRecording"));
