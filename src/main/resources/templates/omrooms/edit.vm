@@ -1,13 +1,13 @@
 <html>
 <head>
-    <title>Edit Room &mdash; Room Edit</title>
+    <title>$i18n.getText("openmeetings.rooms.edit.titel.label")</title>
     <meta name="decorator" content="atl.general">
 </head>
 <body class="page-type-admin">
 <div class="content-container">
 
     <div class="content-body">
-        <h1>Edit Room $room.getName()</h1>
+        <h1>$i18n.getText("openmeetings.rooms.edit.titel.label"): $room.getName()</h1>
 
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">
@@ -19,9 +19,7 @@
                 #end
             </div>
             <!-- .aui-message -->
-        #end
-
-                <h1>Create Room</h1>
+        #end    	
         <div class="create-issue-panel">
 
             <form method="post" id="h" action="openmeetingsrooms" class="aui">
@@ -40,11 +38,10 @@
                         Roomtype                        
                     </label>
                     <select name="roomType" id="om-roomtype" style="width: 30%;">
-                        <option value="1">Conference</option>
-                        <option value="2" #if ("$room.getRoomType()" == "2")selected#end>Interview</option>
-                        <option value="3" #if ("$room.getRoomType()" == "3")selected#end>20</option>
-                        <option value="4" #if ("$room.getRoomType()" == "4")selected#end>30</option>
-                        <option value="5" #if ("$room.getRoomType()" == "5")selected#end>60</option>
+                        <option value="1" #if ("$room.getRoomType()" == "2")selected#end>$i18n.getText("openmeetings.rooms.edit.conference.label")</option>
+                        <option value="2" #if ("$room.getRoomType()" == "2")selected#end>$i18n.getText("openmeetings.rooms.edit.audience.label")</option>
+                        <option value="3" #if ("$room.getRoomType()" == "3")selected#end>$i18n.getText("openmeetings.rooms.edit.restricted.label")</option>
+                        <option value="4" #if ("$room.getRoomType()" == "4")selected#end>$i18n.getText("openmeetings.rooms.edit.interview.label")</option>                        
                     </select>
                 </div>
                 <div class="field-group">
@@ -57,6 +54,8 @@
                         <option value="20" #if ("$room.getNumberOfParticipent()" == "20")selected#end>20</option>
                         <option value="30" #if ("$room.getNumberOfParticipent()" == "30")selected#end>30</option>
                         <option value="60" #if ("$room.getNumberOfParticipent()" == "60")selected#end>60</option>
+                        <option value="100" #if ("$room.getNumberOfParticipent()" == "100")selected#end>100</option>
+                        <option value="150" #if ("$room.getNumberOfParticipent()" == "150")selected#end>150</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -64,8 +63,8 @@
                         Is moderated
                     </label>
                     <select name="isModeratedRoom" id="om-is-moderated" style="width: 30%;">
-                        <option value="false" #if ("$room.getIsModeratedRoom()" == "false")selected#end>No</option>
-                        <option value="true" #if ("$room.getIsModeratedRoom()" == "true")selected#end>Yes</option>                       
+                        <option value="false" #if ("$room.getIsModeratedRoom()" == "false")selected#end>$i18n.getText("openmeetings.rooms.no.label")</option>
+                        <option value="true" #if ("$room.getIsModeratedRoom()" == "true")selected#end>$i18n.getText("openmeetings.rooms.yes.label")</option>                       
                     </select>
                 </div>
                 <div class="field-group">
@@ -73,8 +72,8 @@
                         Is audio only
                     </label>
                     <select name="isAudioOnly" id="om-is-moderated" style="width: 30%;">
-                        <option value="false" #if ("$room.getIsAudioOnly()" == "false")selected#end>No</option>
-                        <option value="true" #if ("$room.getIsAudioOnly()" == "true")selected#end>Yes</option>                       
+                        <option value="false" #if ("$room.getIsAudioOnly()" == "false")selected#end>$i18n.getText("openmeetings.rooms.no.label")</option>
+                        <option value="true" #if ("$room.getIsAudioOnly()" == "true")selected#end>$i18n.getText("openmeetings.rooms.yes.label")</option>                       
                     </select>
                 </div>
                 <div class="field-group">
@@ -82,12 +81,12 @@
                         Allow Recording
                     </label>
                     <select name="isAllowedRecording" id="om-allow-recording" style="width: 30%;">
-                        <option value="false" #if ("$room.getIsAllowedRecording()" == "false")selected#end>No</option>
-                        <option value="true" #if ("$room.getIsAllowedRecording()" == "true")selected#end>Yes</option>                       
+                        <option value="false" #if ("$room.getIsAllowedRecording()" == "false")selected#end>$i18n.getText("openmeetings.rooms.no.label")</option>
+                        <option value="true" #if ("$room.getIsAllowedRecording()" == "true")selected#end>$i18n.getText("openmeetings.rooms.yes.label")</option>                       
                     </select>
                 </div>
                 <div class="buttons">
-                    <input class="button" type="submit" value="Save">&nbsp;
+                    <input class="button" type="submit" value=$i18n.getText("openmeetings.admin.save.label")>&nbsp;
                     <a href="openmeetingsrooms">Cancel</a>
                 </div>
             </form>

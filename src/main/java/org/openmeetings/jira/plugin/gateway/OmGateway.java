@@ -49,14 +49,9 @@ public class OmGateway {
     	
     	this.setSessionId(item.elementText("session_id"));
     	
-		log.error(item.elementText("session_id"));
+		log.info(item.elementText("session_id"));
 		
 		LinkedHashMap<String, Element> result = omRestService.call("http://"+url+":"+port+"/openmeetings/services/UserService/loginUser?SID="+this.getSessionId()+"&username="+omusername+"&userpass="+userpass, null);
-		
-		//log.error(result.get("return").asXML());
-		
-		log.error(result.get("return").getStringValue());		
-		
 		
 		if (Integer.valueOf(result.get("return").getStringValue())>0){
 	    	return true; 

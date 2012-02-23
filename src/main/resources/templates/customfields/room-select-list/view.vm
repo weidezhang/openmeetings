@@ -1,4 +1,3 @@
 #if ($value)
-##$!value.toString() 
- <a href="$requestContext.baseUrl/plugins/servlet/openmeetingsrooms?enter=y&roomId=$textutils.htmlEncode($value.toString())">Link to room</a>
+ <a href="$requestContext.baseUrl/plugins/servlet/openmeetingsrooms?enter=y&roomId=$textutils.htmlEncode($value.toString())">$i18n.getText("openmeetings.rooms.enter.label")</a>
 #end

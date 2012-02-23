@@ -8,68 +8,98 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+
 import org.dom4j.DocumentException;
+import org.jfree.util.Log;
 import org.openmeetings.jira.plugin.ao.omrooms.Room;
 import org.openmeetings.jira.plugin.ao.omrooms.RoomService;
 import org.openmeetings.jira.plugin.gateway.OmGateway;
+import org.openmeetings.jira.plugin.gateway.OmRestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.jira.ComponentManager;
-import com.atlassian.jira.bc.issue.IssueService;
+import com.atlassian.jira.functest.framework.UserProfile;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.user.util.DefaultUserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.google.common.collect.Maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.*;
+
+import com.atlassian.jira.util.velocity.VelocityRequestContextFactory;
+import com.atlassian.jira.avatar.Avatar;
+import com.atlassian.jira.avatar.Avatar.Type;
+import com.atlassian.jira.avatar.AvatarManager;
+import com.atlassian.jira.avatar.AvatarService;
+import com.atlassian.crowd.embedded.api.UserWithAttributes;
+
  
 public final class RoomsServlet extends HttpServlet
 {
+	private static final Logger log = LoggerFactory.getLogger(RoomsServlet.class);
+	
     private final RoomService roomService;
     private TemplateRenderer templateRenderer;
     private OmGateway omGateway;
     private UserManager userManager;
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
 	private String roomURL;
+	protected final VelocityRequestContextFactory requestContextFactory;
+	
+	private final AvatarManager avatarManager;	
+	
+	
     
     private static final String LIST_BROWSER_TEMPLATE = "/templates/omrooms/list.vm";
     private static final String NEW_BROWSER_TEMPLATE = "/templates/omrooms/new.vm";
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/omrooms/edit.vm";
     private static final String ENTER_BROWSER_TEMPLATE = "/templates/omrooms/enter.vm";
  
-    public RoomsServlet(RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, com.atlassian.jira.user.util.UserManager jiraUserManager, UserManager userManager)
+    public RoomsServlet(VelocityRequestContextFactory requestContextFactory, AvatarManager avatarManager, RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, com.atlassian.jira.user.util.UserManager jiraUserManager, UserManager userManager)
     {
         this.roomService = checkNotNull(roomService);
         this.templateRenderer = templateRenderer;
         this.omGateway = omGateway;
         this.jiraUserManager = jiraUserManager;
         this.userManager = userManager;
+        this.avatarManager = avatarManager;
+        this.requestContextFactory = requestContextFactory;
         
     }
  
+    public String getCanonicalBaseUrl() {
+    	   return this.requestContextFactory.getJiraVelocityRequestContext().getCanonicalBaseUrl();
+    }
 
 	private User getCurrentUser(HttpServletRequest req) {
 	    // To get the current user, we first get the username from the session.
 	    // Then we pass that over to the jiraUserManager in order to get an
-	    // actual User object.
-	    //return jiraUserManager.getUser(userManager.getRemoteUsername(req));
+	    // actual User object.	 
 	    return jiraUserManager.getUserObject(userManager.getRemoteUsername(req));
 	}
 	
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	User user = getCurrentUser(req);
+    	User currentUser = getCurrentUser(req);
+    	System.out.println("currentUser: "+currentUser.getName());
+		User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
+    	System.out.println("currentUser2: "+currentUser2.getName());
         
         if ("y".equals(req.getParameter("new"))) {
-        	// Renders new.vm template if the "new" parameter is passed
-            
+        	// Renders new.vm template if the "new" parameter is passed            
             // Create an empty context map to pass into the render method
             Map<String, Object> context = Maps.newHashMap();
             // Make sure to set the contentType otherwise bad things happen
@@ -79,67 +109,64 @@ public final class RoomsServlet extends HttpServlet
            templateRenderer.render(NEW_BROWSER_TEMPLATE, context, res.getWriter());
         	
         }else if("y".equals(req.getParameter("edit"))){
-        	// Renders edit.vm template if the "edit" parameter is passed
-                       
-        	Integer id = Integer.valueOf(req.getParameter("key"));        	
-//        	Boolean isAllowedRecording = Boolean.valueOf(req.getParameter("isAllowedRecording"));
-//        	Boolean isAudioOnly = Boolean.valueOf(req.getParameter("isAudioOnly"));
-//        	Boolean isModeratedRoom = Boolean.valueOf(req.getParameter("isModeratedRoom"));
-//        	String roomName = req.getParameter("roomname");
-//        	Long numberOfParticipent = Long.valueOf(req.getParameter("numberOfParticipent"));  
-//        	Long roomType = Long.valueOf(req.getParameter("roomType"));        	
-//        	Long roomId = Long.valueOf(req.getParameter("roomId"));
-        	        	
-//        	Room room =  roomService.update(id, isAllowedRecording, isAudioOnly, isModeratedRoom, name, numberOfParticipent, roomType);
-        	
+        	// Renders edit.vm template if the "edit" parameter is passed                       
+        	Integer id = Integer.valueOf(req.getParameter("key"));
         	Room room = roomService.getRoom(id);
         	
             Map<String, Object> context = Maps.newHashMap();
-            context.put("room", room);
-//            context.put("isAllowedRecording", isAllowedRecording);
-//            context.put("isAudioOnly", isAudioOnly);
-//            context.put("isModeratedRoom", isModeratedRoom);
-//            context.put("roomName", roomName);
-//            context.put("numberOfParticipent", numberOfParticipent);
-//            context.put("roomType", roomType);
-//            context.put("roomId", roomId);            
+            context.put("room", room);        
             res.setContentType("text/html;charset=utf-8");
             // Render the template with the issue inside the context
-            templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, res.getWriter());
-        	
+            templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, res.getWriter());        	
         }else if("y".equals(req.getParameter("delete"))){
         	Integer id = Integer.valueOf(req.getParameter("key"));
     		roomService.delete(id);
     		res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
-        }else if("y".equals(req.getParameter("enter"))){
-        	String iframe_d;
+        }else if("y".equals(req.getParameter("enter"))){        	
         	try {
 				if(omGateway.loginUser()){
 					
-//					roomId = omGateway.setUserObjectAndGenerateRoomHash(
-//							username, 
-//							firstname, 
-//							lastname, 
-//							profilePictureUrl, 
-//							email, 
-//							externalUserId, 
-//							externalUserType, 
-//							room_id, 
-//							becomeModeratorAsInt, 
-//							showAudioVideoTestAsInt);
+					//authContext.getUser().getName();
+					//com.atlassian.jira.ComponentManager.getInstance().getJiraAuthenticationContext().getUser();
+										
+					Long directoryId = currentUser.getDirectoryId();
+					String firsname = currentUser.getDisplayName();
+					String email = currentUser.getEmailAddress();
+					Long userId = new Date().getTime();
+					String username = currentUser.getName();
+					int becomeModeratorAsInt = 1;
+					int showAudioVideoTestAsInt = 1;
+					
+					
+					System.out.println("directoryId: "+directoryId);
+					System.out.println("username: "+username);
+										
+					 String avatarId = this.avatarManager.getDefaultAvatarId(Avatar.Type.USER).toString();					 
+					 //URI avatarUrl = avatarService.getAvatarURL(currentUser, avatarId, Avatar.Size.SMALL);
+					 //String profilePictureUrl = avatarUrl.toString();
+					 String profilePictureUrl = this.getCanonicalBaseUrl() + "/secure/projectavatar?avatarId=" + avatarId + "&size=small";
+					 
+
+					 
+//					String userEmail;
+//			        UserProfile userProfile = userService.getUserProfile(reviewData.getAuthor().getUserName());
+//			        if (userProfile != null) {
+//			                userEmail = userProfile.getEmail();
+//			        }
+					 
 					Long roomId = Long.valueOf(req.getParameter("roomId"));
 					
-					String roomHash = omGateway.setUserObjectAndGenerateRoomHash( 
-							"username", 
-							"firstname", 
-							"lastname", 
-							"profilePictureUrl", 
-							"email@test.de", 
-							1L, 
-							"externalUserType", 
-							roomId, 
-							1, 
-							1);
+					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, 
+																				firsname, 
+																				"", 
+																				profilePictureUrl, 
+																				email, 
+																				userId, 
+																				"jira", 
+																				roomId, 
+																				becomeModeratorAsInt, 
+																				showAudioVideoTestAsInt);
+					
 					
 					if(!roomHash.isEmpty()){
 						
@@ -152,11 +179,7 @@ public final class RoomsServlet extends HttpServlet
 								"&secureHash=" +roomHash+								
 								"&language=1"+
 								"&lzproxied=solo";					
-								
-								
-//						printf("<iframe src='%s' width='%s' height='600px' />",$iframe_d,
-//								"100%");
-						
+													
 					}
 					
 				}
@@ -173,10 +196,7 @@ public final class RoomsServlet extends HttpServlet
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	
-	        // Render the list of issues (list.vm) if no params are passed in
-	        //List<Room> rooms =  roomService.all();
-	        //List<Room> rooms =  roomService.allNotDeleted();
+     
 	        Map<String, Object> context = Maps.newHashMap();
 	       
 			context.put("roomURL", this.roomURL);
@@ -185,8 +205,8 @@ public final class RoomsServlet extends HttpServlet
 	        templateRenderer.render(ENTER_BROWSER_TEMPLATE, context, res.getWriter());
         }else {
             // Render the list of issues (list.vm) if no params are passed in
-            //List<Room> rooms =  roomService.all();
-            List<Room> rooms =  roomService.allNotDeleted();
+            //List<Room> rooms =  roomService.allNotDeleted();
+            List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.getName());
             Map<String, Object> context = Maps.newHashMap();
             context.put("rooms", rooms);
             res.setContentType("text/html;charset=utf-8");
@@ -199,9 +219,12 @@ public final class RoomsServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	User user = getCurrentUser(req);
+    	User currentUser = getCurrentUser(req);
+    	System.out.println("currentUser: "+currentUser.getName());
+    	User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
     	//Second variant to get current user object. 
     	//User user2 = (User) ComponentManager.getInstance().getJiraAuthenticationContext().getUser();
+    	System.out.println("currentUser22: "+currentUser2);
     	
     	if ("y".equals(req.getParameter("edit"))) {
     		
@@ -289,24 +312,12 @@ public final class RoomsServlet extends HttpServlet
 				e.printStackTrace();
 			}
         	
-        	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType, roomId, user.getDirectoryId());
+        	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType, roomId, currentUser.getName());
             //roomService.add(description, true, true, true, "name", 4L, 1L);
         	
             res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
     		
-    	}
-    	
-//        final String description = req.getParameter("task");
-//        final String isAllowedRecording = req.getParameter("isAllowedRecording");
-//        final String isAudioOnly = req.getParameter("isAudioOnly");
-//        final String isModeratedRoom = req.getParameter("isModeratedRoom");
-//        final String name = req.getParameter("name");
-//        final Long numberOfParticipent = Long.valueOf(req.getParameter("numberOfParticipent"));
-//        final Long roomType = Long.valueOf(req.getParameter("roomType"));
-        
-        //roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, name, numberOfParticipent, roomType);
-        //roomService.add(true, true, true, "name", 4L, 1L);
+    	}   	
 
-        //res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
     }
 }

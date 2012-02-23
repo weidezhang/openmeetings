@@ -8,7 +8,7 @@ import java.util.List;
 public interface RoomService
 {
     Room add(boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
-    		String name, Long numberOfParticipent, Long roomType, Long roomId, Long createdByUserId);
+    		String name, Long numberOfParticipent, Long roomType, Long roomId, String createdByUserName);
     
     Room update(Integer id, boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
     		String name, Long numberOfParticipent, Long roomType);
@@ -20,4 +20,6 @@ public interface RoomService
     List<Room> all();
     
     List<Room> allNotDeleted();
+    
+    List<Room> allNotDeletedByUserName(String userName);
 }

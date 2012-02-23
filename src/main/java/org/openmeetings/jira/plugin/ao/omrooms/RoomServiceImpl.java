@@ -20,7 +20,7 @@ public final class RoomServiceImpl implements RoomService
 
     @Override
     public Room add(boolean isAllowedRecording, boolean isAudioOnly, boolean isModeratedRoom,
-    		String name, Long numberOfParticipent, Long roomType, Long roomId, Long createdByUserId)
+    		String name, Long numberOfParticipent, Long roomType, Long roomId, String createdByUserName)
     {
         final Room room = ao.create(Room.class);
       
@@ -31,7 +31,7 @@ public final class RoomServiceImpl implements RoomService
         room.setNumberOfParticipent(numberOfParticipent);
         room.setRoomType(roomType);
         room.setRoomId(roomId);
-        room.setCreatedByUserId(createdByUserId);
+        room.setCreatedByUserName(createdByUserName);
         room.setIsDeleted(false);
         room.save();
         return room;
@@ -83,5 +83,15 @@ public final class RoomServiceImpl implements RoomService
 		
 		final Room room = ao.get(Room.class, id);
 		return room;
+	}
+
+	@Override
+	public List<Room> allNotDeletedByUserName(String userName) {		
+	 
+	 	return newArrayList(ao.find(Room.class, Query.select().
+				 where("IS_DELETED LIKE ? AND CREATED_BY_USER_NAME LIKE ?",false, userName.toString()).limit(1000)));	
+		
+		 //return newArrayList(ao.find(Room.class,"IS_DELETED LIKE ? AND CREATED_BY_USER_NAME = ?", false, userName));	
+		 		
 	}
 }

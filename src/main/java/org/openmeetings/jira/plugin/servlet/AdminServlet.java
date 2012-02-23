@@ -37,21 +37,14 @@ public class AdminServlet extends HttpServlet
 {
 	private static final Logger log = LoggerFactory.getLogger(AdminServlet.class);
 	
-    private final UserManager userManager;
-    //private final TemplateRenderer renderer;
-    //private final LoginUriProvider loginUriProvider;
+    private final UserManager userManager;    
     private TemplateRenderer templateRenderer;
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
    
     private OmPluginSettings omPluginSettings;    
     
-    private static final String NEW_BROWSER_TEMPLATE = "/templates/config/adminnew.vm";
-    private static final String EDIT_BROWSER_TEMPLATE = "/templates/config/adminedit.vm";
+    
     private static final String OM_CONFIG_TEMPLATE = "/templates/config/omconfig.vm";
-//    public TodoServlet(ActiveObjects ao)
-//    {
-//        this.ao = checkNotNull(ao);
-//    }
     
     public AdminServlet(com.atlassian.jira.user.util.UserManager jiraUserManager, 
 				    		TemplateRenderer templateRenderer,				    		
@@ -87,17 +80,9 @@ public class AdminServlet extends HttpServlet
             response.setContentType("text/html;charset=utf-8");
             // Render the velocity template (new.vm). Since the new.vm template 
             // doesn't need to render any in dynamic content, we just pass it an empty context
-           templateRenderer.render(NEW_BROWSER_TEMPLATE, context, response.getWriter());
+           //templateRenderer.render(NEW_BROWSER_TEMPLATE, context, response.getWriter());
         } else if ("y".equals(request.getParameter("edit"))) {
-            // Renders edit.vm template if the "edit" parameter is passed
-     
-//            // Retrieve issue with the specified key
-//        	AdminConfiguration omConfig =  adminOmConfigurationService.get(request.getParameter("key"));// req.getParameter("key"));
-//            Map<String, Object> context = Maps.newHashMap();
-//            context.put("omConfig", omConfig);
-//            response.setContentType("text/html;charset=utf-8");
-//            // Render the template with the issue inside the context
-//            templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, response.getWriter());
+
         } else {
         	        	
         	String url; 
@@ -142,7 +127,8 @@ public class AdminServlet extends HttpServlet
       
         if ("y".equals(request.getParameter("edit"))) {
           
-
+        	
+        	response.sendRedirect(request.getContextPath() + "secure/AdminSummary.jspa");
       
         } else {
         	String url = request.getParameter("url"); 

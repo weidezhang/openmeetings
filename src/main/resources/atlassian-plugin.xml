@@ -12,7 +12,7 @@
     <label key="OpenMeetings Setup"/>
   </web-section>
   <web-item key="om_config" section="integrations_section/om_config_section">
-    <label>Server Setup</label>
+    <label>OpenMeetings Setup</label>
     <link linkId="admin_link" absolute="false">/plugins/servlet/openmeetingsadmin</link>
   </web-item>
   <web-section key="my_links_section" name="My Links Main Section" location="my_links_link" weight="10">

@@ -11,7 +11,7 @@
             <form method="post" id="h" action="openmeetingsadmin" class="aui">
                 <div class="field-group">
                     <label for="h-furl">
-                        URL
+                        $i18n.getText("openmeetings.config.url.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="field-group">
                     <label for="h-fport">
-                        Port
+                         $i18n.getText("openmeetings.config.port.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="field-group">
                     <label for="h-fusername">
-                        Username
+                         $i18n.getText("openmeetings.config.username.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="field-group">
                     <label for="h-fuserpass">
-                        Userpass
+                        $i18n.getText("openmeetings.config.userpass.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
@@ -43,15 +43,15 @@
                 </div>
                 <div class="field-group">
                     <label for="h-fkey">
-                        Key
+                        $i18n.getText("openmeetings.config.key.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
                     <input id="h-fkey" class="text long-field" type="text" name="key" value=$key>
                 </div>                            
                 <div class="buttons">
-                    <input class="button" type="submit" value="Save">&nbsp;
-                    <a href="/secure/AdminSummary.jspa">Cancel</a>
+                    <input class="button" type="submit" value="$i18n.getText("openmeetings.admin.save.label")">&nbsp;
+                    <a href="$requestContext.baseUrl/secure/AdminSummary.jspa">$i18n.getText("openmeetings.rooms.cancel.label")</a>
                 </div>
             </form>
         </div>

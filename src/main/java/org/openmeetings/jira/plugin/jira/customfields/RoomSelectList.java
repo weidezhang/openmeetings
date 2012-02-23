@@ -40,18 +40,11 @@ import com.atlassian.jira.issue.fields.config.FieldConfig;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 
 	public class RoomSelectList extends TextCFType {
-	    private static final Logger log = LoggerFactory.getLogger(RoomSelectList.class);
-		//private final OptionsManager optionsManager;
-		//private static SelectConverter selectConverter;
-		private final RoomService roomService;
-	
-//	    public RoomSelectList(CustomFieldValuePersister customFieldValuePersister, StringConverter stringConverter, SelectConverter selectConverter, OptionsManager optionsManager, GenericConfigManager genericConfigManager, RoomService roomService) {
-//	    super(customFieldValuePersister, stringConverter, selectConverter, optionsManager, genericConfigManager);
-//	    this.roomService = roomService;
-//	    //this.optionsManager = optionsManager;
 		
-    
+	    private static final Logger log = LoggerFactory.getLogger(RoomSelectList.class);
 	    
+		private final RoomService roomService;
+ 	    
 		public RoomSelectList(CustomFieldValuePersister customFieldValuePersister,
 	            GenericConfigManager genericConfigManager, RoomService roomService) {
 	        super(customFieldValuePersister, genericConfigManager);
@@ -69,22 +62,10 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
         if (issue == null) {
             return map;
         }
-
-         FieldConfig fieldConfig = field.getRelevantConfig(issue);
-         //add what you need to the map here
-         //field.getValue(issue);
-         
-         //fieldConfig.getConfigItems().get(1);
-        	//getValueFromIssue
-         //Object param = issue.getCustomFieldValue(field);
-         //map.put("param", param);
-         
-         List<Room> rooms =  roomService.allNotDeleted();
-         
-         map.put("rooms", rooms);
-         //map.put("value", param); 
-         
-        return map;
+         //FieldConfig fieldConfig = field.getRelevantConfig(issue);                  
+         List<Room> rooms =  roomService.allNotDeleted();         
+         map.put("rooms", rooms); 
+         return map;
     }
     
     @Override

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>All Rooms &mdash; Room List</title>
+    <title>$i18n.getText("openmeetings.rooms.roomlist.label")</title>
     <meta name="decorator" content="atl.general">
     <script>
         AJS.$(document).ready(function() {
@@ -28,7 +28,6 @@
 
     <div class="content-body">
         <h1>You've Got #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms!</h1>
-
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">
                 #foreach($error in $errors)
@@ -46,37 +45,51 @@
                 <table class="aui">
                     <thead>
                     <tr>
-                        <th>RoomId</th>
-                        <th>Roomname</th>
-                        <th>Roomtype</th>
-                        <th>Participent</th>
-                        <th>Moderator</th>
-                        <th>Audio</th>
+                        ##<th>$i18n.getText("openmeetings.rooms.roomid.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.roomname.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.roomtype.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.participent.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.ismoderated.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.isaudio.label")</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                         #foreach( $room in $rooms )
                         <tr>
-                            <td>$room.getRoomId()</td>
+                            ##<td>$room.getRoomId()</td>
                             <td>$room.getName()</td>
                             <td>
-                                #if($room.getRoomType())
-                            $room.getRoomType()
-                        #end
+                                #if($room.getRoomType() == 1)		                           
+		                            $i18n.getText("openmeetings.rooms.conference.label")
+	                            #elseif($room.getRoomType() == 2)
+	                            	$i18n.getText("openmeetings.rooms.audience.label")
+                            	#elseif($room.getRoomType() == 3)
+	                            	$i18n.getText("openmeetings.rooms.restricted.label")
+                            	#elseif($room.getRoomType() == 4)
+	                            	$i18n.getText("openmeetings.rooms.interview.label")
+		                        #end
                             </td>
                             <td>
                                 $room.getNumberOfParticipent()
                             </td>
                             <td>
-                                $room.getIsModeratedRoom()
+                            	#if($room.getIsModeratedRoom() == true)                                	
+                                	$i18n.getText("openmeetings.rooms.yes.label")
+                                #else
+                                	$i18n.getText("openmeetings.rooms.no.label")
+                                #end
                             </td>
                             <td>
-                                $room.getIsAudioOnly()
+                            	#if( $room.getIsAudioOnly() == true)                                	
+                                	$i18n.getText("openmeetings.rooms.yes.label")
+                                #else
+                                	$i18n.getText("openmeetings.rooms.no.label")
+                                #end                               
                             </td>
                             <td>
-                                <a href="openmeetingsrooms?edit=y&key=$room.getID()">Edit</a> &nbsp;
-                                <a href="openmeetingsrooms?delete=y&key=$room.getID()" class="delete-room" data-key="$room.getID()">Delete</a>
+                                <a href="openmeetingsrooms?edit=y&key=$room.getID()">$i18n.getText("openmeetings.rooms.edit.label")</a> &nbsp;
+                                <a href="openmeetingsrooms?delete=y&key=$room.getID()" class="delete-room" data-key="$room.getID()">$i18n.getText("openmeetings.rooms.delete.label")</a>
                             </td>
                         </tr>
                         #end
@@ -86,7 +99,7 @@
         #end
         <form method="get" action="openmeetingsrooms" class="aui">
             <input type="hidden" name="new" value="y">
-            <input type="submit" class="button" value="Create new room">
+            <input type="submit" class="button" value=$i18n.getText("openmeetings.rooms.createnewroom.label")>
         </form>
     </div>
 </div>

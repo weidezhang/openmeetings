@@ -1,13 +1,13 @@
 <html>
 <head>
-    <title>Edit OpenMeetings Configuration</title>
+    <title>$i18n.getText("openmeetings.config.titel.label")</title>
     <meta name="decorator" content="atl.general">
 </head>
 <body class="page-type-admin">
 <div class="content-container">
 
     <div class="content-body">
-        <h1>Edit issue omConfig.getKey()</h1>
+        <h1>$i18n.getText("openmeetings.config.server.label") $omConfig.getKey()</h1>
 
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">
@@ -20,54 +20,53 @@
             </div>
             <!-- .aui-message -->
         #end
-
         <div class="create-issue-panel">
-            <form method="post" id="h" action="openmeetingsconfig" class="aui">
+            <form method="post" id="h" action="openmeetingsadmin" class="aui">
                 <input type="hidden" name="edit" value="y">
-                <input type="hidden" name="key" value="omConfig.getKey()">
+                <input type="hidden" name="key" value="$omConfig.getKey()">
                 <div class="field-group">
                     <label for="h-furl">
-                        URL
+                        $i18n.getText("openmeetings.config.url.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <input id="h-furl" class="text long-field" type="text" name="url" value="omConfig.getOmUrl()">
+                    <input id="h-furl" class="text long-field" type="text" name="url" value="$!omConfig.getOmUrl()">
                 </div>
                 <div class="field-group">
                     <label for="h-fport">
-                        Port
+                        $i18n.getText("openmeetings.config.port.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <textarea id="h-fport" name="port">omConfig.getOmPort()</textarea>
+                    <textarea id="h-fport" name="port">$!omConfig.getOmPort()</textarea>
                 </div>                
                  <div class="field-group">
                     <label for="h-fusername">
-                        User Name
+                        $i18n.getText("openmeetings.config.username.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <textarea id="h-fusername" name="username">omConfig.getOmUserName()</textarea>
+                    <textarea id="h-fusername" name="username">$!omConfig.getOmUserName()</textarea>
                 </div>                
                 <div class="field-group">
                     <label for="h-fdescription">
-                        User Pass
+                        $i18n.getText("openmeetings.config.userpass.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <textarea id="h-fuserpass" name="userpass">omConfig.getOmUserPass()</textarea>
-                </div>                
+                    <textarea id="h-fuserpass" name="userpass">$!omConfig.getOmUserPass()</textarea>
+                </div>                                
                 <div class="field-group">
                     <label for="h-fdescription">
-                        Key
+                        $i18n.getText("openmeetings.config.key.label")
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <textarea id="h-fkey" name="description">omConfig.getOmKey()</textarea>
+                    <textarea id="h-fkey" name="description">$!omConfig.getOmKey()</textarea>
                 </div>                
                 <div class="buttons">
-                    <input class="button" type="submit" value="Update">&nbsp;
-                    <a href="openmeetingscrud">Cancel</a>
+                    <input class="button" type="submit" value="$i18n.getText("openmeetings.admin.save.label")">&nbsp;
+                    <a href="$requestContext.baseUrl/plugins">$i18n.getText("openmeetings.rooms.cancel.label")</a>
                 </div>
             </form>
         </div>
