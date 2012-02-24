@@ -1,12 +1,14 @@
 <html>
 <head>
     <title>OpenMeetings Admin &mdash; </title>
-    <meta name="decorator" content="atl.general">
+    <meta name="decorator" content="atl.admin">
 </head>
 <body class="page-type-admin">
+<div class="admin-headers">
+	<h1 id="admin-page-heading">$i18n.getText("openmeetings.config.titel.h1.label")</h1>
+</div>
 <div class="content-container">
-    <div class="content-body">
-        <h1>OpenMeetings Configuration</h1>
+    <div class="content-body">        
         <div class="create-issue-panel">
             <form method="post" id="h" action="openmeetingsadmin" class="aui">
                 <div class="field-group">
@@ -39,7 +41,7 @@
                         <span class="aui-icon icon-required"></span>
                         <span class="content">required</span>
                     </label>
-                    <input id="h-fuserpass" class="text long-field" type="text" name="userpass" value=$userpass>
+                    <input id="h-fuserpass" class="text long-field" type="password" name="userpass" value=$userpass>
                 </div>
                 <div class="field-group">
                     <label for="h-fkey">
@@ -51,7 +53,7 @@
                 </div>                            
                 <div class="buttons">
                     <input class="button" type="submit" value="$i18n.getText("openmeetings.admin.save.label")">&nbsp;
-                    <a href="$requestContext.baseUrl/secure/AdminSummary.jspa">$i18n.getText("openmeetings.rooms.cancel.label")</a>
+                   <!-- <a href=$requestContext.baseUrl()"/secure/AdminSummary.jspa">$i18n.getText("openmeetings.rooms.cancel.label")</a>-->
                 </div>
             </form>
         </div>

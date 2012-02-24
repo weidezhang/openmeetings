@@ -5,11 +5,13 @@
     <description>${project.description}</description>
     <version>${project.version}</version>
     <vendor name="${project.organization.name}" url="${project.organization.url}"/>
-    <!--<param name="configure.url">/secure/OmConfig.jspa</param>-->
+    <!--<application-version min="4.0" max="5.0"/>-->
     <param name="configure.url">/plugins/servlet/openmeetingsadmin</param>
   </plugin-info>
+  
   <web-section key="om_config_section" location="integrations_section">
     <label key="OpenMeetings Setup"/>
+    <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserIsAdminCondition"/>
   </web-section>
   <web-item key="om_config" section="integrations_section/om_config_section">
     <label>OpenMeetings Setup</label>
@@ -31,30 +33,38 @@
     <label>Create Room</label>
     <link linkId="create_room_link" absolute="false">/plugins/servlet/openmeetingsrooms?new=y</link>/&gt;
   </web-item>
+  
   <servlet name="Openmeetings admin" i18n-name-key="openmeetings-admin.name" key="openmeetings-admin" class="org.openmeetings.jira.plugin.servlet.AdminServlet">
     <description key="openmeetings-admin.description">The Openmeetings Admin Plugin</description>
     <url-pattern>/openmeetingsadmin</url-pattern>
+    <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserIsAdminCondition"/>
   </servlet>
   <servlet name="Openmeetings Rooms" i18n-name-key="openmeetings-room.name" key="openmeetings-room" class="org.openmeetings.jira.plugin.servlet.RoomsServlet">
     <description key="openmeetings-room.description">The Openmeetings Rooms Plugin</description>
     <url-pattern>/openmeetingsrooms</url-pattern>
   </servlet>
+  
   <resource type="i18n" name="i18n" location="atlassian-plugin"/>
+  
   <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
-  <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>  
+  <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
+    
   <customfield-type name="Room Select List" i18n-name-key="room-select-list.name" key="room-select-list" class="org.openmeetings.jira.plugin.jira.customfields.RoomSelectList">
     <description key="room-select-list.description">The Room Select List Plugin allow to select one OpenMeetings room from roomlist.</description>
     <resource name="view" type="velocity" location="/templates/customfields/room-select-list/view.vm"/>
     <resource name="edit" type="velocity" location="/templates/customfields/room-select-list/edit.vm"/>
   </customfield-type>
+  
   <!--AO to persist chosen admin configuration -->
   <ao key="openmeetings-ao-module">
     <description>The module configuring the Active Objects service used by JIRA-OPENMEETINGS plugin</description>
     <entity>org.openmeetings.jira.plugin.ao.omrooms.Room</entity>
   </ao>
+  
   <component-import key="ao" name="Active Objects components" interface="com.atlassian.activeobjects.external.ActiveObjects">
     <description>Access to the Active Objects service</description>
   </component-import>
+  <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
   <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
   <component key="tx-processor" name="Transactional Annotation Processor" class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
     <decription>Processes @Transactional annotations.</decription>

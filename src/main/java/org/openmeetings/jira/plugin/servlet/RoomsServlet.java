@@ -4,6 +4,7 @@ package org.openmeetings.jira.plugin.servlet;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +42,7 @@ public final class RoomsServlet extends HttpServlet
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
 	private String roomURL;
 	protected final VelocityRequestContextFactory requestContextFactory;
-	private OmPluginSettings omPluginSettings;
-	
+	private OmPluginSettings omPluginSettings;	
 	private final AvatarManager avatarManager;	
 	
 	
@@ -61,7 +61,7 @@ public final class RoomsServlet extends HttpServlet
         this.userManager = userManager;
         this.avatarManager = avatarManager;
         this.requestContextFactory = requestContextFactory;
-        this.omPluginSettings = omPluginSettings;
+        this.omPluginSettings = omPluginSettings;     
         
     }
  
@@ -76,13 +76,13 @@ public final class RoomsServlet extends HttpServlet
 	    return jiraUserManager.getUserObject(userManager.getRemoteUsername(req));
 	}
 	
+		
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
     	User currentUser = getCurrentUser(req);    	
 		//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
-    	
-        
+    	    	        
         if ("y".equals(req.getParameter("new"))) {
         	// Renders new.vm template if the "new" parameter is passed            
             // Create an empty context map to pass into the render method
@@ -186,7 +186,6 @@ public final class RoomsServlet extends HttpServlet
     	//Second variant to get current user object. 
     	//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();    	
     	//User user2 = (User) ComponentManager.getInstance().getJiraAuthenticationContext().getUser();
-    	
     	
     	if ("y".equals(req.getParameter("edit"))) {
     		

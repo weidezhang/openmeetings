@@ -11,6 +11,7 @@ import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.google.common.collect.Maps;
@@ -22,22 +23,24 @@ public class AdminServlet extends HttpServlet
     private final UserManager userManager;    
     private TemplateRenderer templateRenderer;
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
+    private final LoginUriProvider loginUriProvider;
    
-    private OmPluginSettings omPluginSettings;    
-    
+    private OmPluginSettings omPluginSettings; 
     
     private static final String OM_CONFIG_TEMPLATE = "/templates/config/omconfig.vm";
     
     public AdminServlet(com.atlassian.jira.user.util.UserManager jiraUserManager, 
 				    		TemplateRenderer templateRenderer,				    		
 				    		UserManager userManager,
-				    		OmPluginSettings omPluginSettings)
+				    		OmPluginSettings omPluginSettings,
+				    		LoginUriProvider loginUriProvider)
     {
         this.userManager = userManager;
         this.templateRenderer = templateRenderer;
         this.jiraUserManager = jiraUserManager;
         //this.pluginSettingsFactory = pluginSettingsFactory;
         this.omPluginSettings = omPluginSettings;
+        this.loginUriProvider = loginUriProvider;
        
         
     }
@@ -50,6 +53,9 @@ public class AdminServlet extends HttpServlet
         {
             redirectToLogin(request, response);
             return;
+        }else if(username == null){
+        	 redirectToLogin(request, response);
+             return;        	
         }
                 
         /////////
@@ -103,16 +109,7 @@ public class AdminServlet extends HttpServlet
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map params = request.getParameterMap();
-      
-        User user = getCurrentUser(request);
-      
-        if ("y".equals(request.getParameter("edit"))) {
-          
-        	
-        	response.sendRedirect(request.getContextPath() + "secure/AdminSummary.jspa");
-      
-        } else {
+        
         	String url = request.getParameter("url"); 
         	String port = request.getParameter("port");        	
         	String userpass = request.getParameter("userpass"); 
@@ -123,19 +120,17 @@ public class AdminServlet extends HttpServlet
         	omPluginSettings.storeSomeInfo("port", port);
         	omPluginSettings.storeSomeInfo("userpass", userpass);
         	omPluginSettings.storeSomeInfo("username", username);
-        	omPluginSettings.storeSomeInfo("key", key);
-        	
+        	omPluginSettings.storeSomeInfo("key", key);        	
             
-            response.sendRedirect(request.getContextPath() + "/plugins/servlet/openmeetingsadmin");
-        }
+            //response.sendRedirect(request.getContextPath() + "/plugins/servlet/openmeetingsadmin");
+            response.sendRedirect(request.getContextPath() + "/secure/AdminSummary.jspa");
+       
     }
     
 
-   
-
     private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        //response.sendRedirect(loginUriProvider.getLoginUri(getUri(request)).toASCIIString());
+        response.sendRedirect(loginUriProvider.getLoginUri(getUri(request)).toASCIIString());
     }
 
     private URI getUri(HttpServletRequest request)
@@ -147,31 +142,6 @@ public class AdminServlet extends HttpServlet
             builder.append(request.getQueryString());
         }
         return URI.create(builder.toString());
-    }
+    }    
     
-    private User getCurrentUser(HttpServletRequest req) {
-	    // To get the current user, we first get the username from the session.
-	    // Then we pass that over to the jiraUserManager in order to get an
-	    // actual User object.
-	    return jiraUserManager.getUser(userManager.getRemoteUsername(req));
-	}
-    
-//    public void storeSomeInfo(String key, String value) {
-//        // createGlobalSettings is nice and fast, so there's no need to cache it (it's memoised when necessary).
-//        pluginSettingsFactory.createGlobalSettings().put("openmeetings:" + key, value);
-//        
-//    }
-// 
-//    public Object getSomeInfo(String key) {
-//        return pluginSettingsFactory.createGlobalSettings().get("openmeetings:" + key);
-//    }
-// 
-//    public void storeSomeInfo(String projectKey, String key, String value) {
-//        // createSettingsForKey is nice and fast, so there's no need to cache it (it's memoised when necessary).
-//        pluginSettingsFactory.createSettingsForKey(projectKey).put("openmeetings:" + key, value);
-//    }
-// 
-//    public Object getSomeInfo(String projectKey, String key) {
-//        return pluginSettingsFactory.createSettingsForKey(projectKey).get("openmeetings:" + key);
-//    }
 }
