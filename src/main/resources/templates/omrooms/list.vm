@@ -25,7 +25,6 @@
 </head>
 <body class="page-type-admin">
 <div class="content-container">
-
     <div class="content-body">
         <h1>You've Got #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms!</h1>
         #if ($errors.size()>0)
@@ -39,8 +38,7 @@
             </div>
             <!-- .aui-message -->
         #end
-
-        #if ($rooms.size() > 0)
+        #if($rooms.size() > 0)
             <div class="rooms">
                 <table class="aui">
                     <thead>

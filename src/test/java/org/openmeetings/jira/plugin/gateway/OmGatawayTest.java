@@ -48,7 +48,7 @@ public class OmGatawayTest {
 	}
 
     //@Test
-    public void testLogin() throws SAXException, IOException, ParserConfigurationException, XPathExpressionException, ServletException, DocumentException {
+    public void testLogin() throws Exception {
 //        String expected = "test";
 //        when(mockRequest.getParameter(Mockito.anyString())).thenReturn(expected);
 //        assertEquals(expected,mockRequest.getParameter("some string"));

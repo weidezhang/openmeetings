@@ -117,95 +117,124 @@ new OmRestService();
     @Test
     public void testCallApacheCommons() throws SAXException, IOException, ParserConfigurationException, XPathExpressionException, DocumentException {
         
-    	    	
-//    	String request= "http://localhost:5080/openmeetings/services/UserService/getSession";
-//		HttpClient client = new HttpClient();
-//
-//        GetMethod method = new GetMethod(request);
-//
-//
-//		// Send GET request
-//
-//        int statusCode = client.executeMethod(method);
-//        
-//		switch (statusCode) {
-//	    
-//	    case 200: {
-//	    	
-//	    System.out.println("Success connection");
-//
-//	    break;
-//
-//	    }
-//	    case 400: {
-//
-//	    System.out.println("Bad request. The parameters passed to the service did not match as expected. The Message should tell you what was missing or incorrect."); 
-//
-//	    System.out.println("Change the parameter appcd to appid and this error message will go away.");
-//
-//	    break;
-//
-//	    }
-//	
-//		    case 403: {
-//	
-//		    System.out.println("Forbidden. You do not have permission to access this resource, or are over your rate limit.");
-//	
-//		    break;
-//	
-//	    }
-//	
-//		    case 503: {
-//	
-//		    System.out.println("Service unavailable. An internal problem prevented us from returning data to you.");
-//	
-//		    break;
-//	
-//	    }
-//	
-//		    default: System.out.println("Your call to Yahoo! Web Services returned an unexpected  HTTP status of: " + statusCode);
-//	
-//	    }
-//        
-//        InputStream rstream = null;
-//
-//        rstream = method.getResponseBodyAsStream();
-//
-//        BufferedReader br = new BufferedReader(new InputStreamReader(rstream));
-//        
-//        SAXReader reader = new SAXReader();
-//	    String line;
-//	    Document document = null;
-//	    while ((line = br.readLine()) != null) {
-//	    	document = reader.read(new ByteArrayInputStream(line.getBytes("UTF-8")));
-//	    	System.out.println("line"+line);
-//	    
-//	    }
-//	
-//	    //System.out.println("line2"+document.asXML());
-//	                  
-//        Element root = document.getRootElement();
-//       
-//        log.error(root.asXML());
-//        
-//        
-//        for ( @SuppressWarnings("unchecked")
-//            
-//        	Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
-//                
-//            Element item = i.next();
-//            
-//            log.debug(item.getName());
-//            //log.error(item.getNamespacePrefix());
-//            //log.error(item.getPath());
-//            //log.error(item.getXPathResult(10).getName());//.getPath("/ns:getSessionResponse/ns:return/ax24:session_id"));
-//            log.error(item.elementText("session_id"));
-//            
-//            String nodeVal = item.getName();
-//        }
-//
-//        br.close();
-//			
+    	try{   	
+    	String request= "http://localhost:5080/openmeetings/services/UserService/getSession";
+		HttpClient client = new HttpClient();
+
+        GetMethod method = new GetMethod(request);
+
+
+		// Send GET request
+
+        int statusCode = client.executeMethod(method);
+        
+		switch (statusCode) {
+	    
+	    case 200: {
+	    	
+	    System.out.println("Success connection");
+
+	    break;
+
+	    }
+	    case 400: {
+
+	    System.out.println("Bad request. The parameters passed to the service did not match as expected. The Message should tell you what was missing or incorrect."); 
+
+	    System.out.println("Change the parameter appcd to appid and this error message will go away.");
+
+	    break;
+
+	    }
+	
+		    case 403: {
+	
+		    System.out.println("Forbidden. You do not have permission to access this resource, or are over your rate limit.");
+	
+		    break;
+	
+	    }
+	
+		    case 503: {
+	
+		    System.out.println("Service unavailable. An internal problem prevented us from returning data to you.");
+	
+		    break;
+	
+	    }
+	
+		    default: System.out.println("Your call to Yahoo! Web Services returned an unexpected  HTTP status of: " + statusCode);
+	
+	    }
+        
+        InputStream rstream = null;
+
+        rstream = method.getResponseBodyAsStream();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(rstream));
+        
+        SAXReader reader = new SAXReader();
+	    String line;
+	    Document document = null;
+	    while ((line = br.readLine()) != null) {
+	    	document = reader.read(new ByteArrayInputStream(line.getBytes("UTF-8")));
+	    	System.out.println("line"+line);
+	    
+	    }
+	
+	    //System.out.println("line2"+document.asXML());
+	                  
+        Element root = document.getRootElement();
+       
+        log.error(root.asXML());
+        
+        
+        for ( @SuppressWarnings("unchecked")
+            
+        	Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+            
+        	
+        	
+            Element item = i.next();
+            
+            if(item.getNamespacePrefix()=="soapenv"){
+            	
+            	System.out.println("Data:"+item.getData().toString());
+            	
+//	            log.debug(item.getName());
+//	            //log.error(item.getNamespacePrefix());
+//	            //log.error(item.getPath());
+//	            //log.error(item.getXPathResult(10).getName());//.getPath("/ns:getSessionResponse/ns:return/ax24:session_id"));
+//	            log.error(item.elementText("session_id"));
+//	            log.error("Error: ",item.elementText("Text"));
+//	            log.error(item.attributeValue("soapenv:Reason"));
+//	            log.error(item.asXML());
+//	            log.error(item.getPath());
+//	            log.error(item.getData().toString());
+//	            log.error(item.getName());
+//	            log.error(item.getNamespacePrefix());
+	            
+	            
+	            String nodeVal = item.getName();
+        	}else{
+        		log.debug(item.getName());
+	            //log.error(item.getNamespacePrefix());
+	            //log.error(item.getPath());
+	            //log.error(item.getXPathResult(10).getName());//.getPath("/ns:getSessionResponse/ns:return/ax24:session_id"));
+	            log.error(item.elementText("session_id"));
+	            log.error("Error: ",item.elementText("Text"));
+	            log.error(item.attributeValue("soapenv:Reason"));
+        		
+        	}
+        }
+
+        br.close();
+		
+    	}catch(Exception e){
+    		
+    		e.getStackTrace();
+    		System.out.println("Exeption: "+ e);
+    	}
     }
     
 }

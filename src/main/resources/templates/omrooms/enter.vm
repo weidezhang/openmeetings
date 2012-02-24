@@ -1,8 +1,19 @@
 <html>
 <head>
-    <title>$i18n.getText("openmeetings.rooms.edit.titel.label")</title>
+    <title>$i18n.getText("openmeetings.rooms.enter.titel.label")</title>
     <meta name="decorator" content="atl.general">
 </head>
 <body class="page-type-admin">
-<iframe name="IframeName" src=$roomURL width='100%' height='600px'></iframe>
+	#if ($errors.size()>0)
+	    <div class="aui-message error shadowed">
+	        #foreach($error in $errors)
+	            <p class="title">
+	                <span class="aui-icon icon-error"></span>
+	                <strong>$error</strong>
+	            </p>
+	        #end
+	    </div>	     
+	#else
+		<iframe name="IframeName" src=$roomURL width='100%' height='600px'></iframe>
+	#end
 </body>

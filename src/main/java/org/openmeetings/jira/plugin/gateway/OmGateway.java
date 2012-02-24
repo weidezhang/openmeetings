@@ -26,31 +26,39 @@ public class OmGateway {
 		this.omPluginSettings = omPluginSettings;
 	}	
 	
-	public Boolean loginUser() throws XPathExpressionException, IOException, ServletException, SAXException, ParserConfigurationException, DocumentException{
+	public Boolean loginUser() throws Exception{
 		
-		String url = (String)omPluginSettings.getSomeInfo("url"); 
-    	String port = (String)omPluginSettings.getSomeInfo("port");         	
-    	String userpass = (String)omPluginSettings.getSomeInfo("userpass");  
-    	String omusername = (String)omPluginSettings.getSomeInfo("username"); 
-    	String key = (String)omPluginSettings.getSomeInfo("key"); 
+		LinkedHashMap<String, Element> result=null;
 		
-    	String sessionURL = "http://"+url+":"+port+"/openmeetings/services/UserService/getSession";
-    	
-    	LinkedHashMap<String,Element> elementMap = omRestService.call(sessionURL, null);
-		
-    	Element item = elementMap.get("return");
-    	
-    	this.setSessionId(item.elementText("session_id"));
-    	
-		log.info(item.elementText("session_id"));
-		
-		LinkedHashMap<String, Element> result = omRestService.call("http://"+url+":"+port+"/openmeetings/services/UserService/loginUser?SID="+this.getSessionId()+"&username="+omusername+"&userpass="+userpass, null);
+		try{
+			String url = (String)omPluginSettings.getSomeInfo("url"); 
+	    	String port = (String)omPluginSettings.getSomeInfo("port");         	
+	    	String userpass = (String)omPluginSettings.getSomeInfo("userpass");  
+	    	String omusername = (String)omPluginSettings.getSomeInfo("username"); 
+	    	String key = (String)omPluginSettings.getSomeInfo("key"); 
+			
+	    	String sessionURL = "http://"+url+":"+port+"/openmeetings/services/UserService/getSession";
+	    	
+	    	LinkedHashMap<String,Element> elementMap = omRestService.call(sessionURL, null);
+			
+	    	Element item = elementMap.get("return");
+	    	
+	    	this.setSessionId(item.elementText("session_id"));
+	    	
+			log.info(item.elementText("session_id"));
+			
+			result = omRestService.call("http://"+url+":"+port+"/openmeetings/services/UserService/loginUser?SID="+this.getSessionId()+"&username="+omusername+"&userpass="+userpass, null);
+			
+		}catch(Exception e){
+			throw new Exception(e);
+		}
 		
 		if (Integer.valueOf(result.get("return").getStringValue())>0){
 	    	return true; 
 		} else {
 			return false;
 		}
+		
 	}
 	
 	public Long addRoomWithModerationExternalTypeAndTopBarOption(	Boolean isAllowedRecording,
@@ -59,34 +67,33 @@ public class OmGateway {
 																	String name,
 																	Long numberOfParticipent,
 																	Long roomType 
-																) throws 	XPathExpressionException, 
-																			IOException, 
-																			ServletException, 
-																			SAXException, 
-																			ParserConfigurationException, DocumentException{
-    			
-    	String restURL = "http://localhost:5080/openmeetings/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" +
-			    			"SID="+this.getSessionId()+
-			    			"&name="+name+
-							"&roomtypes_id="+roomType.toString()+
-							"&comment=jira"+
-							"&numberOfPartizipants="+numberOfParticipent.toString()+
-							"&ispublic=false"+
-							"&appointment=false"+
-							"&isDemoRoom=false"+
-							"&demoTime="+
-							"&isModeratedRoom="+isModeratedRoom.toString()+
-							"&externalRoomType=jira"+
-							"&allowUserQuestions="+
-							"&isAudioOnly="+isAudioOnly.toString()+
-							"&waitForRecording=false"+
-							"&allowRecording="+isAllowedRecording.toString()+
-							"&hideTopBar=false";
-    	    	
-		LinkedHashMap<String, Element> result = omRestService.call(restURL, null);		
-		
-		String roomId = result.get("return").getStringValue();
-		
+																) throws 	Exception{
+		String roomId ="";
+		try{		
+	    	String restURL = "http://localhost:5080/openmeetings/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" +
+				    			"SID="+this.getSessionId()+
+				    			"&name="+name+
+								"&roomtypes_id="+roomType.toString()+
+								"&comment=jira"+
+								"&numberOfPartizipants="+numberOfParticipent.toString()+
+								"&ispublic=false"+
+								"&appointment=false"+
+								"&isDemoRoom=false"+
+								"&demoTime="+
+								"&isModeratedRoom="+isModeratedRoom.toString()+
+								"&externalRoomType=jira"+
+								"&allowUserQuestions="+
+								"&isAudioOnly="+isAudioOnly.toString()+
+								"&waitForRecording=false"+
+								"&allowRecording="+isAllowedRecording.toString()+
+								"&hideTopBar=false";
+	    	    	
+			LinkedHashMap<String, Element> result = omRestService.call(restURL, null);		
+			
+			roomId = result.get("return").getStringValue();
+		}catch(Exception e){
+			throw new Exception(e);
+		}
     	return Long.valueOf(roomId);
     }
 	
@@ -97,56 +104,52 @@ public class OmGateway {
 														Long numberOfParticipent,
 														Long roomType,
 														Long roomId
-														) throws 	XPathExpressionException, 
-																	IOException, 
-																	ServletException, 
-																	SAXException, 
-																	ParserConfigurationException, 
-																	DocumentException{
-
+														) throws 	Exception{
+		
+		String updateRoomId = "";
+		try{
 	
-		String restURL = "http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?" +
-							"SID="+this.getSessionId()+
-							"&room_id="+roomId.toString()+
-							"&name="+roomname.toString()+
-							"&roomtypes_id="+roomType.toString()+
-							"&comment="+
-							"&numberOfPartizipants="+numberOfParticipent.toString()+
-							"&ispublic=false"+
-							"&appointment=false"+
-							"&isDemoRoom=false"+
-							"&demoTime="+
-							"&isModeratedRoom="+isModeratedRoom.toString()+							
-							"&allowUserQuestions=";
-		
-						//Is not available for update method	
-//							"&externalRoomType=jira"+
-//							"&isAudioOnly="+isAudioOnly+
-//							"&waitForRecording=false"+
-//							"&allowRecording="+isAllowedRecording+
-//							"&hideTopBar=false";
-		
-		LinkedHashMap<String, Element> result = omRestService.call(restURL, null);		
-		
-		log.info("addRoomWithModerationExternalTypeAndTopBarOption with ID: ",result.get("return").getStringValue());
-		
-		String updateRoomId = result.get("return").getStringValue();
-		
+			String restURL = "http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?" +
+								"SID="+this.getSessionId()+
+								"&room_id="+roomId.toString()+
+								"&name="+roomname.toString()+
+								"&roomtypes_id="+roomType.toString()+
+								"&comment="+
+								"&numberOfPartizipants="+numberOfParticipent.toString()+
+								"&ispublic=false"+
+								"&appointment=false"+
+								"&isDemoRoom=false"+
+								"&demoTime="+
+								"&isModeratedRoom="+isModeratedRoom.toString()+							
+								"&allowUserQuestions=";
+			
+							//Is not available for update method	
+	//							"&externalRoomType=jira"+
+	//							"&isAudioOnly="+isAudioOnly+
+	//							"&waitForRecording=false"+
+	//							"&allowRecording="+isAllowedRecording+
+	//							"&hideTopBar=false";
+			
+			LinkedHashMap<String, Element> result = omRestService.call(restURL, null);		
+			
+			log.info("addRoomWithModerationExternalTypeAndTopBarOption with ID: ",result.get("return").getStringValue());
+			
+			updateRoomId = result.get("return").getStringValue();
+			 
+		}catch(Exception e){
+			throw new Exception(e);
+		}
 		return Long.valueOf(updateRoomId);
 	}
 	
 	public String setUserObjectAndGenerateRoomHash (String username , String firstname , 
 			String lastname , String profilePictureUrl , String email , Long externalUserId , 
 			String externalUserType , Long room_id , int becomeModeratorAsInt , int showAudioVideoTestAsInt ) 
-																	throws XPathExpressionException, 
-																	IOException, 
-																	ServletException, 
-																	SAXException, 
-																	ParserConfigurationException, 
-																	DocumentException 
-	{		
-		
-		String restURL = "http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?" +
+																	throws Exception 
+	{	
+		String roomHash = null;	
+		try{		
+			String restURL = "http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?" +
 				"SID="+this.getSessionId()+
 				"&username="+username+
 				"&firstname="+firstname+
@@ -162,10 +165,14 @@ public class OmGateway {
 	
 				LinkedHashMap<String, Element> result = omRestService.call(restURL, null);		
 				
-				String roomHash = result.get("return").getStringValue();
+				 roomHash = result.get("return").getStringValue();
 				
-				return roomHash;
+				//return roomHash;
+		}catch(Exception e){
+			throw new Exception(e);
+		}
 		
+		return roomHash;
 	}
 
 	public String getSessionId() {

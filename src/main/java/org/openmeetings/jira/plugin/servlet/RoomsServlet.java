@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +40,12 @@ public final class RoomsServlet extends HttpServlet
     private TemplateRenderer templateRenderer;
     private OmGateway omGateway;
     private UserManager userManager;
-    private com.atlassian.jira.user.util.UserManager jiraUserManager;
-	private String roomURL;
+    private com.atlassian.jira.user.util.UserManager jiraUserManager;	
 	protected final VelocityRequestContextFactory requestContextFactory;
 	private OmPluginSettings omPluginSettings;	
-	private final AvatarManager avatarManager;	
+	private final AvatarManager avatarManager;
+	
+	private ArrayList<Exception> errors = new ArrayList<Exception>();;
 	
 	
     
@@ -81,6 +83,9 @@ public final class RoomsServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
     	User currentUser = getCurrentUser(req);    	
+    	//ArrayList<Exception> errors = new ArrayList<Exception>();
+    	String roomURL = "";    	
+    	
 		//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
     	    	        
         if ("y".equals(req.getParameter("new"))) {
@@ -136,7 +141,7 @@ public final class RoomsServlet extends HttpServlet
 					
 					if(!roomHash.isEmpty()){
 				
-						this.roomURL = "http://"+url+":"+port+
+						roomURL = "http://"+url+":"+port+
 								"/openmeetings/?"+
 								"scopeRoomId=" + roomId +
 								"&secureHash=" +roomHash+								
@@ -145,36 +150,53 @@ public final class RoomsServlet extends HttpServlet
 													
 					}
 					
+				}else{
+					
+					this.errors.add(new Exception("Could not login User to OpenMeetings, check your OpenMeetings plugin configuration"));
 				}
+				
+				
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (SAXException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (DocumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				this.errors.add(e);
 			}
      
-	        Map<String, Object> context = Maps.newHashMap();
+	        Map<String, Object> context = Maps.newHashMap();	        
 	       
-			context.put("roomURL", this.roomURL);
-	        res.setContentType("text/html;charset=utf-8");
+			context.put("roomURL", roomURL);
+			context.put("errors", this.errors);
+	        res.setContentType("text/html;charset=utf-8");	        
 	        // Pass in the list of rooms as the context
 	        templateRenderer.render(ENTER_BROWSER_TEMPLATE, context, res.getWriter());
+	        this.errors.clear();
         }else {
             // Render the list of issues (list.vm) if no params are passed in
             //List<Room> rooms =  roomService.allNotDeleted();
             List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.getName());
             Map<String, Object> context = Maps.newHashMap();
+            context.put("errors", this.errors);
             context.put("rooms", rooms);
             res.setContentType("text/html;charset=utf-8");
             // Pass in the list of rooms as the context
             templateRenderer.render(LIST_BROWSER_TEMPLATE, context, res.getWriter());
+            this.errors.clear();
         } 	
     	
     }
@@ -214,23 +236,34 @@ public final class RoomsServlet extends HttpServlet
 							roomType, 
 							roomId);
 					
+		        	roomService.update(id, isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType);
+
+				}else{
+					this.errors.add(new Exception("Could not login User to OpenMeetings, check your OpenMeetings plugin configuration"));
 				}
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (SAXException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DocumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				this.errors.add(e);
 			}
         	
-        	roomService.update(id, isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType);
-            res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
+            
+        	res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
     		
     	}else if("y".equals(req.getParameter("delete"))){    		
     		Integer id = Integer.valueOf(req.getParameter("key"));
@@ -258,22 +291,33 @@ public final class RoomsServlet extends HttpServlet
 							roomType
 							);
 					
+		        	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType, roomId, currentUser.getName());
+
+				}else{
+					this.errors.add(new Exception("Could not login User to OpenMeetings, check your OpenMeetings plugin configuration"));
 				}
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
+				this.errors.add(e);
 				e.printStackTrace();
 			} catch (SAXException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
 			} catch (DocumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				this.errors.add(e);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				this.errors.add(e);
 			}
         	
-        	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType, roomId, currentUser.getName());
             //roomService.add(description, true, true, true, "name", 4L, 1L);
         	
             res.sendRedirect(req.getContextPath() + "/plugins/servlet/openmeetingsrooms");
