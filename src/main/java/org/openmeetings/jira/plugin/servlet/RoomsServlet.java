@@ -1,49 +1,33 @@
 package org.openmeetings.jira.plugin.servlet;
 
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-
-
 import org.dom4j.DocumentException;
-import org.jfree.util.Log;
+import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.openmeetings.jira.plugin.ao.omrooms.Room;
 import org.openmeetings.jira.plugin.ao.omrooms.RoomService;
 import org.openmeetings.jira.plugin.gateway.OmGateway;
-import org.openmeetings.jira.plugin.gateway.OmRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
 import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.avatar.Avatar;
+import com.atlassian.jira.avatar.AvatarManager;
+import com.atlassian.jira.util.velocity.VelocityRequestContextFactory;
 import com.atlassian.sal.api.user.UserManager;
-import com.atlassian.jira.ComponentManager;
-import com.atlassian.jira.functest.framework.UserProfile;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.user.util.DefaultUserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.google.common.collect.Maps;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URI;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.base.Preconditions.*;
-
-import com.atlassian.jira.util.velocity.VelocityRequestContextFactory;
-import com.atlassian.jira.avatar.Avatar;
-import com.atlassian.jira.avatar.Avatar.Type;
-import com.atlassian.jira.avatar.AvatarManager;
-import com.atlassian.jira.avatar.AvatarService;
-import com.atlassian.crowd.embedded.api.UserWithAttributes;
 
  
 public final class RoomsServlet extends HttpServlet
@@ -57,6 +41,7 @@ public final class RoomsServlet extends HttpServlet
     private com.atlassian.jira.user.util.UserManager jiraUserManager;
 	private String roomURL;
 	protected final VelocityRequestContextFactory requestContextFactory;
+	private OmPluginSettings omPluginSettings;
 	
 	private final AvatarManager avatarManager;	
 	
@@ -67,7 +52,7 @@ public final class RoomsServlet extends HttpServlet
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/omrooms/edit.vm";
     private static final String ENTER_BROWSER_TEMPLATE = "/templates/omrooms/enter.vm";
  
-    public RoomsServlet(VelocityRequestContextFactory requestContextFactory, AvatarManager avatarManager, RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, com.atlassian.jira.user.util.UserManager jiraUserManager, UserManager userManager)
+    public RoomsServlet(OmPluginSettings omPluginSettings, VelocityRequestContextFactory requestContextFactory, AvatarManager avatarManager, RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, com.atlassian.jira.user.util.UserManager jiraUserManager, UserManager userManager)
     {
         this.roomService = checkNotNull(roomService);
         this.templateRenderer = templateRenderer;
@@ -76,6 +61,7 @@ public final class RoomsServlet extends HttpServlet
         this.userManager = userManager;
         this.avatarManager = avatarManager;
         this.requestContextFactory = requestContextFactory;
+        this.omPluginSettings = omPluginSettings;
         
     }
  
@@ -93,10 +79,9 @@ public final class RoomsServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	User currentUser = getCurrentUser(req);
-    	System.out.println("currentUser: "+currentUser.getName());
-		User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
-    	System.out.println("currentUser2: "+currentUser2.getName());
+    	User currentUser = getCurrentUser(req);    	
+		//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
+    	
         
         if ("y".equals(req.getParameter("new"))) {
         	// Renders new.vm template if the "new" parameter is passed            
@@ -126,53 +111,31 @@ public final class RoomsServlet extends HttpServlet
         	try {
 				if(omGateway.loginUser()){
 					
-					//authContext.getUser().getName();
-					//com.atlassian.jira.ComponentManager.getInstance().getJiraAuthenticationContext().getUser();
+					String url = (String)omPluginSettings.getSomeInfo("url"); 
+		        	String port = (String)omPluginSettings.getSomeInfo("port");  
 										
-					Long directoryId = currentUser.getDirectoryId();
 					String firsname = currentUser.getDisplayName();
 					String email = currentUser.getEmailAddress();
 					Long userId = new Date().getTime();
 					String username = currentUser.getName();
 					int becomeModeratorAsInt = 1;
 					int showAudioVideoTestAsInt = 1;
-					
-					
-					System.out.println("directoryId: "+directoryId);
-					System.out.println("username: "+username);
 										
 					 String avatarId = this.avatarManager.getDefaultAvatarId(Avatar.Type.USER).toString();					 
 					 //URI avatarUrl = avatarService.getAvatarURL(currentUser, avatarId, Avatar.Size.SMALL);
 					 //String profilePictureUrl = avatarUrl.toString();
 					 String profilePictureUrl = this.getCanonicalBaseUrl() + "/secure/projectavatar?avatarId=" + avatarId + "&size=small";
 					 
-
-					 
-//					String userEmail;
-//			        UserProfile userProfile = userService.getUserProfile(reviewData.getAuthor().getUserName());
-//			        if (userProfile != null) {
-//			                userEmail = userProfile.getEmail();
-//			        }
-					 
 					Long roomId = Long.valueOf(req.getParameter("roomId"));
 					
-					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, 
-																				firsname, 
-																				"", 
-																				profilePictureUrl, 
-																				email, 
-																				userId, 
-																				"jira", 
-																				roomId, 
-																				becomeModeratorAsInt, 
+					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, firsname, "", profilePictureUrl, 
+																				email, userId, "jira", 	roomId, 
+																				becomeModeratorAsInt,
 																				showAudioVideoTestAsInt);
 					
 					
 					if(!roomHash.isEmpty()){
-						
-						String url = "localhost"; 
-				    	String port = "5080"; 
-						
+				
 						this.roomURL = "http://"+url+":"+port+
 								"/openmeetings/?"+
 								"scopeRoomId=" + roomId +
@@ -219,12 +182,11 @@ public final class RoomsServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	User currentUser = getCurrentUser(req);
-    	System.out.println("currentUser: "+currentUser.getName());
-    	User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
+    	User currentUser = getCurrentUser(req);  
     	//Second variant to get current user object. 
+    	//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();    	
     	//User user2 = (User) ComponentManager.getInstance().getJiraAuthenticationContext().getUser();
-    	System.out.println("currentUser22: "+currentUser2);
+    	
     	
     	if ("y".equals(req.getParameter("edit"))) {
     		

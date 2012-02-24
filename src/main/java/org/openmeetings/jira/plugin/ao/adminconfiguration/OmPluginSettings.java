@@ -1,6 +1,5 @@
 package org.openmeetings.jira.plugin.ao.adminconfiguration;
 
-import org.openmeetings.jira.plugin.servlet.AdminServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,43 +5,26 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.representation.Form;
-
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import org.xml.sax.SAXException;
 
 
 public class OmRestService {
@@ -55,14 +38,10 @@ public class OmRestService {
 	
 	private  String getEncodetURI(String url) throws MalformedURLException {
 		return new URL(url).toString().replaceAll(" ","%20");
-	}
-	
-	
+	}	
 	
 	public LinkedHashMap<String, Element> call(String request, Object param)throws IOException, ServletException, SAXException, ParserConfigurationException, XPathExpressionException, DocumentException
-	{
-		
-		//String request= "http://localhost:5080/openmeetings/services/UserService/getSession";
+	{				
 		HttpClient client = new HttpClient();
 
         GetMethod method = new GetMethod(getEncodetURI(request).toString());

@@ -1,37 +1,19 @@
 package org.openmeetings.jira.plugin.servlet;
 
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
-import org.openmeetings.jira.plugin.ao.omrooms.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.crowd.embedded.api.User;
-import com.atlassian.jira.bc.issue.IssueService;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.issue.IssueInputParameters;
-import com.atlassian.jira.issue.MutableIssue;
-import com.atlassian.jira.project.Project;
-import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.atlassian.sal.api.transaction.TransactionCallback;
 import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.google.common.collect.Maps;
-
-import static com.google.common.base.Preconditions.*;
 
 public class AdminServlet extends HttpServlet
 {

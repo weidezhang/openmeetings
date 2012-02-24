@@ -2,22 +2,15 @@ package org.openmeetings.jira.plugin.gateway;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
-
 import javax.servlet.ServletException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-
 import org.openmeetings.jira.plugin.ao.adminconfiguration.OmPluginSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
-import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 
 public class OmGateway {
 	
