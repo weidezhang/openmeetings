@@ -82,7 +82,7 @@ public class OmRestService {
 	
 	    }
 	
-		    default: System.out.println("Your call to Yahoo! Web Services returned an unexpected  HTTP status of: " + statusCode);
+		    default: System.out.println("Your call to OpenMeetings! Web Services returned an unexpected  HTTP status of: " + statusCode);
 	
 	    }
         

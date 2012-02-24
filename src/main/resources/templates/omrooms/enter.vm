@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Edit Issue &mdash; Issue CRUD Tutorial</title>
+    <title>$i18n.getText("openmeetings.rooms.edit.titel.label")</title>
     <meta name="decorator" content="atl.general">
 </head>
 <body class="page-type-admin">

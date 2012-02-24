@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 //import com.atlassian.jira.issue.customfields.impl.AbstractSingleFieldType;
+import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.impl.SelectCFType;
 import com.atlassian.jira.util.ErrorCollection;
@@ -54,7 +56,10 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 	@Override
     public Map<String, Object> getVelocityParameters(final Issue issue,
                                                      final CustomField field,
-                                                     final FieldLayoutItem fieldLayoutItem) {
+                                                     final FieldLayoutItem fieldLayoutItem)
+     {
+		
+		User currentUser = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
         final Map<String, Object> map = super.getVelocityParameters(issue, field, fieldLayoutItem);
 
         // This method is also called to get the default value, in
@@ -63,7 +68,8 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
             return map;
         }
          //FieldConfig fieldConfig = field.getRelevantConfig(issue);                  
-         List<Room> rooms =  roomService.allNotDeleted();         
+         //List<Room> rooms =  roomService.allNotDeleted();         
+         List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.toString());
          map.put("rooms", rooms); 
          return map;
     }
