@@ -9,7 +9,7 @@
 	        #foreach($error in $errors)
 	            <p class="title">
 	                <span class="aui-icon icon-error"></span>
-	                <strong>$error</strong>
+	                <strong>$error.getMessage()</strong>
 	            </p>
 	        #end
 	    </div>	     

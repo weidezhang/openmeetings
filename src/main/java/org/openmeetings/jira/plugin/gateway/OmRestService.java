@@ -59,11 +59,11 @@ public class OmRestService {
 		} catch (HttpException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			throw new Exception("Connection to OpenMeetings refused. Please check your OpenMeetings configuration. HttpException");
+			throw new Exception("Connection to OpenMeetings refused. Please check your OpenMeetings configuration.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			throw new Exception("Connection to OpenMeetings refused. Please check your OpenMeetings configuration. IOException");
+			throw new Exception("Connection to OpenMeetings refused. Please check your OpenMeetings configuration.");
 		}
 		
 		

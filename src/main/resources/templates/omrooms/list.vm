@@ -26,13 +26,13 @@
 <body class="page-type-admin">
 <div class="content-container">
     <div class="content-body">
-        <h1>You've Got #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms!</h1>
+        <h1>OpenMeetings #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms</h1>
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">
                 #foreach($error in $errors)
                     <p class="title">
                         <span class="aui-icon icon-error"></span>
-                        <strong>$error</strong>
+                        <strong>$error.getMessage()</strong>
                     </p>
                 #end
             </div>
@@ -97,7 +97,7 @@
         #end
         <form method="get" action="openmeetingsrooms" class="aui">
             <input type="hidden" name="new" value="y">
-            <input type="submit" class="button" value=$i18n.getText("openmeetings.rooms.createnewroom.label")>
+            <input type="submit" class="button" value="$i18n.getText("openmeetings.rooms.createnewroom.label")">
         </form>
     </div>
 </div>

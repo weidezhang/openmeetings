@@ -5,7 +5,7 @@
     <description>${project.description}</description>
     <version>${project.version}</version>
     <vendor name="${project.organization.name}" url="${project.organization.url}"/>
-    <!--<application-version min="4.0" max="5.0"/>-->
+    <!--<application-version min="4.4" max="5.0"/>-->
     <param name="configure.url">/plugins/servlet/openmeetingsadmin</param>
   </plugin-info>
   
