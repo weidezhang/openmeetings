@@ -140,6 +140,8 @@ public class OmRestService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception("DocumentException by SAXReader in REST Service");
+		}finally{
+			br.close();
 		}
 	    
         Element root = document.getRootElement(); 
