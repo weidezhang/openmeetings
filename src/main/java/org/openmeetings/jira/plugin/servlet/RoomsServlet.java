@@ -117,7 +117,8 @@ public final class RoomsServlet extends HttpServlet
 				if(omGateway.loginUser()){
 					
 					String url = (String)omPluginSettings.getSomeInfo("url"); 
-		        	String port = (String)omPluginSettings.getSomeInfo("port");  
+		        	String port = (String)omPluginSettings.getSomeInfo("port");
+		        	String externalUserType = (String)omPluginSettings.getSomeInfo("key");  
 										
 					String firsname = currentUser.getDisplayName();
 					String email = currentUser.getEmailAddress();
@@ -134,7 +135,7 @@ public final class RoomsServlet extends HttpServlet
 					Long roomId = Long.valueOf(req.getParameter("roomId"));
 					
 					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, firsname, "", profilePictureUrl, 
-																				email, userId, "jira", 	roomId, 
+																				email, userId, externalUserType, 	roomId, 
 																				becomeModeratorAsInt,
 																				showAudioVideoTestAsInt);
 					
@@ -277,6 +278,7 @@ public final class RoomsServlet extends HttpServlet
         	String roomName = req.getParameter("roomname");
         	Long numberOfParticipent = Long.valueOf(req.getParameter("numberOfParticipent"));  
         	Long roomType = Long.valueOf(req.getParameter("roomType")); 
+        	String externalRoomType = (String)omPluginSettings.getSomeInfo("key");
         	Long roomId = 0L;
         	
         	try {
@@ -288,7 +290,8 @@ public final class RoomsServlet extends HttpServlet
 							isModeratedRoom,
 							roomName,
 							numberOfParticipent,
-							roomType
+							roomType,
+							externalRoomType
 							);
 					
 		        	roomService.add(isAllowedRecording, isAudioOnly, isModeratedRoom, roomName, numberOfParticipent, roomType, roomId, currentUser.getName());

@@ -70,7 +70,7 @@ public class OmRestService {
 		switch (statusCode) {
 	    
 		    case 200: {		    	
-			    System.out.println("Success connection");			    
+			    //System.out.println("Success connection");			    
 			    break;	
 		    }
 		    case 400: {		    	

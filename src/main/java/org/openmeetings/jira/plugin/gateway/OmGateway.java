@@ -55,7 +55,8 @@ public class OmGateway {
 																	Boolean isModeratedRoom,
 																	String name,
 																	Long numberOfParticipent,
-																	Long roomType 
+																	Long roomType,
+																	String externalRoomType
 																) throws 	Exception{
 		String roomId ="";
 			
@@ -70,7 +71,7 @@ public class OmGateway {
 							"&isDemoRoom=false"+
 							"&demoTime="+
 							"&isModeratedRoom="+isModeratedRoom.toString()+
-							"&externalRoomType=jira"+
+							"&externalRoomType="+externalRoomType+
 							"&allowUserQuestions="+
 							"&isAudioOnly="+isAudioOnly.toString()+
 							"&waitForRecording=false"+
