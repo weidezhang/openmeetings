@@ -116,24 +116,39 @@ public final class RoomsServlet extends HttpServlet
         	try {
 				if(omGateway.loginUser()){
 					
+					String username = "";
+					String firsname = "";
+					Long userId = 0L;
+					String email = "";
+					int becomeModeratorAsInt = 1;
+					int showAudioVideoTestAsInt = 1;
+					
 					String url = (String)omPluginSettings.getSomeInfo("url"); 
 		        	String port = (String)omPluginSettings.getSomeInfo("port");
 		        	String externalUserType = (String)omPluginSettings.getSomeInfo("key");  
-										
-					String firsname = currentUser.getDisplayName();
-					String email = currentUser.getEmailAddress();
-					Long userId = new Date().getTime();
-					String username = currentUser.getName();
-					int becomeModeratorAsInt = 1;
-					int showAudioVideoTestAsInt = 1;
-										
+					
+		        	if(currentUser == null){
+		        		firsname = "anonymous";
+						email = "";
+						userId = new Date().getTime();
+						username = "anonymous";
+						becomeModeratorAsInt = 0;
+						showAudioVideoTestAsInt = 1;  
+		        	}else{
+		        		firsname = currentUser.getDisplayName();
+						email = currentUser.getEmailAddress();
+						userId = new Date().getTime();
+						username = currentUser.getName();
+						becomeModeratorAsInt = 1;
+						showAudioVideoTestAsInt = 1;
+		        	}					
 					 String avatarId = this.avatarManager.getDefaultAvatarId(Avatar.Type.USER).toString();					 
 					 //URI avatarUrl = avatarService.getAvatarURL(currentUser, avatarId, Avatar.Size.SMALL);
 					 //String profilePictureUrl = avatarUrl.toString();
 					 String profilePictureUrl = this.getCanonicalBaseUrl() + "/secure/projectavatar?avatarId=" + avatarId + "&size=small";
 					 
 					Long roomId = Long.valueOf(req.getParameter("roomId"));
-					
+										
 					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, firsname, "", profilePictureUrl, 
 																				email, userId, externalUserType, 	roomId, 
 																				becomeModeratorAsInt,

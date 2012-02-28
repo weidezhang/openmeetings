@@ -68,9 +68,11 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
             return map;
         }
          //FieldConfig fieldConfig = field.getRelevantConfig(issue);                  
-         //List<Room> rooms =  roomService.allNotDeleted();         
+         //List<Room> rooms =  roomService.allNotDeleted();   
+        if(currentUser != null){
          List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.toString());
          map.put("rooms", rooms); 
+        }
          return map;
     }
     
