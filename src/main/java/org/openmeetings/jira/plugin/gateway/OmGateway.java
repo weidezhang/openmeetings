@@ -76,9 +76,13 @@ public class OmGateway {
 																	Long roomType,
 																	String externalRoomType
 																) throws 	Exception{
+		
+		String url = (String)omPluginSettings.getSomeInfo("url"); 
+    	String port = (String)omPluginSettings.getSomeInfo("port");         	
+    			
 		String roomId ="";
 			
-    	String restURL = "http://localhost:5080/openmeetings/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" +
+    	String restURL = "http://"+url+":"+port+"/openmeetings/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" +
 			    			"SID="+this.getSessionId()+
 			    			"&name="+name+
 							"&roomtypes_id="+roomType.toString()+
@@ -111,9 +115,11 @@ public class OmGateway {
 														Long roomId
 														) throws 	Exception{
 		
+		String url = (String)omPluginSettings.getSomeInfo("url"); 
+    	String port = (String)omPluginSettings.getSomeInfo("port");     
 		String updateRoomId = "";
 			
-		String restURL = "http://localhost:5080/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?" +
+		String restURL = "http://"+url+":"+port+"/openmeetings/services/RoomService/updateRoomWithModerationAndQuestions?" +
 							"SID="+this.getSessionId()+
 							"&room_id="+roomId.toString()+
 							"&name="+roomname.toString()+
@@ -148,9 +154,11 @@ public class OmGateway {
 			String externalUserType , Long room_id , int becomeModeratorAsInt , int showAudioVideoTestAsInt ) 
 																	throws Exception 
 	{	
+		String url = (String)omPluginSettings.getSomeInfo("url"); 
+    	String port = (String)omPluginSettings.getSomeInfo("port"); 
 		String roomHash = null;	
 			
-		String restURL = "http://localhost:5080/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?" +
+		String restURL = "http://"+url+":"+port+"/openmeetings/services/UserService/setUserObjectAndGenerateRoomHash?" +
 			"SID="+this.getSessionId()+
 			"&username="+username+
 			"&firstname="+firstname+
