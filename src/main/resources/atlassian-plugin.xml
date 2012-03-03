@@ -61,7 +61,7 @@
   <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
   <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
     
-  <customfield-type name="Room Select List" i18n-name-key="room-select-list.name" key="room-select-list" class="org.openmeetings.jira.plugin.jira.customfields.RoomSelectList">
+  <customfield-type name="OpenMeetings Room Select List" i18n-name-key="room-select-list.name" key="room-select-list" class="org.openmeetings.jira.plugin.jira.customfields.RoomSelectList">
     <description key="room-select-list.description">The Room Select List Plugin allow to select one OpenMeetings room from roomlist.</description>
     <resource name="view" type="velocity" location="/templates/customfields/room-select-list/view.vm"/>
     <resource name="edit" type="velocity" location="/templates/customfields/room-select-list/edit.vm"/>

@@ -59,7 +59,7 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.config.FieldConfig;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 
-	public class RoomSelectList extends TextCFType {
+	public class RoomSelectList extends AbstractSingleFieldType<Integer> {
 		
 	    private static final Logger log = LoggerFactory.getLogger(RoomSelectList.class);
 	    
@@ -79,18 +79,19 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 		
 		User currentUser = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
         final Map<String, Object> map = super.getVelocityParameters(issue, field, fieldLayoutItem);
-
+                        
         // This method is also called to get the default value, in
         // which case issue is null so we can't use it to add currencyLocale
         if (issue == null) {
             return map;
-        }
+        }        
          //FieldConfig fieldConfig = field.getRelevantConfig(issue);                  
          //List<Room> rooms =  roomService.allNotDeleted();   
         if(currentUser != null){
-         List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.toString());
+        	//List<Room> rooms =  roomService.allNotDeleted();   
+         List<Room> rooms =  roomService.allNotDeletedByUserName(currentUser.getName());
          map.put("rooms", rooms); 
-        }
+        }        
          return map;
     }
     
@@ -127,7 +128,7 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
     }
 
 	@Override
-	public String getStringFromSingularObject(Object singularObject) {
+	public String getStringFromSingularObject(Integer singularObject) {
 		if (singularObject == null)
             return "";
         // format
@@ -135,8 +136,9 @@ import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 	}
 
 	@Override
-	protected Object getDbValueFromObject(Object customFieldObject) {
+	protected Object getDbValueFromObject(Integer customFieldObject) {
 		// TODO Auto-generated method stub
 		return getStringFromSingularObject(customFieldObject);
 	}
+
 }

@@ -122,8 +122,8 @@
   </dependencies>	
   <properties>
     <amps.version>3.7.2</amps.version>
-    <jira.version>4.4.1</jira.version>
-    <jira.data.version>4.4</jira.data.version>
+    <jira.version>5.0</jira.version>
+    <jira.data.version>5.0</jira.data.version>
   </properties>
 </project>
 
