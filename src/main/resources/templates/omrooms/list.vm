@@ -1,0 +1,118 @@
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<html>
+<head>
+    <title>$i18n.getText("openmeetings.rooms.roomlist.label")</title>
+    <meta name="decorator" content="atl.general">
+    <script>
+        AJS.$(document).ready(function() {
+            jQuery('.delete-room').click(function() {
+                console.log('deleting');
+                var self = jQuery(this);
+                jQuery.ajax({
+                    type: "delete",
+                    url: "openmeetingsrooms?key=" + self.data("key"),
+                    success: function(data) {
+                        console.log('dom', self, data);
+                        self.parent().parent().remove();
+                    },
+                    error: function() {
+                        console.log('error', arguments);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+    <div class="content-body">
+        <h1>OpenMeetings #if($rooms.size()==0)<span style="color:red">NO</span>#end Rooms</h1>
+        #if ($errors.size()>0)
+            <div class="aui-message error shadowed">
+                #foreach($error in $errors)
+                    <p class="title">
+                        <span class="aui-icon icon-error"></span>
+                        <strong>$error.getMessage()</strong>
+                    </p>
+                #end
+            </div>
+            <!-- .aui-message -->
+        #end
+        #if($rooms.size() > 0)
+            <div class="rooms">
+                <table class="aui">
+                    <thead>
+                    <tr>
+                        ##<th>$i18n.getText("openmeetings.rooms.roomid.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.roomname.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.roomtype.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.participent.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.ismoderated.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.isaudio.label")</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        #foreach( $room in $rooms )
+                        <tr>
+                            ##<td>$room.getRoomId()</td>
+                            <td>$room.getName()</td>
+                            <td>
+                                #if($room.getRoomType() == 1)		                           
+		                            $i18n.getText("openmeetings.rooms.conference.label")
+	                            #elseif($room.getRoomType() == 2)
+	                            	$i18n.getText("openmeetings.rooms.audience.label")
+                            	#elseif($room.getRoomType() == 3)
+	                            	$i18n.getText("openmeetings.rooms.restricted.label")
+                            	#elseif($room.getRoomType() == 4)
+	                            	$i18n.getText("openmeetings.rooms.interview.label")
+		                        #end
+                            </td>
+                            <td>
+                                $room.getNumberOfParticipent()
+                            </td>
+                            <td>
+                            	#if($room.getIsModeratedRoom() == true)                                	
+                                	$i18n.getText("openmeetings.rooms.yes.label")
+                                #else
+                                	$i18n.getText("openmeetings.rooms.no.label")
+                                #end
+                            </td>
+                            <td>
+                            	#if( $room.getIsAudioOnly() == true)                                	
+                                	$i18n.getText("openmeetings.rooms.yes.label")
+                                #else
+                                	$i18n.getText("openmeetings.rooms.no.label")
+                                #end                               
+                            </td>
+                            <td>
+                                <a href="openmeetingsrooms?edit=y&key=$room.getID()">$i18n.getText("openmeetings.rooms.edit.label")</a> &nbsp;
+                                <a href="openmeetingsrooms?delete=y&key=$room.getID()" class="delete-room" data-key="$room.getID()">$i18n.getText("openmeetings.rooms.delete.label")</a>
+                            </td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+        #end
+        <form method="get" action="openmeetingsrooms" class="aui">
+            <input type="hidden" name="new" value="y">
+            <input type="submit" class="button" value="$i18n.getText("openmeetings.rooms.createnewroom.label")">
+        </form>
+    </div>
+</div>
+</body>
+</html>

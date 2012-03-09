@@ -1,0 +1,92 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="configure.url">/plugins/servlet/openmeetingsadmin</param>
+    </plugin-info>
+
+    <macro name="openmeetings-room-link" class="com.openmeetings.confluence.plugins.ExampleMacro" key="openmeetings-room-link">
+	    <!-- TODO: Add macro description -->
+	    <description>Insert Room Link in page</description>  
+	    
+	    <!-- Provides help text for the Confluence notation guide. -->
+        <resource type="velocity" name="enter" location="templates/enter.vm">
+            <param name="help-section" value="confluence"/>
+        </resource>
+        <!-- Specifies which macro browser category this macro should display in. -->
+        <category name="confluence-content"/>
+        <!-- Defines the parameters this macro may consume. -->
+        <parameters>
+            <parameter name="greeting" type="string"/>
+        </parameters>   
+    </macro>
+   
+  <web-item key="om_config" section="system.admin/configuration">
+    <label>OpenMeetings Setup</label>
+    <link linkId="admin_link" absolute="false">/plugins/servlet/openmeetingsadmin</link>
+    <condition class="com.atlassian.confluence.plugin.descriptor.web.conditions.SystemAdministratorCondition"/>
+  </web-item>
+  <web-section key="my_links_section" name="My Links Main Section" location="my_links_link" weight="10">
+    <!--<condition class="com.atlassian.confluence.plugin.webfragment.conditions.UserLoggedInCondition"/>-->
+  </web-section>
+  
+  <!--
+  <web-item key="my_links_link" name="Link on My Links Main Section" section="system.dashboard" weight="47">
+    <label>OpenMeetingsRooms</label>
+    <link linkId="my_links_link"/>   
+  </web-item>
+  -->
+  
+  <web-item key="website_link_space" name="Rooms Web Site Space" section="system.space" weight="100">
+    <label>My OpenMeetings Rooms</label>
+    <link linkId="rooms_link_space" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
+  </web-item>
+  <web-item key="website_link_browse" name="Rooms Web Site Browse" section="system.browse" weight="100">
+    <label>My OpenMeetings Rooms</label>
+    <link linkId="rooms_link_browse" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
+  </web-item>
+   <web-item key="website_link_dashboard" name="Rooms Web Site Dashboard" section="system.dashboard" weight="47">
+    <label>My OpenMeetings Rooms</label>
+    <link linkId="rooms_link_dashboard" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
+    <!--<condition class="com.atlassian.confluence.plugin.webfragment.conditions.UserLoggedInCondition"/>-->
+  </web-item>
+  <web-item key="create_room_link" name="Create Room Web Site" section="system.content.add/space" weight="10">
+    <label>Create Room</label>
+    <link linkId="create_room_link" absolute="false">/plugins/servlet/openmeetingsrooms?new=y</link>/&gt;
+  </web-item>
+  
+  <servlet name="Openmeetings admin" i18n-name-key="openmeetings-admin.name" key="openmeetings-admin" class="com.openmeetings.confluence.plugins.servlet.AdminServlet">
+    <description key="openmeetings-admin.description">The Openmeetings Admin Plugin</description>
+    <url-pattern>/openmeetingsadmin</url-pattern>
+    <!--<condition class="com.atlassian.jira.plugin.webfragment.conditions.UserIsAdminCondition"/>-->
+  </servlet>
+  <servlet name="Openmeetings Rooms" i18n-name-key="openmeetings-room.name" key="openmeetings-room" class="com.openmeetings.confluence.plugins.servlet.RoomsServlet">
+    <description key="openmeetings-room.description">The Openmeetings Rooms Plugin</description>
+    <url-pattern>/openmeetingsrooms</url-pattern>
+  </servlet>
+  
+  <resource type="i18n" name="i18n" location="atlassian-plugin"/>
+  
+  <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
+  <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>    
+   
+  <!--AO to persist chosen admin configuration -->
+  <ao key="openmeetings-ao-module">
+    <description>The module configuring the Active Objects service used by CONFLUENCE-OPENMEETINGS plugin</description>
+    <entity>com.openmeetings.confluence.plugins.ao.omrooms.Room</entity>
+  </ao>
+  
+  <component-import key="ao" name="Active Objects components" interface="com.atlassian.activeobjects.external.ActiveObjects">
+    <description>Access to the Active Objects service</description>
+  </component-import>
+  <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+  <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
+  <component key="tx-processor" name="Transactional Annotation Processor" class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
+    <decription>Processes @Transactional annotations.</decription>
+  </component>
+  <component key="room-service" name="Room Service" class="com.openmeetings.confluence.plugins.ao.omrooms.RoomServiceImpl"/>
+  <component key="omPluginSettings" name="OpenMeetings Plugin Settings" class="com.openmeetings.confluence.plugins.ao.adminconfiguration.OmPluginSettings"/>
+  <component key="omRestService" name="OpenMeetings REST Service" class="com.openmeetings.confluence.plugins.gateway.OmRestService"/>
+  <component key="omGateway" name="OpenMeetings Gateway" class="com.openmeetings.confluence.plugins.gateway.OmGateway"/>
+</atlassian-plugin>

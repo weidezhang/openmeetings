@@ -1,0 +1,97 @@
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<html>
+<head>
+    <title>$i18n.getText("openmeetings.rooms.createnewroom.label")</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+
+    <div class="content-body">
+        <h1>Create Room</h1>
+        <div class="create-issue-panel">
+
+            <form method="post" id="h" action="openmeetingsrooms" class="aui">
+                <div class="field-group">
+                    <label for="h-froomname">
+                        Roomname
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-froomname" class="text long-field" type="text" name="roomname">
+                </div>
+                <div class="field-group">
+                    <label for="h-froomtype">
+                        Roomtype                        
+                    </label>
+                    <select name="roomType" id="om-roomtype" style="width: 30%;">
+                        <option value="1">$i18n.getText("openmeetings.rooms.edit.conference.label")</option>
+                        <option value="2">$i18n.getText("openmeetings.rooms.edit.audience.label")</option>
+                        <option value="3">$i18n.getText("openmeetings.rooms.edit.restricted.label")</option>
+                        <option value="4">$i18n.getText("openmeetings.rooms.edit.interview.label")</option>      
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fnr-participent">
+                        Nr. of Participent                       
+                    </label>
+                    <select name="numberOfParticipent" id="om-participent" style="width: 30%;">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="60">60</option>
+                        <option value="100">100</option>
+                        <option value="150">150</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fmoderated">
+                        Is moderated
+                    </label>
+                    <select name="isModeratedRoom" id="om-is-moderated" style="width: 30%;">
+                       <option value="false">$i18n.getText("openmeetings.rooms.no.label")</option>
+                       <option value="true">$i18n.getText("openmeetings.rooms.yes.label")</option>                       
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-faudioonly">
+                        Is audio only
+                    </label>
+                    <select name="isAudioOnly" id="om-is-moderated" style="width: 30%;">
+                       <option value="false">$i18n.getText("openmeetings.rooms.no.label")</option>
+                       <option value="true">$i18n.getText("openmeetings.rooms.yes.label")</option>                
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="h-fallow-recording">
+                        Allow Recording
+                    </label>
+                    <select name="isAllowedRecording" id="om-allow-recording" style="width: 30%;">
+                       <option value="false">$i18n.getText("openmeetings.rooms.no.label")</option>
+                       <option value="true">$i18n.getText("openmeetings.rooms.yes.label")</option>                       
+                    </select>
+                </div>
+                <div class="buttons">
+                    <input class="button" type="submit" value="$i18n.getText("openmeetings.rooms.create.label")">&nbsp;
+                    <a href="openmeetingsrooms">$i18n.getText("openmeetings.rooms.cancel.label")</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

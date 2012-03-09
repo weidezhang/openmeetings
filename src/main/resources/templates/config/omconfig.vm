@@ -1,0 +1,76 @@
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<html>
+<head>
+    <title>OpenMeetings Admin &mdash; </title>
+    <meta name="decorator" content="atl.admin">
+</head>
+<body class="page-type-admin">
+<div class="admin-headers">
+	<h1 id="admin-page-heading">$i18n.getText("openmeetings.config.titel.h1.label")</h1>
+</div>
+<div class="content-container">
+    <div class="content-body">        
+        <div class="create-issue-panel">
+            <form method="post" id="h" action="openmeetingsadmin" class="aui">
+                <div class="field-group">
+                    <label for="h-furl">
+                        $i18n.getText("openmeetings.config.url.label")
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-furl" class="text long-field" type="text" name="url" value="$url"></input>
+                </div>
+                <div class="field-group">
+                    <label for="h-fport">
+                         $i18n.getText("openmeetings.config.port.label")
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fport" class="text long-field" type="text" name="port" value=$port>
+                </div>
+                <div class="field-group">
+                    <label for="h-fusername">
+                         $i18n.getText("openmeetings.config.username.label")
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fusername" class="text long-field" type="text" name="username" value=$username>
+                </div>
+                <div class="field-group">
+                    <label for="h-fuserpass">
+                        $i18n.getText("openmeetings.config.userpass.label")
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fuserpass" class="text long-field" type="password" name="userpass" value=$userpass>
+                </div>
+                <div class="field-group">
+                    <label for="h-fkey">
+                        $i18n.getText("openmeetings.config.key.label")
+                        <span class="aui-icon icon-required"></span>
+                        <span class="content">required</span>
+                    </label>
+                    <input id="h-fkey" class="text long-field" type="text" name="key" value=$key>
+                </div>                            
+                <div class="buttons">
+                    <input class="button" type="submit" value="$i18n.getText("openmeetings.admin.save.label")">&nbsp;
+                   <!-- <a href=$requestContext.baseUrl()"/secure/AdminSummary.jspa">$i18n.getText("openmeetings.rooms.cancel.label")</a>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
