@@ -41,9 +41,7 @@ import com.opensymphony.util.TextUtils;
 import com.atlassian.confluence.renderer.PageContext;
 
 /**
- * This very simple macro shows you the very basic use-case of displaying *something* on the Confluence page where it is used.
- * Use this example macro to toy around, and then quickly move on to the next example - this macro doesn't
- * really show you all the fun stuff you can do with Confluence.
+ * Insert room link in a page
  */
 public class OpenMeetingsMacro extends BaseMacro
 {
