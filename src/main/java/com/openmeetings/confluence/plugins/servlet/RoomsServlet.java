@@ -38,15 +38,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.atlassian.confluence.setup.settings.SettingsManager;
 import com.atlassian.confluence.user.AuthenticatedUserThreadLocal;
 import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.sal.api.user.UserManager;
+import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.google.common.collect.Maps;
 import com.openmeetings.confluence.plugins.ao.adminconfiguration.OmPluginSettings;
 import com.openmeetings.confluence.plugins.ao.omrooms.Room;
 import com.openmeetings.confluence.plugins.ao.omrooms.RoomService;
 import com.openmeetings.confluence.plugins.gateway.OmGateway;
+
+import com.atlassian.confluence.user.UserAccessor;
+import com.atlassian.confluence.user.actions.ProfilePictureInfo;
 
  
 public final class RoomsServlet extends HttpServlet
@@ -56,10 +61,9 @@ public final class RoomsServlet extends HttpServlet
     private final RoomService roomService;
     private TemplateRenderer templateRenderer;
     private OmGateway omGateway;
-    private UserManager userManager;    	
-	//protected final VelocityRequestContextFactory requestContextFactory;
-	private OmPluginSettings omPluginSettings;	
-	///private final AvatarManager avatarManager;
+    private UserManager userManager; 
+	private OmPluginSettings omPluginSettings;		
+	private SettingsManager settingsManager;
 	
 	private ArrayList<Exception> errors = new ArrayList<Exception>();;
 	
@@ -70,34 +74,28 @@ public final class RoomsServlet extends HttpServlet
     private static final String EDIT_BROWSER_TEMPLATE = "/templates/omrooms/edit.vm";
     private static final String ENTER_BROWSER_TEMPLATE = "/templates/omrooms/enter.vm";
  
-    public RoomsServlet(OmPluginSettings omPluginSettings, RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, UserManager userManager)
+    public RoomsServlet(SettingsManager settingsManager, OmPluginSettings omPluginSettings, RoomService roomService, TemplateRenderer templateRenderer, OmGateway omGateway, UserManager userManager)
     {
         this.roomService = checkNotNull(roomService);
         this.templateRenderer = templateRenderer;
         this.omGateway = omGateway;
         this.userManager = userManager;
-        this.omPluginSettings = omPluginSettings;     
+        this.omPluginSettings = omPluginSettings; 
+        this.settingsManager = settingsManager;        
         
     }
  
-    public String getCanonicalBaseUrl() {
-    		return "";
-    	   //return this.requestContextFactory.getJiraVelocityRequestContext().getCanonicalBaseUrl();
-    }
-
+   
 	private User getCurrentUser(HttpServletRequest req) {
-	    // To get the current user, we first get the username from the session.
-	    // Then we pass that over to the jiraUserManager in order to get an
-	    // actual User object.		
-	    return  (User) AuthenticatedUserThreadLocal.getUser();//jiraUserManager.getUserObject(userManager.getRemoteUsername(req));
+	    	
+	    return  (User) AuthenticatedUserThreadLocal.getUser();
 	}
 	
 		
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
     {
-    	User currentUser = getCurrentUser(req);    	
-    	//ArrayList<Exception> errors = new ArrayList<Exception>();
+    	User currentUser = getCurrentUser(req);
     	String roomURL = "";  	
     	 
 		//User currentUser2 = ComponentManager.getInstance().getJiraAuthenticationContext().getLoggedInUser();
@@ -155,15 +153,17 @@ public final class RoomsServlet extends HttpServlet
 						username = currentUser.getName();
 						becomeModeratorAsInt = 1;
 						showAudioVideoTestAsInt = 1;
-		        	}					
-					 String avatarId = "1";//this.avatarManager.getDefaultAvatarId(Avatar.Type.USER).toString();					 
-					 //URI avatarUrl = avatarService.getAvatarURL(currentUser, avatarId, Avatar.Size.SMALL);
-					 //String profilePictureUrl = avatarUrl.toString();
-					 String profilePictureUrl = this.getCanonicalBaseUrl() + "/secure/projectavatar?avatarId=" + avatarId + "&size=small";
-					 
+		        	}
+		        	
+		        	UserAccessor userAccessor = (UserAccessor) ContainerManager.getInstance().getContainerContext().getComponent("userAccessor");		        	
+		        	String picturePath = userAccessor.getUserProfilePicture((com.atlassian.user.User)currentUser).getDownloadPath();
+		        	String baseURL = settingsManager.getGlobalSettings().getBaseUrl(); 
+		        	
+					String profilePictureUrl = baseURL + picturePath;				
+					
 					Long roomId = Long.valueOf(req.getParameter("roomId"));
 										
-					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, firsname, "", profilePictureUrl, 
+					String roomHash = omGateway.setUserObjectAndGenerateRoomHash(username, firsname, "", profilePictureUrl.toString(), 
 																				email, userId, externalUserType, 	roomId, 
 																				becomeModeratorAsInt,
 																				showAudioVideoTestAsInt);

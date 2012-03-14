@@ -138,7 +138,7 @@ public class AdminServlet extends HttpServlet
         	omPluginSettings.storeSomeInfo("key", key);        	
             
             //response.sendRedirect(request.getContextPath() + "/plugins/servlet/openmeetingsadmin");
-            response.sendRedirect(request.getContextPath() + "/secure/AdminSummary.jspa");
+            response.sendRedirect(request.getContextPath() + "/admin/console.action");
        
     }
     

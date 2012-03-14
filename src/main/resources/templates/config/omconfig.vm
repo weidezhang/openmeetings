@@ -13,7 +13,7 @@
  -->
 <html>
 <head>
-    <title>OpenMeetings Admin &mdash; </title>
+    <title>OpenMeetings Admin</title>
     <meta name="decorator" content="atl.admin">
 </head>
 <body class="page-type-admin">

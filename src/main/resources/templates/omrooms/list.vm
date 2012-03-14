@@ -56,7 +56,7 @@
                 <table class="aui">
                     <thead>
                     <tr>
-                        ##<th>$i18n.getText("openmeetings.rooms.roomid.label")</th>
+                        <th>$i18n.getText("openmeetings.rooms.roomid.label")</th>
                         <th>$i18n.getText("openmeetings.rooms.roomname.label")</th>
                         <th>$i18n.getText("openmeetings.rooms.roomtype.label")</th>
                         <th>$i18n.getText("openmeetings.rooms.participent.label")</th>
@@ -68,7 +68,7 @@
                     <tbody>
                         #foreach( $room in $rooms )
                         <tr>
-                            ##<td>$room.getRoomId()</td>
+                            <td>$room.getRoomId()</td>
                             <td>$room.getName()</td>
                             <td>
                                 #if($room.getRoomType() == 1)		                           

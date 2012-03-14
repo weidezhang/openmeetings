@@ -20,7 +20,7 @@
 <div class="content-container">
 
     <div class="content-body">
-        <h1>$i18n.getText("openmeetings.rooms.edit.titel.label"): $room.getName()</h1>
+       <!-- <h1>$i18n.getText("openmeetings.rooms.edit.titel.label"): $room.getName()</h1>-->
 
         #if ($errors.size()>0)
             <div class="aui-message error shadowed">

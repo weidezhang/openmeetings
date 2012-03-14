@@ -3,7 +3,7 @@ package com.openmeetings.confluence.plugins;
 import org.junit.Test;
 
 /**
- * Testing {@link com.openmeetings.confluence.plugins.ExampleMacro}
+ * Testing {@link com.openmeetings.confluence.plugins.OpenMeetingsMacro}
  */
 public class ExampleMacroTest
 {

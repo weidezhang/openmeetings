@@ -20,7 +20,7 @@
 <div class="content-container">
 
     <div class="content-body">
-        <h1>Create Room</h1>
+       <!-- <h1>Create Room</h1>-->
         <div class="create-issue-panel">
 
             <form method="post" id="h" action="openmeetingsrooms" class="aui">

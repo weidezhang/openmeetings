@@ -6,7 +6,7 @@
         <param name="configure.url">/plugins/servlet/openmeetingsadmin</param>
     </plugin-info>
 
-    <macro name="openmeetings-room-link" class="com.openmeetings.confluence.plugins.ExampleMacro" key="openmeetings-room-link">
+    <macro name="openmeetings-room-link" class="com.openmeetings.confluence.plugins.OpenMeetingsMacro" key="openmeetings-room-link">
 	    <!-- TODO: Add macro description -->
 	    <description>Insert Room Link in page</description>  
 	    
@@ -15,13 +15,51 @@
             <param name="help-section" value="confluence"/>
         </resource>
         <!-- Specifies which macro browser category this macro should display in. -->
-        <category name="confluence-content"/>
+        <category name="communication"/>
         <!-- Defines the parameters this macro may consume. -->
         <parameters>
-            <parameter name="greeting" type="string"/>
+            <parameter name="room_id" type="string"/>
+            <!--
+            <parameter name="roomid" type="enum">
+            	<value name="10"/>
+            	<value name="100"/>
+            </parameter>
+            <parameter name="title" type="confluence-content">
+            	<option key="type" value="attachment"/>
+                <option key="showNameInPlaceholder" value="false" />
+                <option key="showValueInPlaceholder" value="true" />
+            </parameter>
+            -->
         </parameters>   
     </macro>
-   
+    <!--
+    <macro name="openmeetings-room-link2" class="com.openmeetings.confluence.plugins.TutorialMacro" key="openmeetings-room-link2">
+	    
+	    <description>Insert Room Link in page</description>  
+	    
+	   
+        <resource type="velocity" name="enter" location="templates/omrooms/enter.vm">
+            <param name="help-section" value="confluence"/>
+        </resource>
+        
+        <category name="confluence-content"/>
+       
+        <parameters>
+            <parameter name="room_id" type="string"/>
+            <parameter name="roomid" type="enum">
+            	<value name="10"/>
+            	<value name="100"/>
+            </parameter>
+        </parameters>   
+    </macro>
+    -->
+   <!--
+    <web-resource key="macro-browser-smart-fields" name="Macro Browser Smart Fields">
+    	<resource type="download" name="myBrowserField.js" location="myBrowserField.js" />
+    	<dependency>confluence.editor.actions:editor-macro-browser</dependency>
+    	<context>macro-browser</context>
+	</web-resource>
+   -->
   <web-item key="om_config" section="system.admin/configuration">
     <label>OpenMeetings Setup</label>
     <link linkId="admin_link" absolute="false">/plugins/servlet/openmeetingsadmin</link>
@@ -37,20 +75,23 @@
     <link linkId="my_links_link"/>   
   </web-item>
   -->
-  
+  <!--
   <web-item key="website_link_space" name="Rooms Web Site Space" section="system.space" weight="100">
     <label>My OpenMeetings Rooms</label>
     <link linkId="rooms_link_space" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
   </web-item>
+  -->
   <web-item key="website_link_browse" name="Rooms Web Site Browse" section="system.browse" weight="100">
     <label>My OpenMeetings Rooms</label>
     <link linkId="rooms_link_browse" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
   </web-item>
+  <!--
    <web-item key="website_link_dashboard" name="Rooms Web Site Dashboard" section="system.dashboard" weight="47">
     <label>My OpenMeetings Rooms</label>
     <link linkId="rooms_link_dashboard" absolute="false">/plugins/servlet/openmeetingsrooms</link>/&gt;
-    <!--<condition class="com.atlassian.confluence.plugin.webfragment.conditions.UserLoggedInCondition"/>-->
+    <condition class="com.atlassian.confluence.plugin.webfragment.conditions.UserLoggedInCondition"/>
   </web-item>
+  -->
   <web-item key="create_room_link" name="Create Room Web Site" section="system.content.add/space" weight="10">
     <label>Create Room</label>
     <link linkId="create_room_link" absolute="false">/plugins/servlet/openmeetingsrooms?new=y</link>/&gt;
