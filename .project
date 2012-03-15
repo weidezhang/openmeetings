@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
   <name>openmeetingsconfluence</name>
-  <comment>This is the com.openmeetings.confluence.plugins:openmeetingsconfluence plugin for Atlassian Confluence. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <comment>This is the OpenMeetings integration plugin for Atlassian Confluence. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>
     <buildCommand>

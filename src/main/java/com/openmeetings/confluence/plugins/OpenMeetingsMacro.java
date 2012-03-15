@@ -119,7 +119,7 @@ public class OpenMeetingsMacro extends BaseMacro
     		}
     		
     		if(roomLink == ""){
-    			roomLink =  "<span class='error'>Room not avaliable!</span>";             
+    			roomLink =  "<span class='error'>Room not available!</span>";             
                 result.append(roomLink);
     		}
     		

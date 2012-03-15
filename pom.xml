@@ -14,8 +14,8 @@
         <url>http://www.e-schwert.de</url>
     </organization>
 
-    <name>openmeetingsconfluence</name>
-    <description>This is the com.openmeetings.confluence.plugins:openmeetingsconfluence plugin for Atlassian Confluence.</description>
+    <name>OpenMeetings Integration Plugin</name>
+    <description>This is the OpenMeetings integration plugin for Atlassian Confluence.</description>
     <packaging>atlassian-plugin</packaging>
 
     <dependencies>
