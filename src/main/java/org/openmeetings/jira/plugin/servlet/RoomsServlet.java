@@ -122,7 +122,8 @@ public final class RoomsServlet extends HttpServlet
         	Room room = roomService.getRoom(id);
         	
             Map<String, Object> context = Maps.newHashMap();
-            context.put("room", room);        
+            context.put("room", room);
+            context.put("errors", this.errors);
             res.setContentType("text/html;charset=utf-8");
             // Render the template with the issue inside the context
             templateRenderer.render(EDIT_BROWSER_TEMPLATE, context, res.getWriter());        	
