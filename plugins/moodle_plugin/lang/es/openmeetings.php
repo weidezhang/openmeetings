@@ -45,6 +45,7 @@ $string['recordings_show'] = 'Dispuestas Grabaciones para Mostrar';
 $string['Comment'] = 'Comentario';
 
 $string['Conference'] = 'Conferencia (max 16 participantes)';
+$string['Interview'] = 'Interview (2 participantes)';
 $string['Audience'] = 'Audiencia (max 32 participantes)';
 $string['Restricted'] = 'Webinar (max 150 participantes)';
 $string['Recording'] = 'Mostrar Grabaciones (seleccionar grabacion en el menu desplegable para ser mostrado en lugar de la reunion)';

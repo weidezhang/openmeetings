@@ -45,7 +45,7 @@ class mod_openmeetings_mod_form extends moodleform_mod {
 		$mform->addElement('hidden', 'room_id', '0', array('size'=>'64'));
 
 		/// Adding the "Room Type" field
-		$mform->addElement('select', 'type', get_string('Room_Type', 'openmeetings'), array('1'=>get_string('Conference', 'openmeetings'), '2'=>get_string('Audience', 'openmeetings'), '3'=>get_string('Restricted', 'openmeetings'), '0'=>get_string('Recording', 'openmeetings')));
+		$mform->addElement('select', 'type', get_string('Room_Type', 'openmeetings'), array('1'=>get_string('Conference', 'openmeetings'), '3'=>get_string('Restricted', 'openmeetings'), '4'=>get_string('Interview', 'openmeetings'), '0'=>get_string('Recording', 'openmeetings')));
 
 		/// Adding the "Number of Participants" field
 		$mform->addElement('select', 'max_user', get_string('Max_User', 'openmeetings'), array('2'=>'2', '4'=>'4', '8'=>'8', '16'=>'16', '24'=>'24', '36'=>'36', '50'=>'50', '100'=>'100', '150'=>'150', '200'=>'200', '250'=>'250', '500'=>'500', '1000'=>'1000'));
@@ -107,26 +107,18 @@ class mod_openmeetings_mod_form extends moodleform_mod {
 		
 			$resultDom = $openmeetings_gateway->openmeetings_getRecordingsByExternalRooms();
 		
-			$flvrecordings = $resultDom->getElementsByTagName('flvrecording');
-			if ($flvrecordings->length > 0) {
+			$flvrecordings = $resultDom->getElementsByTagName('return');
 				
-				foreach ($flvrecordings as $flvrecording) {
-					
-					$flvRecordingIdNode = $flvrecording->getElementsByTagName('flvRecordingId');
-					$flvRecordingNameNode = $flvrecording->getElementsByTagName('fileName');
-					if ($flvRecordingIdNode->length > 0) {
-						$recordings[$flvRecordingIdNode->item(0)->nodeValue] = $flvRecordingNameNode->item(0)->nodeValue;
-					}
-					
-				}
+			foreach ($flvrecordings as $flvrecording) {
 				
-			} else {
-				$flvRecordingIdNode = $resultDom->getElementsByTagName('flvRecordingId');
-				$flvRecordingNameNode = $resultDom->getElementsByTagName('fileName');
+				$flvRecordingIdNode = $flvrecording->getElementsByTagName('flvRecordingId');
+				$flvRecordingNameNode = $flvrecording->getElementsByTagName('fileName');
 				if ($flvRecordingIdNode->length > 0) {
 					$recordings[$flvRecordingIdNode->item(0)->nodeValue] = $flvRecordingNameNode->item(0)->nodeValue;
 				}
+				
 			}
+				
 		
 		
 		}

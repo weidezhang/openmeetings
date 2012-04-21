@@ -45,7 +45,7 @@ $string['recordings_show'] = 'Aufgezeichnete Meetings';
 $string['Comment'] = 'Kommentar';
 
 $string['Conference'] = 'Konference (bis 16 Teilnehmer)';
-$string['Audience'] = 'Audience (bis 32 Teilnehmer)';
+$string['Interview'] = 'Interview (2 Teilnehmer)';
 $string['Restricted'] = 'Webinar (bis 150 Teilnehmer)';
 $string['Recording'] = 'Aufzeichnung anzeigen (Aufzeichnung ausw&auml;hlen die statt dem Konferenzraum dann angezeigt wird!)';
 

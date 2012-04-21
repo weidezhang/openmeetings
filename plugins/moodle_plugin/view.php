@@ -105,7 +105,6 @@ if ($openmeetings_gateway->openmeetings_loginuser()) {
 	}
 		
 	// Simulate the User automatically
-	//echo "openmeetings_setUserObjectWithExternalUser<br/>";
 	if ($openmeetings->type != 0){
 		$returnVal = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag($USER->username,$USER->firstname,
 		$USER->lastname,$USER->picture,$USER->email,$USER->id,$CFG->openmeetings_openmeetingsModuleKey,$openmeetings->room_id,$becomemoderator,$allowRecording);

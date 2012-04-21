@@ -23,7 +23,7 @@ require_once($CFG->dirroot.'/mod/openmeetings/lib/openmeetings_rest_service.php'
 class openmeetings_gateway {
 
 	var $session_id = "";
-
+	
 	function getUrl() {
 		global $CFG;
 		//FIXME protocol should be added
@@ -63,13 +63,12 @@ class openmeetings_gateway {
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($response); echo '</pre>';
 				$this->session_id = $response;
 
 				$result = $restService->call($this->getUrl()."/services/UserService/loginUser?"
 				. "SID=".$this->session_id
-				. "&username=" . $CFG->openmeetings_openmeetingsAdminUser
-				. "&userpass=" . $CFG->openmeetings_openmeetingsAdminUserPass
+				. "&username=" . urlencode($CFG->openmeetings_openmeetingsAdminUser)
+				. "&userpass=" . urlencode($CFG->openmeetings_openmeetingsAdminUserPass)
 				);
 
 				if ($restService->getError()) {
@@ -79,11 +78,7 @@ class openmeetings_gateway {
 					if ($err) {
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} else {
-						//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
 						$returnValue = $result;
-						//print_r($result);
-						//exit;
-						//echo '<h2>returnValue</h2><pre>'; printf($returnValue); echo '</pre>';
 					}
 				}
 			}
@@ -96,46 +91,6 @@ class openmeetings_gateway {
 		}
 	}
 
-
-	function openmeetings_createroomwithmod($openmeetings) {
-		global $CFG;
-
-		$restService = new openmeetings_rest_service();
-		//echo $restService."<br/>";
-		$err = $restService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
-			
-		$result = $restService->call($this->getUrl()."/services/RoomService/addRoomWithModerationQuestionsAndAudioType?" .
-							"SID=".$this->session_id.
-							"&name=".$openmeetings->name.
-							"&roomtypes_id=".$openmeetings->roomtypes_id.
-							"&comment=".$openmeetings->comment.
-							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
-							"&ispublic=".$openmeetings->ispublic.
-							"&appointment=".$openmeetings->appointment.
-							"&isDemoRoom=".$openmeetings->isDemoRoom.
-							"&demoTime=".$openmeetings->demoTime.
-							"&isModeratedRoom=".$openmeetings->isModeratedRoom.
-							"&allowUserQuestions=true" .
-							"&isAudioOnly=false");
-
-		if ($restService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result;
-			}
-		}
-		return -1;
-	}
 
 	function openmeetings_updateRoomWithModeration($openmeetings) {
 
@@ -156,32 +111,18 @@ class openmeetings_gateway {
 			$isModeratedRoom = true;
 		}
 
-		$params = array(
-				'SID' => $this->session_id,
-				'room_id' => $openmeetings->room_id,
-				'name' => $course_name,
-				'roomtypes_id' => $openmeetings->type,
-				'comment' => 'Created by SOAP-Gateway for Moodle Platform',
-				'numberOfPartizipants' => $openmeetings->max_user,
-				'ispublic' => 0,
-				'appointment' => 0,
-				'isDemoRoom' => 0,
-				'demoTime' => 0,
-				'isModeratedRoom' => $isModeratedRoom
-		);
-			
 		$result = $restService->call($this->getUrl()."/services/RoomService/updateRoomWithModeration?" .
 							"SID=".$this->session_id.
 							"&room_id=".$openmeetings->room_id.
-							"&name=".$course_name.
-							"&roomtypes_id=".$openmeetings->type.
-							"&comment="."Created by SOAP-Gateway for Moodle Platform".
+							"&name=".urlencode($course_name).
+							"&roomtypes_id=".urlencode($openmeetings->type).
+							"&comment=".urlencode("Created by SOAP-Gateway for Moodle Platform").
 							"&numberOfPartizipants=".$openmeetings->max_user.
 							"&ispublic=false".
 							"&appointment=false".
 							"&isDemoRoom=false".
 							"&demoTime=0".
-							"&isModeratedRoom=".$isModeratedRoom);
+							"&isModeratedRoom=".$this->var_to_str($isModeratedRoom));
 
 		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
@@ -197,9 +138,40 @@ class openmeetings_gateway {
 		return -1;
 	}
 
+	/*
+	 * public String setUserObjectAndGenerateRecordingHashByURL(String SID, String username, String firstname, String lastname,
+					Long externalUserId, String externalUserType, Long recording_id)
+	 */
+	 function openmeetings_setUserObjectAndGenerateRecordingHashByURL($username, $firstname, $lastname, 
+						$userId, $systemType, $recording_id) {
+	    $restService = new openmeetings_rest_service();
+	 	$result = $restService->call($this->getUrl().'/services/UserService/setUserObjectAndGenerateRecordingHashByURL?'.
+			'SID='.$this->session_id .
+			'&username='.urlencode($username) .
+			'&firstname='.urlencode($firstname) .
+			'&lastname='.urlencode($lastname) .
+			'&externalUserId='.$userId .
+			'&externalUserType='.urlencode($systemType) .
+			'&recording_id='.$recording_id,
+			'return'
+			);
+		
+		if ($client_roomService->fault) {
+			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
+		} else {
+			$err = $restService->getError();
+			if ($err) {
+				echo '<h2>Error</h2><pre>' . $err . '</pre>';
+			} else {
+				echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
+				return $result;
+			}
+		}   
+		return -1;
+	}
 
 	function openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname,
-	$profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording) {
+					$profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording) {
 		global $CFG;
 
 		$restService = new openmeetings_rest_service();
@@ -213,17 +185,17 @@ class openmeetings_gateway {
 
 		$result = $restService->call($this->getUrl()."/services/UserService/setUserObjectAndGenerateRoomHashByURLAndRecFlag?" .
 							"SID=".$this->session_id.
-							"&username=".$username.
-							"&firstname=".$firstname.
-							"&lastname=".$lastname.
-							"&profilePictureUrl=".$profilePictureUrl.
-							"&email=".$email.
-							"&externalUserId=".$userId.
-							"&externalUserType=".$systemType.
-							"&room_id=".$room_id.
+							"&username=".urlencode($username).
+							"&firstname=".urlencode($firstname).
+							"&lastname=".urlencode($lastname).
+							"&profilePictureUrl=".urlencode($profilePictureUrl).
+							"&email=".urlencode($email).
+							"&externalUserId=".urlencode($userId).
+							"&externalUserType=".urlencode($systemType).
+							"&room_id=".urlencode($room_id).
 							"&becomeModeratorAsInt=".$becomeModerator.
 							"&showAudioVideoTestAsInt=1".
-							"&allowRecording=".$allowRecording);
+							"&allowRecording=".$this->var_to_str($allowRecording));
 
 		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
@@ -237,96 +209,6 @@ class openmeetings_gateway {
 			}
 		}
 		return -1;
-	}
-
-	function openmeetings_addRoomWithModerationExternalTypeAndTopBarOption($openmeetings) {
-		global $CFG;
-
-		$restService = new openmeetings_rest_service();
-		//echo $client_roomService."<br/>";
-		$err = $restService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
-
-		$result = $restService->call($this->getUrl()."/services/RoomService/addRoomWithModerationExternalTypeAndTopBarOption?" .
-							"SID=".$this->session_id.
-							"&name=".urlencode($openmeetings->name).
-							"&roomtypes_id=".$openmeetings->roomtypes_id.
-							"&comment=".urlencode($openmeetings->comment).
-							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
-							"&ispublic=".$this->var_to_str($openmeetings->ispublic).
-							"&appointment=".$this->var_to_str($openmeetings->appointment).
-							"&isDemoRoom=".$this->var_to_str($openmeetings->isDemoRoom).
-							"&demoTime=".$openmeetings->demoTime.
-							"&isModeratedRoom=".$this->var_to_str($openmeetings->isModeratedRoom).
-							"&externalRoomType=".$openmeetings->externalRoomType.
-							"&allowUserQuestions=" .$this->var_to_str($openmeetings->allowUserQuestions).
-							"&isAudioOnly=".$this->var_to_str($openmeetings->isAudioOnly).
-							"&waitForRecording=false".
-							"&allowRecording=".$this->var_to_str($openmeetings->allowRecording).
-							"&hideTopBar=false");
-
-
-		if ($restService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				//return $result["return"];
-				return $result;
-			}
-		}
-		return -1;
-	}
-
-	function updateRoomWithModerationAndQuestions($openmeetings) {
-		global $CFG;
-			
-		$restService = new openmeetings_rest_service();
-		//echo $client_roomService."<br/>";
-		$err = $restService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
-
-		$result = $restService->call($this->getUrl()."/services/RoomService/updateRoomWithModerationAndQuestions?" .
-							"SID=".$this->session_id.
-							"&room_id=".$openmeetings->room_id.
-							"&name=".urlencode($openmeetings->name).
-							"&roomtypes_id=".$openmeetings->roomtypes_id.
-							"&comment=".urlencode($openmeetings->comment).
-							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
-							"&ispublic=".$this->var_to_str($openmeetings->ispublic).
-							"&appointment=".$this->var_to_str($openmeetings->appointment).
-							"&isDemoRoom=".$this->var_to_str($openmeetings->isDemoRoom).
-							"&demoTime=".$openmeetings->demoTime.
-							"&isModeratedRoom=".$this->var_to_str($openmeetings->isModeratedRoom).
-							"&allowUserQuestions=".$this->var_to_str($openmeetings->allowUserQuestions));
-
-		if ($restService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-			//print_r($params);
-			//exit();
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				//return $result["return"];
-				return $result;
-			}
-		}
-		return -1;
-
 	}
 
 	function deleteRoom($openmeetings) {
@@ -340,16 +222,6 @@ class openmeetings_gateway {
 			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
-		/*
-		 $params = array(
-		'SID' => $this->session_id,
-		'rooms_id' => $openmeetings->room_id
-			
-		);
-
-		$result = $client_roomService->call('deleteRoom',$params);
-		*/
-
 
 		$result = $restService->call($this->getUrl()."/services/RoomService/deleteRoom?" .
 							"SID=".$this->session_id.
@@ -370,53 +242,10 @@ class openmeetings_gateway {
 		return -1;
 	}
 
+
 	/**
-	 * Sets the User Id and remembers the User,
-	 * the value for $systemType is any Flag but usually should always be the same,
-	 * it only has a reason if you have more then one external Systems, so the $userId will not
-	 * be unique, then you can use the $systemType to give each system its own scope
-	 *
-	 * so a unique external user is always the pair of: $userId + $systemType
-	 *
-	 * in this case the $systemType is 'moodle'
-	 *
+	 * Generate a new room hash for entering a conference room
 	 */
-	function openmeetings_setUserObjectWithExternalUser($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType) {
-		global $CFG;
-
-		$restService = new nusoap_client($this->getUrl()."/services/UserService?wsdl", true);
-
-		$err = $restService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
-		$params = array(
-			'SID' => $this->session_id,
-			'username' => urlencode($username),
-			'firstname' => $firstname,
-			'lastname' => $lastname,
-			'profilePictureUrl' => $profilePictureUrl,
-			'email' => $email,
-			'externalUserId' => $userId,
-			'externalUserType' => $systemType
-		);
-		$result = $restService->call('setUserObjectWithExternalUser',$params);
-		if ($client_roomService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
-			}
-		}
-		return -1;
-	}
-
 	function openmeetings_setUserObjectAndGenerateRoomHash($username,
 									$firstname,
 									$lastname,
@@ -468,6 +297,9 @@ class openmeetings_gateway {
 		return -1;
 	}
 	
+	/**
+	 * Create a new conference room
+	 */
 	function openmeetings_createRoomWithModAndType($openmeetings) {
 		global $USER, $CFG;
 	
@@ -502,13 +334,15 @@ class openmeetings_gateway {
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
-				echo '<h2>Result Create Room </h2><pre>'; print_r($result); echo '</pre>';
 				return $result;
 			}
 		}   
 		return -1;
 	}
 
+	/**
+	 * Get list of available recordings made by this Moodle instance
+	 */
 	function openmeetings_getRecordingsByExternalRooms() {
 	
 		global $CFG;
