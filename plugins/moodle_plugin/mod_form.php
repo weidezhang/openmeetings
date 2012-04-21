@@ -31,8 +31,8 @@ class mod_openmeetings_mod_form extends moodleform_mod {
 
 	function definition() {
 
-		global $COURSE, $openmeetings_gateway, $om_login;
-		$mform    =& $this->_form;
+		global $openmeetings_gateway, $om_login;
+		$mform = $this->_form;
 
 		//-------------------------------------------------------------------------------
 		/// Adding the "general" fieldset, where all the common settings are showed
@@ -105,18 +105,26 @@ class mod_openmeetings_mod_form extends moodleform_mod {
 			
 		if ($om_login) {
 		
-			$recordingsArray = $openmeetings_gateway->openmeetings_getRecordingsByExternalRooms();
+			$resultDom = $openmeetings_gateway->openmeetings_getRecordingsByExternalRooms();
 		
-		
-			foreach ($recordingsArray as $key => $value) {
-				//there is a bug, if a List has the length of 1 the type is wrong
-				if (is_array($value)) {
-					//echo "Das Element " . $value["flvRecordingId"] . " enthält den Wert: " . $value["fileName"] . "<br>";
-					$recordings[$value["flvRecordingId"]] = $value["fileName"];
-				} else {
-					//echo "Das Element " . $recordingsArray["flvRecordingId"] . " enthält den Wert: " . $recordingsArray["fileName"] . "<br>";
-					$recordings[$recordingsArray["flvRecordingId"]] = $recordingsArray["fileName"];
-					break;
+			$flvrecordings = $resultDom->getElementsByTagName('flvrecording');
+			if ($flvrecordings->length > 0) {
+				
+				foreach ($flvrecordings as $flvrecording) {
+					
+					$flvRecordingIdNode = $flvrecording->getElementsByTagName('flvRecordingId');
+					$flvRecordingNameNode = $flvrecording->getElementsByTagName('fileName');
+					if ($flvRecordingIdNode->length > 0) {
+						$recordings[$flvRecordingIdNode->item(0)->nodeValue] = $flvRecordingNameNode->item(0)->nodeValue;
+					}
+					
+				}
+				
+			} else {
+				$flvRecordingIdNode = $resultDom->getElementsByTagName('flvRecordingId');
+				$flvRecordingNameNode = $resultDom->getElementsByTagName('fileName');
+				if ($flvRecordingIdNode->length > 0) {
+					$recordings[$flvRecordingIdNode->item(0)->nodeValue] = $flvRecordingNameNode->item(0)->nodeValue;
 				}
 			}
 		

@@ -134,7 +134,7 @@ function openmeetings_delete_instance($id) {
 
 
 function openmeetings_user_outline($course, $user, $mod, $openmeetings) {
-    return $return;
+    return true;
 }
 
 

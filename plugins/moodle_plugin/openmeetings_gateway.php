@@ -54,12 +54,7 @@ class openmeetings_gateway {
 
 		$restService = new openmeetings_rest_service();
 
-		$response = $restService->call($this->getUrl()."/services/UserService/getSession");
-
-		// Confirm that the request was transmitted to the OpenMeetings!
-		if(!$response->asXML()) {
-			die("Request to OpenMeetings og! OpenMeetings Service failed and no response was returned.");
-		}
+		$response = $restService->call($this->getUrl()."/services/UserService/getSession","session_id");
 
 		if ($restService->getError()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
@@ -68,8 +63,8 @@ class openmeetings_gateway {
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
-				$this->session_id = $sid = $response->children('ns', true)->return->children('ax23', true)->session_id;
+				//echo '<h2>Result</h2><pre>'; print_r($response); echo '</pre>';
+				$this->session_id = $response;
 
 				$result = $restService->call($this->getUrl()."/services/UserService/loginUser?"
 				. "SID=".$this->session_id
@@ -85,14 +80,15 @@ class openmeetings_gateway {
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} else {
 						//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
-						$returnValue = $result->children('ns', true)->return[0];
-						//print_r($result->children('ns', true)->return[0]);
+						$returnValue = $result;
+						//print_r($result);
 						//exit;
 						//echo '<h2>returnValue</h2><pre>'; printf($returnValue); echo '</pre>';
 					}
 				}
 			}
 		}
+		
 		if ($returnValue>0){
 			return true;
 		} else {
@@ -135,7 +131,7 @@ class openmeetings_gateway {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result->children('ns', true)->return[0]; //$result["return"];
+				return $result;
 			}
 		}
 		return -1;
@@ -195,7 +191,7 @@ class openmeetings_gateway {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result->children('ns', true)->return[0]; //$result["return"];
+				return $result;
 			}
 		}
 		return -1;
@@ -237,7 +233,7 @@ class openmeetings_gateway {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result->children('ns', true)->return[0]; //$result["return"];
+				return $result;
 			}
 		}
 		return -1;
@@ -283,7 +279,7 @@ class openmeetings_gateway {
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
 				//return $result["return"];
-				return $result->children('ns', true)->return[0];
+				return $result;
 			}
 		}
 		return -1;
@@ -326,7 +322,7 @@ class openmeetings_gateway {
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
 				//return $result["return"];
-				return $result->children('ns', true)->return[0];
+				return $result;
 			}
 		}
 		return -1;
@@ -368,7 +364,7 @@ class openmeetings_gateway {
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
 				//return $result["return"];
-				return $result->children('ns', true)->return[0];
+				return $result;
 			}
 		}
 		return -1;
@@ -398,7 +394,7 @@ class openmeetings_gateway {
 		}
 		$params = array(
 			'SID' => $this->session_id,
-			'username' => $username,
+			'username' => urlencode($username),
 			'firstname' => $firstname,
 			'lastname' => $lastname,
 			'profilePictureUrl' => $profilePictureUrl,
@@ -422,15 +418,15 @@ class openmeetings_gateway {
 	}
 
 	function openmeetings_setUserObjectAndGenerateRoomHash($username,
-	$firstname,
-	$lastname,
-	$profilePictureUrl,
-	$email,
-	$externalUserId,
-	$externalUserType,
-	$room_id,
-	$becomeModeratorAsInt,
-	$showAudioVideoTestAsInt) {
+									$firstname,
+									$lastname,
+									$profilePictureUrl,
+									$email,
+									$externalUserId,
+									$externalUserType,
+									$room_id,
+									$becomeModeratorAsInt,
+									$showAudioVideoTestAsInt) {
 
 		global $CFG;
 
@@ -438,13 +434,13 @@ class openmeetings_gateway {
 
 		$result = $restService->call($this->getUrl()."/services/UserService/setUserObjectAndGenerateRoomHash?" .
 					"SID=".$this->session_id.
-					"&username=".$username.
-					"&firstname=".$firstname.
-					"&lastname=".$lastname.
-					"&profilePictureUrl=".$profilePictureUrl.
-					"&email=".$email.
-					"&externalUserId=".$externalUserId.
-					"&externalUserType=".$externalUserType.
+					"&username=".urlencode($username).
+					"&firstname=".urlencode($firstname).
+					"&lastname=".urlencode($lastname).
+					"&profilePictureUrl=".urlencode($profilePictureUrl).
+					"&email=".urlencode($email).
+					"&externalUserId=".urlencode($externalUserId).
+					"&externalUserType=".urlencode($externalUserType).
 					"&room_id=".$room_id.
 					"&becomeModeratorAsInt=".$becomeModeratorAsInt.
 					"&showAudioVideoTestAsInt=".$showAudioVideoTestAsInt);
@@ -465,45 +461,40 @@ class openmeetings_gateway {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
 				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result->children('ns', true)->return[0];
+				return $result;
 
 			}
 		}
 		return -1;
 	}
-
-	function openmeetings_sendInvitationHash($username, $message, $baseurl, $email, $subject, $room_id, $conferencedomain, $isPasswordProtected, $invitationpass, $valid, $validFromDate, $validFromTime, $validToDate, $validToTime, $language_id, $sendMail) {
-		global $CFG;
-
-		$restService = new nusoap_client($this->getUrl()."/services/RoomService?wsdl", true);
-
-		$err = $restService->getError();
-
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
+	
+	function openmeetings_createRoomWithModAndType($openmeetings) {
+		global $USER, $CFG;
+	
+		$restService = new openmeetings_rest_service();
+    	$course_name = 'MOODLE_COURSE_ID_'.$openmeetings->course.'_NAME_'.$openmeetings->name;
+		
+		$isModeratedRoom = "false";
+		if ($openmeetings->is_moderated_room == 1) {
+			$isModeratedRoom = "true";
 		}
-		$params = array(
-			'SID' => $this->session_id,
-			'username' => $username,
-			'message' => $message,
-			'baseurl' => $baseurl,
-			'email' => $email,
-			'subject' => $subject,
-			'room_id' => $room_id,
-			'conferencedomain' => $conferencedomain,
-			'isPasswordProtected' => $isPasswordProtected,
-			'invitationpass' => $invitationpass,
-			'valid'=> $valid,
-			'validFromDate' => $validFromDate,
-			'validFromTime' => $validFromTime,
-			'validToDate' => $validToDate,
-			'validToTime' => $validToTime,
-			'language_id' => $language_id,
-			'sendMail' => $sendMail			
-		);
-		$result = $restService->call('sendInvitationHash', $params);
+		
+		$url = $this->getUrl().'/services/RoomService/addRoomWithModerationAndExternalType?' .
+						'SID='.$this->session_id .
+						'&name='.urlencode($course_name).
+						'&roomtypes_id='.$openmeetings->type .
+						'&comment='.urlencode('Created by SOAP-Gateway for Moodle Platform') .
+						'&numberOfPartizipants='.$openmeetings->max_user .
+						'&ispublic=false'.
+						'&appointment=false'.
+						'&isDemoRoom=false'.
+						'&demoTime=0' .
+						'&isModeratedRoom='.$isModeratedRoom .
+						'&externalRoomType='.urlencode($CFG->openmeetings_openmeetingsModuleKey)
+						;
+		
+	 	$result = $restService->call($url, "return");
+		
 		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
@@ -511,94 +502,27 @@ class openmeetings_gateway {
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
+				echo '<h2>Result Create Room </h2><pre>'; print_r($result); echo '</pre>';
+				return $result;
 			}
-		}
+		}   
 		return -1;
 	}
 
-	function sendInvitationHashWithDateObject($username, $message, $baseurl, $email, $subject, $room_id, $conferencedomain, $isPasswordProtected, $invitationpass, $valid, $fromDate, $toDate, $language_id, $sendMail) {
-		global $CFG;
-
-		$restService = new nusoap_client($this->getUrl()."/services/RoomService?wsdl", true);
-
-		$err = $restService->getError();
-
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
-		$params = array(
-			'SID' => $this->session_id,
-			'username' => $username,
-			'message' => $message,
-			'baseurl' => $baseurl,
-			'email' => $email,
-			'subject' => $subject,
-			'room_id' => $room_id,
-			'conferencedomain' => $conferencedomain,
-			'isPasswordProtected' => $isPasswordProtected,
-			'invitationpass' => $invitationpass,
-			'valid'=> $valid,
-			'fromDate' => $fromDate,
-			'toDate' => $toDate,			
-			'language_id' => $language_id,
-			'sendMail' => $sendMail				
-		);
-		$result = $restService->call('sendInvitationHash', $params);
-		if ($restService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				return $result["return"];
-			}
-		}
-		return -1;
-	}
-
-	function getInvitationHash($username, $room_id, $isPasswordProtected, $invitationpass, $valid, $validFromDate, $validFromTime, $validToDate, $validToTime) {
+	function openmeetings_getRecordingsByExternalRooms() {
+	
 		global $CFG;
 
 		$restService = new openmeetings_rest_service();
-		$err = $restService->getError();
-		if ($err) {
-			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
-			exit();
-		}
+		
+		$url = $this->getUrl()."/services/RoomService/getFlvRecordingByExternalRoomType?" .
+					"SID=".$this->session_id .
+					"&externalRoomType=".urlencode($CFG->openmeetings_openmeetingsModuleKey);
 
-		$result = $restService->call($this->getUrl()."/services/RoomService/getInvitationHash?" .
-					"SID=".$this->session_id.
-					"&username=".urlencode($username).
-					"&room_id=".$room_id.
-					"&isPasswordProtected=".$this->var_to_str($isPasswordProtected).
-					"&invitationpass=".$invitationpass.
-					"&valid=".$valid.
-					"&validFromDate=".$validFromDate.
-					"&validFromTime=".$validFromTime.
-					"&validToDate=".$validToDate.
-					"&validToTime=".$validToTime);
-
-
-		if ($restService->fault) {
-			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
-		} else {
-			$err = $restService->getError();
-			if ($err) {
-				echo '<h2>Error</h2><pre>' . $err . '</pre>';
-			} else {
-				//echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-				//return $result["return"];
-				return $result->children('ns', true)->return[0];
-			}
-		}
-		return -1;
+		$result = $restService->call($url,"");
+					
+		return $result;		
+					
 	}
 
 }

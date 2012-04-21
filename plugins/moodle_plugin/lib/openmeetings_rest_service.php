@@ -25,7 +25,7 @@
 
 class openmeetings_rest_service {
 	
-		function call($request){
+		function call($request,$returnAttribute="return"){
 			// This will allow you to view errors in the browser       
 	  		// Note: set "display_errors" to 0 in production  
 	  		//ini_set('display_errors',1);  
@@ -86,30 +86,38 @@ class openmeetings_rest_service {
 			                     The exact error is returned in the XML response.');  
 			                break;  
 			        default:  
-			                die('Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' . $status_code[0]);  
-			}  
-						
-			// Get the XML from the response, bypassing the header  
-			if (!($xml = strstr($response, '<ns'))) {  
-			        $xml = null;  
-			}  		
-				
-			// Create a SimpleXML object with XML response  
-			$simple_xml = simplexml_load_string($xml, "SimpleXMLElement", 0,"http://services.axis.openmeetings.org", true); 
-												
-			return $simple_xml;
+			                die('Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' . $status_code[0]." Request ".$request);  
+			} 
+			
+			// Get the XML from the response, bypassing the header
+			if (!($xml = strstr($response, '<ns'))) {
+				$xml = null;
+			} 
+			
+			$dom = new DOMDocument();
+			$dom->loadXML($xml);
+			
+			if ($returnAttribute == "") {
+				//echo "XML".$xml."<br/>";
+				return $dom;
+			} else {
+				$returnNodeList = $dom->getElementsByTagName($returnAttribute);
+				foreach ($returnNodeList as $returnNode) {
+				    return $returnNode->nodeValue;
+				}
+			}
+			
 		}
 		
 		
 		
 		function getError(){
-		
+			return false;
 		
 		}
 		
 		function fault(){
-		
-		
+			return false;
 		}
 }
 
