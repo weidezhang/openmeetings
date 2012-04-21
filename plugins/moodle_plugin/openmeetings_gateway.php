@@ -163,7 +163,6 @@ class openmeetings_gateway {
 			if ($err) {
 				echo '<h2>Error</h2><pre>' . $err . '</pre>';
 			} else {
-				echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
 				return $result;
 			}
 		}   
