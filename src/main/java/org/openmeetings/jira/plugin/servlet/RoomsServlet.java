@@ -137,7 +137,7 @@ public final class RoomsServlet extends HttpServlet
 					
 					String username = "";
 					String firsname = "";
-					Long userId = 0L;
+					String userId = "";
 					String email = "";
 					int becomeModeratorAsInt = 1;
 					int showAudioVideoTestAsInt = 1;
@@ -149,14 +149,14 @@ public final class RoomsServlet extends HttpServlet
 		        	if(currentUser == null){
 		        		firsname = "anonymous";
 						email = "";
-						userId = new Date().getTime();
+						userId = new Long(new Date().getTime()).toString();
 						username = "anonymous";
 						becomeModeratorAsInt = 0;
 						showAudioVideoTestAsInt = 1;  
 		        	}else{
 		        		firsname = currentUser.getDisplayName();
 						email = currentUser.getEmailAddress();
-						userId = new Date().getTime();
+						userId = currentUser.getName();//new Date().getTime();
 						username = currentUser.getName();
 						becomeModeratorAsInt = 1;
 						showAudioVideoTestAsInt = 1;
