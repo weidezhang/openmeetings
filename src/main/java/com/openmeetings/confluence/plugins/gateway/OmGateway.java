@@ -151,7 +151,7 @@ public class OmGateway {
 	}
 	
 	public String setUserObjectAndGenerateRoomHash (String username , String firstname , 
-			String lastname , String profilePictureUrl , String email , Long externalUserId , 
+			String lastname , String profilePictureUrl , String email , String externalUserId , 
 			String externalUserType , Long room_id , int becomeModeratorAsInt , int showAudioVideoTestAsInt ) 
 																	throws Exception 
 	{	
