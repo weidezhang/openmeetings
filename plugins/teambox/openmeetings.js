@@ -44,6 +44,7 @@
         initialize: function () {
             // Instantiate the controller
             this.controller = new Teambox.Apps.Openmeetings.Controller();
+
             // Add an element to the Apps section in the sidebar
             $(".more_section .separator")
                 .after("<div class='el' id='openmeetings_link'>"+
