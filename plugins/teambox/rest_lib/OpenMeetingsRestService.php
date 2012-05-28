@@ -108,6 +108,54 @@ class OpenMeetingsRestService extends RestService {
         return $ret;
     }
     
+    public function getInvitationForProject($organization, $project, $account) {
+        $projectId = $organization->id."_".$project->id;
+        $projectName = $organization->name."_".$project->name;
+        
+        $url = $this->getInvitationUrl($projectId, $projectName, $account);
+        return $url;
+    }
+    
+    public function getInvitationForOrganization($organization, $account) {
+        $url = $this->getInvitationUrl($organization->id, $organization->name, $account);
+        return $url;
+    }
+
+    public function getInvitationUrl($id, $name, $account) {
+        $link = mysql_connect('localhost', $this->mysqlLogin, $this->mysqlPassword);
+        if (!$link) {
+            die("Can't create a connection to the teambox databse");
+        }
+        $query = 'select roomId from '.$this->mysqlDatabse.'.ProjectRooms where projectId = '.$id;
+        $result = mysql_query($query);
+
+        $createRoom = true;
+        if ($row = mysql_fetch_assoc($result)) {
+            $roomId = $row['roomId'];
+            $createRoom = false;
+        }
+        mysql_free_result($result);
+
+        if ($createRoom) {
+            $roomId = $this->createRoom($name);
+            if ($roomId < 0) {
+                die("Can't create a room: ".$name);
+            }
+            $query = 'insert into '.$this->mysqlDatabse.'.ProjectRooms values('.$id.', '.$roomId.')';
+            mysql_query($query);
+        }
+
+        $hash = $this->getRoomHash($roomId, $account);
+        if ($hash < 0) {
+            die("Can't create a secure hash: ".$name);
+        }
+
+        $url = $this->omHashUrl.$hash;
+    
+        mysql_close($link);
+        return $url;
+    }
+    
     public function createRoom($name) {
         $request = $this->restApiUrl."RoomService/addRoomWithModeration?"
             ."SID=".$this->sessionId

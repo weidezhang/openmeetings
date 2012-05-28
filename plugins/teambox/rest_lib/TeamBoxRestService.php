@@ -63,6 +63,15 @@ class TeamBoxRestService extends RestService {
         return $data;
     }
     
+    public function getUserOrganizations() {
+        $url = $this->restApiUrl . 'organizations';
+        $parameters = 'access_token=' . $this->accessToken;
+        $response = $this->call($url, $parameters, 'GET');
+        $data = $this->getJsonMultiData($response);
+        
+        return $data;
+    }
+    
     private function getJsonSingleData($response) {
         if (!($content = strstr($response, '{'))) {
             $content = null;

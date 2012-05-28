@@ -31,15 +31,14 @@ $token = getTeamBoxAccessToken();
 $tbService = new TeamBoxRestService($token);
 $account = $tbService->getAccountInfo();
 $projects = $tbService->getUserProjects();
+$organizations = $tbService->getUserOrganizations();
 
 $omService = new OpenMeetingsRestService();
 $logged = $omService->loginAdmin();
 if (!$logged) {
     print 'OpenMeetings internal error. Ask your system administrator.';
     exit(0);
-}
-
-$invitationsMap = $omService->getInvitationsMap($projects, $account); 
+} 
 
 ?>
 
@@ -54,13 +53,36 @@ $invitationsMap = $omService->getInvitationsMap($projects, $account);
 <div style="text-align: center;">
 <?php
 
-if (0 == count($invitationsMap)) {
-    echo '<p>You do not participate in any project, so you can not enter any project conference room</p>';
+if (0 == count($organizations)) {
+    echo '<p>You do not participate in any organization and project, so you can not enter any conference room</p>';
 } else {
-    echo '<p>Please, choose the project which conference room you want to enter:</p>';
-    foreach ($invitationsMap as $project => $url) {
-        echo '<p><a class="button button-primary" href="'.$url.'"><span>'.$project.'</span></a></p>';
+    echo '<p>Please, choose the project or the organization which conference room you want to enter:</p>';
+
+    echo '<table class="table-with-borders">';
+    echo '<tr>';
+        echo '<td>Organizations:</td>';
+        echo '<td>Projects:</td>';
+    echo '</tr>';
+
+    foreach ($organizations as $organization) {
+        $url = $omService->getInvitationForOrganization($organization, $account);
+
+        echo '<tr>';
+        echo '<td>';
+        echo '<a class="button button-danger" href="'.$url.'"><span>'.$organization->name.'</span></a>';
+        echo '</td>';
+
+        echo '<td>';
+        foreach ($projects as $project) {
+            if ($project->organization_id === $organization->id) {
+                $url = $omService->getInvitationForProject($organization, $project, $account);
+                echo '<p><a class="button button-primary" href="'.$url.'"><span>'.$project->name.'</span></a></p>';
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
     }
+    echo '</table>';
 }
 
 ?>
