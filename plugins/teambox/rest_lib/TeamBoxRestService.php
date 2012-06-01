@@ -56,7 +56,7 @@ class TeamBoxRestService extends RestService {
     
     public function getUserProjects() {
         $url = $this->restApiUrl . 'projects';
-        $parameters = 'access_token=' . $this->accessToken;
+        $parameters = 'access_token=' . $this->accessToken.'&count=0';
         $response = $this->call($url, $parameters, 'GET');
         $data = $this->getJsonMultiData($response);
         

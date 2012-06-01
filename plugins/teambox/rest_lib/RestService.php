@@ -65,7 +65,11 @@ class RestService {
         	
         // Confirm that the request was transmitted to the service! Image Search Service
         if(!$response) {
-            die("Request ".$this->serviceName."! ".$this->serviceName." Service failed and no response was returned.");
+            if ($dieOnError) {
+                die("Request ".$this->serviceName."! ".$this->serviceName." Service failed and no response was returned.");
+            } else {
+                return false;
+            }
         }
         	
         // Create an array to store the HTTP response codes

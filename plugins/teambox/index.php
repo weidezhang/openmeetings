@@ -47,7 +47,7 @@ if (!$logged) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-<link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/public-9083c95676119d2654a02c3057084689.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/public-61885d5db2e6b3192d52d9e3c742ba00.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
 
 <div style="text-align: center;">
@@ -69,14 +69,14 @@ if (0 == count($organizations)) {
 
         echo '<tr>';
         echo '<td>';
-        echo '<a class="button button-danger" href="'.$url.'"><span>'.$organization->name.'</span></a>';
+        echo '<a class="button button-primary" href="'.$url.'"><span>'.$organization->name.'</span></a>';
         echo '</td>';
 
         echo '<td>';
         foreach ($projects as $project) {
             if ($project->organization_id === $organization->id) {
                 $url = $omService->getInvitationForProject($organization, $project, $account);
-                echo '<p><a class="button button-primary" href="'.$url.'"><span>'.$project->name.'</span></a></p>';
+                echo '<p><a class="button" href="'.$url.'"><span>'.$project->name.'</span></a></p>';
             }
         }
         echo '</td>';

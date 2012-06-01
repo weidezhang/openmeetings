@@ -1,4 +1,4 @@
-.button-primary, .button-danger {
+.button-primary, .button-danger, .button {
 	width: 200px;
 	white-space: nowrap;
 	overflow: hidden;
