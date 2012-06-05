@@ -53,7 +53,7 @@ class OpenMeetingsRestService extends RestService {
         $request = $this->restApiUrl . 'UserService/getSession';
         $response = $this->call($request);
         $xml = $this->getXmlContent($response);
-        $this->sessionId = $xml->children('ns', true)->return->children('ax23', true)->session_id;
+        $this->sessionId = $xml->children('ns', true)->return->children('ax24', true)->session_id;
         
         $request = $this->restApiUrl.'UserService/loginUser?'
                 .'SID='.$this->sessionId
@@ -163,7 +163,10 @@ class OpenMeetingsRestService extends RestService {
             ."&roomtypes_id=3"
             ."&numberOfPartizipants=10"
             ."&ispublic=false"
-            ."&isModeratedRoom=false";
+            ."&isModeratedRoom=false"
+            ."&appointment=false"
+            ."&isDemoRoom=false"
+            ."&demoTime=0";
         
         $request = str_replace(' ', '_', $request);
         $response = $this->call($request);
