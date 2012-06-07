@@ -104,10 +104,13 @@ if ($openmeetings_gateway->openmeetings_loginuser()) {
 		$becomemoderator = 1;
 	}
 		
+	$profilePictureUrl = moodle_url::make_pluginfile_url(
+		get_context_instance(CONTEXT_USER, $USER->id)->id, 'user', 'icon', NULL, '/', 'f2')->out(false);
+
 	// Simulate the User automatically
 	if ($openmeetings->type != 0){
 		$returnVal = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag($USER->username,$USER->firstname,
-		$USER->lastname,$USER->picture,$USER->email,$USER->id,$CFG->openmeetings_openmeetingsModuleKey,$openmeetings->room_id,$becomemoderator,$allowRecording);
+		$USER->lastname,$profilePictureUrl,$USER->email,$USER->id,$CFG->openmeetings_openmeetingsModuleKey,$openmeetings->room_id,$becomemoderator,$allowRecording);
 	} else {
 		$returnVal = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRecordingHashByURL($USER->username,$USER->firstname,
 		$USER->lastname,$USER->id,$CFG->openmeetings_openmeetingsModuleKey,$openmeetings->room_recording_id);
@@ -125,9 +128,7 @@ if ($openmeetings_gateway->openmeetings_loginuser()) {
 							 	"/".$CFG->openmeetings_webappname."/?" .
 								"secureHash=" . $returnVal . 
 								"&scopeRoomId=" . $scope_room_id .
-		//"&swf=maindebug.swf8.swf" .
 								"&language=" . $openmeetings->language . 
-								"&picture=" . $USER->picture . 
 								"&user_id=". $USER->id . 
 								"&moodleRoom=1" .   
 								"&wwwroot=". $CFG->wwwroot;                                                                                                
