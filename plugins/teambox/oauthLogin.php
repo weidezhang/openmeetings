@@ -77,7 +77,7 @@ function getTeamBoxAccessToken() {
     
     $token = $dataStore->retrieveAccessToken();
     if ($CFG[https]) {
-        setcookie($tokenCookieId, $token->getAccessToken(), $token->getLifeTime(), '/teambox/', $cookieDomain, true);
+        setcookie($tokenCookieId, $token->getAccessToken(), $token->getLifeTime(), '/', $cookieDomain, true);
     } else {
         setcookie($tokenCookieId, $token->getAccessToken(), $token->getLifeTime());
     }
