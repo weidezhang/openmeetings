@@ -1,0 +1,29 @@
+<zimlet name="com_zimbra_om" version="0.1" description="add OM functions in zimbra">
+  <include>om.js</include>
+  <includeCSS>om.css</includeCSS>
+  <handlerObject>com_zimbra_om</handlerObject>
+
+  <zimletPanelItem label="Open Meetings" icon="om-panelIcon">
+    <toolTipText>OM meetings and events</toolTipText>
+      <contextMenu>
+          <menuItem label = "Zimlet Preferences" id= "om_preferences"/>
+      </contextMenu>
+  </zimletPanelItem>
+    <userProperties>
+		<property type = "string" name = "server1_baseurl" value = ""/>
+        <property type = "string" name = "server1_username" value = ""/>
+        <property type = "string" name = "server1_password" value = ""/>
+		<property type = "string" name = "server2_baseurl" value = ""/>
+		<property type = "string" name = "server2_username" value = ""/>
+		<property type = "string" name = "server2_password" value = ""/>
+		<property type = "string" name = "server3_baseurl" value = ""/>
+		<property type = "string" name = "server3_username" value = ""/>
+		<property type = "string" name = "server3_password" value = ""/>
+		<property type = "string" name = "server4_baseurl" value = ""/>
+		<property type = "string" name = "server4_username" value = ""/>
+		<property type = "string" name = "server4_password" value = ""/>
+		<property type = "string" name = "server5_baseurl" value = "" />
+		<property type = "string" name = "server5_username" value = ""/>
+		<property type = "string" name = "server5_password" value = ""/>
+	</userProperties>
+</zimlet>

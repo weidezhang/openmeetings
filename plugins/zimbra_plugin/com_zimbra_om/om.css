@@ -1,0 +1,66 @@
+.Imgom-panelIcon{
+	background: url("om.gif") no-repeat 0 0;
+	width: 16 px;
+	height: 16 px;
+	overflow: hidden;
+	}
+
+/* the rest of the style sheet*/
+#meetingform{
+	width: 500px;
+	padding: 20px;
+	background: #f0f0f0;
+	overflow:auto;
+	
+	/*border style*/
+	border: 1px solid #cccccc;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	
+	/*border shadow*/
+	-moz-box-shadow: 2px 2px 2px #cccccc;
+	-webkit-box-shadow: 2px px 2px #cccccc;
+	box-shadow: 2px 2px 2px #cccccc;
+	}
+
+
+.input{
+	font-family: Arial, Verdana;
+	font-size: 15 px;
+	padding: 5px;
+	border: 1px solid #b9bdc1;
+	width: 300px;
+	color: #797979;
+	}
+
+.check{
+	padding: 5px;
+	border: 1px solid #b9bdc1;
+	width: 300px;
+	color: #797979;
+	}
+
+.option{
+	padding: 5px;
+	
+	width: 300px;
+	color: #797979;
+	}
+	
+.hint{
+	display:none;
+	}
+
+.field:hover .hint{
+	position: absolute;
+	display:block:
+	margin: -30px 0 0 455px;
+	color: #FFFFFF;
+	padding: 7px 10px;
+	background: rgba(0,0,0,0.6);
+	
+	-mox-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+	}
