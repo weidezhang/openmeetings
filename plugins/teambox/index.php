@@ -47,6 +47,7 @@ if (!$logged) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
+<link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/application-37543c3d9d17e9c1f80cadeffa6f73bf.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/public-61885d5db2e6b3192d52d9e3c742ba00.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
 
@@ -86,6 +87,36 @@ if (0 == count($organizations)) {
 }
 
 ?>
+</div>
+
+<script language="javascript"> 
+function hide() {
+	var ele = document.getElementById("facebox");
+	ele.style.display = "none";
+} 
+</script>
+
+<div id="facebox" style="top: 45%; left: 50%; width: 45%; height: 40%" >
+    <div class="content" style="width: 100%; height: 100%">
+        <div class="help_box_options" style="width: 97%; height: 100%">
+            <ul>
+                This is the demo version of the Apache Openmeetings application for Teambox. With this application you can try all features of Apache Openmeetings software such as video conferencing, instant messaging, white board, collaborative document editing and other groupware.
+                <br><br>
+                The special conference rooms are created for all of your organizations and projects. Just click to the corresponding button and start conferencing with your teammates.
+                <br><br>
+                In this case, you will use the demo OpenMeetings server. If you want to set up your own server you should visit our site:
+                <br>
+                <a href="http://incubator.apache.org/openmeetings/">Apache Openmeetings</a>
+                <br>
+                and download the latest version of the software. Feel free to write us directly by e-mail:
+                <br>
+                <a href="mailto:openmeetings-user@incubator.apache.org">openmeetings-user@incubator.apache.org</a>
+            </ul>
+        </div>
+    </div>
+    <a class="close" href="javascript:hide();" style="display: block;">
+        <img class="close_image" title="Close message" src="https://teambox.com/assets/facebox/fancy_closebox.png">
+    </a>
 </div>
 
 </body>
