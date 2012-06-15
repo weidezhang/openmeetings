@@ -100,9 +100,9 @@ function hide() {
     <div class="content" style="width: 100%; height: 100%">
         <div class="help_box_options" style="width: 97%; height: 100%">
             <ul>
-                This is the demo version of the Apache Openmeetings application for Teambox. With this application you can try all features of Apache Openmeetings software such as video conferencing, instant messaging, white board, collaborative document editing and other groupware.
+                This is the demo version of the Apache Openmeetings application for Teambox. With this application you can use all features of Apache Openmeetings software such as video conferencing, instant messaging, white board, collaborative document editing and other groupware.
                 <br><br>
-                The special conference rooms are created for all of your organizations and projects. Just click to the corresponding button and start conferencing with your teammates.
+                The special conference rooms are created for all of your organizations and each organizations' projects. Click to the corresponding button and start conferencing with your teammates.
                 <br><br>
                 In this case, you will use the demo OpenMeetings server. If you want to set up your own server you should visit our site:
                 <br>
