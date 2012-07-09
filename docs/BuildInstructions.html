@@ -946,7 +946,18 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>Get the source: </p>
+                                    <p>
+				Required Software to build:
+				<ul>
+					<li>Sun Java JDK6</li>
+					<li>Apache ANT 1.8.3 or later</li>
+					<li>
+						SVN Command line client (Subversion 1.7 required!)
+						<a href="http://subversion.apache.org/packages.html" target="_BLANK" rel="nofollow">http://subversion.apache.org/packages.html</a>
+					</li>
+				</ul>
+			</p>
+                                                <p>Get the source: </p>
                                                 <div class="xmlcode">
 				svn checkout
 				https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
@@ -966,10 +977,12 @@ limitations under the License.
 				</span>
 				<br />
 				ant compile.laszlo.main
-				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and main.swf8.swf</span>
+				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and
+					main.swf8.swf</span>
 				<br />
 				ant compile.laszlo.main.debug
-				<span style="margin-left: 30px;"># compiles the debug-client into maindebug.as3.swf10.swf andmaindebug.swf8.swf
+				<span style="margin-left: 30px;"># compiles the debug-client into
+					maindebug.as3.swf10.swf andmaindebug.swf8.swf
 				</span>
 				<br />
 				ant -Ddb=&lt;name of DB&gt;
@@ -1038,8 +1051,10 @@ limitations under the License.
 						Marketplace)
 					</li>
 					<li>
-						Apache IvyDE™ For Eclipse (installable via Help &gt; Install New Software)
-						URL: http://www.apache.org/dist/ant/ivyde/updatesite detailed steps can be found here:
+						Apache IvyDE™ For Eclipse (installable via Help &gt; Install
+						New Software)
+						URL: http://www.apache.org/dist/ant/ivyde/updatesite
+						detailed steps can be found here:
 						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
 					</li>
 					<li>MySQL (or Postgres, or other Databases supported by Hibernate)
