@@ -71,8 +71,12 @@ public class OpenmeetingsConfigPanel
         passwordPanel.add( lblPassword );
         passwordPanel.add( tePassword );
         
-        
-        teServer.setText( OpenmeetingsConfigManager.getInstance().getServer() );
+        OpenmeetingsConfigManager cfg = OpenmeetingsConfigManager.getInstance();
+        String serverUri = cfg.getServer();
+        if (!serverUri.isEmpty()) {
+            serverUri = cfg.getProtoPrefix() + serverUri + cfg.getOmUriContext();
+        }
+        teServer.setText(serverUri);
         teLogin.setText( OpenmeetingsConfigManager.getInstance().getLogin() );
         tePassword.setText( OpenmeetingsConfigManager.getInstance().getPassword() );
         
@@ -136,11 +140,30 @@ public class OpenmeetingsConfigPanel
          * @param e <tt>ActionEvent</tt>.
          */
         public void actionPerformed(ActionEvent e)
-        {  	
-        	OpenmeetingsConfigManager.getInstance().setSever( teServer.getText() );
-        	OpenmeetingsConfigManager.getInstance().setLogin( teLogin.getText() );
+        {
+                        String protoPrefix = "http://";
+            String serverUri = teServer.getText();
+            String uriContext = "/";
+            if (serverUri.startsWith("http://")) {
+                protoPrefix = "http://";
+                serverUri = serverUri.substring(protoPrefix.length());
+            } else if (serverUri.startsWith("https://")) {
+                protoPrefix = "https://";
+                serverUri = serverUri.substring(protoPrefix.length());
+            }
+            int slashPos = serverUri.indexOf('/');
+            if (slashPos >= 0) {
+                uriContext = serverUri.substring(slashPos);
+                serverUri = serverUri.substring(0, slashPos);
+            }
+
+            OpenmeetingsConfigManager cfg = OpenmeetingsConfigManager.getInstance();
+        	cfg.setServer(serverUri);
+            cfg.setProtoPrefix(protoPrefix);
+            cfg.setOmUriContext(uriContext);
+            cfg.setLogin( teLogin.getText() );
         	try {
-				OpenmeetingsConfigManager.getInstance().setPassword( new String( tePassword.getPassword() ) );
+				cfg.setPassword(new String(tePassword.getPassword()));
 			} catch (Exception e1) {				
 				e1.printStackTrace();
 			}

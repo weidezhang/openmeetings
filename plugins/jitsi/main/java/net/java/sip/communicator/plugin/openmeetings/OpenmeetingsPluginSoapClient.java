@@ -266,21 +266,21 @@ public class OpenmeetingsPluginSoapClient {
 
 
 	
-	public void setServer( String serverUrl_ ){		
-		serverUrl = serverUrl_;		
+	public void setServerUrl(String serverUrl_){
+		serverUrl = serverUrl_;
 	}
-	
-	private String getServer(){
+
+	private String getServerUrl(){
 		return serverUrl;
 	}
-	
-	private String getUserServiceUrl(){		
-		String url = "http://" + getServer() + "/openmeetings/services/UserService?wsdl";
+
+	private String getUserServiceUrl(){
+		String url = getServerUrl() + "services/UserService?wsdl";
 		System.out.println( "URL = " + url);
 		return url;
 	}
-	private String getJabberServiceUrl(){		
-		String url = "http://" + getServer() + "/openmeetings/services/JabberService?wsdl";
+	private String getJabberServiceUrl(){
+		String url = getServerUrl() + "services/JabberService?wsdl";
 		System.out.println( "URL = " + url);
 		return url;
 	}

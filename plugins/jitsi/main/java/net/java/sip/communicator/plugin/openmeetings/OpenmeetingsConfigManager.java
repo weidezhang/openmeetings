@@ -23,6 +23,8 @@ import org.osgi.framework.ServiceReference;
 public class OpenmeetingsConfigManager {
 	
 	private String server;
+    private String protoPrefix;
+    private String omUriContext;
 	private String login;
 	private String password;
 	private String stringForHash = "user:";
@@ -100,8 +102,7 @@ public class OpenmeetingsConfigManager {
 	}
 	
 	public String getCreationUrl() throws Exception{
-		
-		final String url = "http://"+ getServer() + "/client/username="+getLogin()+"&password="+getPassword()+
+        final String url = getProtoPrefix() + getServer() + "/client/username="+getLogin()+"&password="+getPassword()+
 							"&hash=" + getHash();
 		System.out.println( "CREATION URL = " + url );
 		return url;
@@ -114,9 +115,10 @@ public class OpenmeetingsConfigManager {
 	}
 	
 	public String getInvitationUrl( String displayedName ) throws Exception{
-		
+        String protoPrefix = getProtoPrefix();
 		String server = getServer();
-		soapClient.setServer( server );
+        String uriContext = getOmUriContext();
+		soapClient.setServerUrl(protoPrefix + server + uriContext);
 		
 		String invitationHash = null; 						
 		
@@ -195,15 +197,46 @@ public class OpenmeetingsConfigManager {
 	        return configurationService;
 	    }
 	 
-	public void setSever( String server ){
-		this.server = server;		
+    public void setServer(String server){
+		this.server = server;
 		getConfigurationService().setProperty( "plugin.openmeetings.SERVER", server);
-		           
 	}
 	public String getServer() {
 		String value = (String)getConfigurationService().getProperty( "plugin.openmeetings.SERVER" );
+        if (null == value) {
+            value = "";
+        }
 		server = value;
 		return server;
+	}
+
+    public void setProtoPrefix(String protoPrefix){
+		this.protoPrefix = protoPrefix;
+		getConfigurationService().setProperty("plugin.openmeetings.PROTOCOL_PREFIX", protoPrefix);
+	}
+    public String getProtoPrefix() {
+		String value = (String)getConfigurationService().getProperty("plugin.openmeetings.PROTOCOL_PREFIX");
+        if (null == value) {
+            value = "";
+        }
+		protoPrefix = value;
+		return protoPrefix;
+	}
+
+    public void setOmUriContext(String omUriContext){
+		this.omUriContext = omUriContext;
+		getConfigurationService().setProperty("plugin.openmeetings.OM_URI_CONTEXT", omUriContext);
+	}
+    public String getOmUriContext() {
+		String value = (String)getConfigurationService().getProperty("plugin.openmeetings.OM_URI_CONTEXT");
+        if (null == value) {
+            value = "";
+        }
+        if (!value.endsWith("/")) {
+            value += "/";
+        }
+		omUriContext = value;
+		return omUriContext;
 	}
 
 	public void setLogin( String login ){
