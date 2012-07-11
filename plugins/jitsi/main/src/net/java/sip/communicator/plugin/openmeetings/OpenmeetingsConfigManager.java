@@ -13,15 +13,16 @@ import java.security.*;
 
 import javax.xml.soap.SOAPException;
 
-import net.java.sip.communicator.impl.protocol.zeroconf.MessageZeroconfImpl;
+//import net.java.sip.communicator.impl.protocol.zeroconf.MessageZeroconfImpl;
 import net.java.sip.communicator.service.configuration.ConfigurationService;
+import net.java.sip.communicator.util.Logger;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 
 public class OpenmeetingsConfigManager {
-	
+	Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 	private String server;
     private String protoPrefix;
     private String omUriContext;
@@ -114,7 +115,7 @@ public class OpenmeetingsConfigManager {
 		return url;		
 	}
 	
-	public String getInvitationUrl( String displayedName ) throws Exception{
+	public String getInvitationUrl(String displayedName) throws Exception {
         String protoPrefix = getProtoPrefix();
 		String server = getServer();
         String uriContext = getOmUriContext();
@@ -123,18 +124,17 @@ public class OpenmeetingsConfigManager {
 		String invitationHash = null; 						
 		
 		try {
-			invitationHash = soapClient.getInvitationHash( getLogin(), getPassword(),displayedName );
+			invitationHash = soapClient.getInvitationHash(getLogin(), getPassword(), displayedName);
 		} catch (Exception e) {			
-			System.out.println( e.getMessage());			
+			logger.error(e);
 		}
-		
-		if( invitationHash.equals(null) )
-			return null;
-		
-		String invitationUrl = createInvitationUrl( invitationHash );
-		
+
+		if (invitationHash == null) return null;
+
+		String invitationUrl = createInvitationUrl(invitationHash);
 		return invitationUrl;		
 	}
+
 	public String sendUrl() throws Exception {
 				
 		String url = getCreationUrl();
@@ -244,7 +244,7 @@ public class OpenmeetingsConfigManager {
 		getConfigurationService().setProperty( "plugin.openmeetings.LOGIN", login);
 	}
 	public String getLogin() {
-		String value = (String)getConfigurationService().getProperty( "plugin.openmeetings.LOGIN" );
+		String value = (String)getConfigurationService().getProperty("plugin.openmeetings.LOGIN");
 		login = value;
 		return login;
 	}

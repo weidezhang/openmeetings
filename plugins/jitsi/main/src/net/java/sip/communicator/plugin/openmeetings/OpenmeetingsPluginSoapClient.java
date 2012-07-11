@@ -1,6 +1,6 @@
 package net.java.sip.communicator.plugin.openmeetings;
 
-
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -30,9 +30,13 @@ import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import net.java.sip.communicator.util.Logger;
+
 public class OpenmeetingsPluginSoapClient {
 
 	String serverUrl;
+	Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
+
 	
 	private static final String NAMESPACE_PREFIX = "openmeetings";
 	
@@ -47,18 +51,18 @@ public class OpenmeetingsPluginSoapClient {
 	
 		soapMessage.saveChanges();
 		
-//		System.out.println("\n Soap request:\n");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
+		logger.info("\n Soap request to " + getUserServiceUrl() + "\n");
+		logMessage(soapMessage);
 		
 		final SOAPConnection soapConnection = getSoapConnection();
 		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getUserServiceUrl());
-//		System.out.println("\n Soap response:\n");
+		logger.info("\n Soap response:\n");
 //		soapMessageReply.writeTo(System.out);
 //		System.out.println();
+
 		//final String textContent = soapMessageReply.getSOAPBody().getChildElement();
-	
-		//System.out.println( "SID = " + textContent);
+		//logger.info( "SID = " + textContent);
+		
 		soapConnection.close();
 		
 		SOAPBody responseBody = soapMessageReply.getSOAPBody();
@@ -74,8 +78,19 @@ public class OpenmeetingsPluginSoapClient {
 
 		return sid;
 	}
+
+	public void logMessage(SOAPMessage msg) {
+	    try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			msg.writeTo(out);
+			logger.info(new String(out.toByteArray()) + "\n\n");
+		} catch (Exception e) {
+		    logger.error(e);
+		}
+	}
+
 	
-	private String login( final String sid, final String username, final String password) throws SOAPException, IOException {
+	private String login(final String sid, final String username, final String password) throws SOAPException, IOException {
 		final SOAPMessage soapMessage = getSoapMessage();
 		final SOAPBody soapBody = soapMessage.getSOAPBody();
 		final SOAPElement loginElement = soapBody.addChildElement("loginUser", NAMESPACE_PREFIX);
@@ -108,25 +123,27 @@ public class OpenmeetingsPluginSoapClient {
 
 		return textContent;
 	}
-	public String getInvitationHash( final String username, final String password, final String displayedName ) throws Exception {
+	public String getInvitationHash(final String username, final String password, final String displayedName) throws Exception {
 		final SOAPMessage soapMessage = getSoapMessage();
 		final SOAPBody soapBody = soapMessage.getSOAPBody();
 		final SOAPElement requestElement = soapBody.addChildElement("getInvitationHash", NAMESPACE_PREFIX);
 
-		String sid = getSID( username, password );
+		logger.info(username + ":" + password + ":" + displayedName);
+		
+		String sid = getSID(username, password);
 		String error_id = null;
 		try {
-			error_id = login( sid, username, password);
+			error_id = login(sid, username, password);
 		} catch (Exception e) {
-			System.out.println( e.getMessage() );
+			logger.info(e.getMessage());
 		}		
 		
 		if( !error_id.equals( "1" ) ){
-			System.out.println("User cant login!");
+			logger.info("User cant login!");
 			return null;
 		}
 			
-		String room_id = getAvailableRooms( sid );
+		String room_id = getAvailableRooms(sid);
 		
 		requestElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
 		requestElement.addChildElement("username", NAMESPACE_PREFIX).addTextNode( displayedName );
@@ -134,20 +151,20 @@ public class OpenmeetingsPluginSoapClient {
 				
 		soapMessage.saveChanges();
 
-//		System.out.println("\nGET INVITATION REQUEST:\n");
+		logger.info("\nGET INVITATION REQUEST:\n");
 //		soapMessage.writeTo(System.out);
 //		System.out.println();
 		
 		final SOAPConnection soapConnection = getSoapConnection();
 		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getJabberServiceUrl());
 		
-//		System.out.println("\nGET INVITATION RESPONSE:\n");
+		logger.info("\nGET INVITATION RESPONSE:\n");
 //		soapMessageReply.writeTo(System.out);
 //		System.out.println();
 		
 		final String textContent = soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
 
-//		System.out.println( "INVITATION RESPONSE =  " + textContent);
+		logger.info( "INVITATION RESPONSE =  " + textContent);
 		soapConnection.close();		
 
 		return textContent;

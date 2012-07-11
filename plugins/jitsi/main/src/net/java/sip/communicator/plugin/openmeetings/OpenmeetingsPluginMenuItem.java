@@ -19,11 +19,12 @@ import javax.swing.*;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.InvalidSyntaxException;
 
 import net.java.sip.communicator.service.contactlist.*;
 import net.java.sip.communicator.service.gui.*;
 import net.java.sip.communicator.service.gui.Container;
-
+import net.java.sip.communicator.util.*;
 
 public class OpenmeetingsPluginMenuItem
     extends AbstractPluginComponent
@@ -52,16 +53,43 @@ public class OpenmeetingsPluginMenuItem
      */
     public void actionPerformed(ActionEvent e)
     { 
-    	
-      	String invitationUrl = null;
+    	Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
+
+		ServiceReference cRef[];
 		try {
-			invitationUrl = OpenmeetingsConfigManager.getInstance().getInvitationUrl( 
-											OpenmeetingsConfigManager.getInstance().getLogin() );
-		} catch (Exception e1) {
-			System.out.println( e1.getMessage() );			
+			cRef = bc.getServiceReferences(ProtocolProviderService.class.getName(), null);
+		} catch (InvalidSyntaxException e1) {
+			logger.error(e1.getMessage());
+			return;
 		}
-    	if( invitationUrl.equals(null)){
-    		System.out.println("Can't get invitation URL");
+		ProtocolProviderService jabberProvider = null;
+		
+		for (int i = 0; i < cRef.length; i++) {
+			ProtocolProviderService provider = (ProtocolProviderService) bc.getService(cRef[i]);
+			logger.info("found " + provider.getClass().getName());
+			if (provider.getClass().getName().indexOf("Jabber") >= 0) {
+				jabberProvider = provider;
+				break;
+			}
+		}
+		if (jabberProvider == null) {
+			logger.error("cannot find jabber service");
+			return;
+		}
+
+      	String invitationUrl = null;
+
+//		System.getProperties().put("http.proxyHost", "10.10.2.254");
+//		System.getProperties().put("http.proxyPort", "3128");
+		logger.info("getting invitation for " + OpenmeetingsConfigManager.getInstance().getLogin());
+		try {
+			invitationUrl = OpenmeetingsConfigManager.getInstance().getInvitationUrl(
+											OpenmeetingsConfigManager.getInstance().getLogin());
+		} catch (Exception e1) {
+			logger.info(e1.getMessage());			
+		}
+    	if (invitationUrl == null) {
+    		logger.info("Can't get invitation URL");
     		return;
     	}
     	
@@ -70,26 +98,24 @@ public class OpenmeetingsPluginMenuItem
     	Contact to = metaContact.getDefaultContact();
       	String invitationUrlForSend = null;
 		try {
-			invitationUrlForSend = OpenmeetingsConfigManager.getInstance().getInvitationUrl( to.getDisplayName() );
+			invitationUrlForSend = OpenmeetingsConfigManager.getInstance().getInvitationUrl(to.getDisplayName());
 		} catch (Exception e1) {
-			System.out.println( e1.getMessage() );			
+			logger.info(e1.getMessage());			
 		}
     	if( invitationUrl.equals(null)){
-    		System.out.println("Can't get invitation URL For send");
+    		logger.info("Can't get invitation URL For send");
     		return;
     	}
-    	    	
-    	ServiceReference cRef = bc.getServiceReference( ProtocolProviderService.class.getName() );
-    	ProtocolProviderService jabberProvider =
-    		(ProtocolProviderService)bc.getService(cRef);
-    	
+//		System.getProperties().remove("http.proxyHost");
+//		System.getProperties().remove("http.proxyPort");
+   	
     	OperationSetBasicInstantMessaging basicInstMsgImpl =
     		(OperationSetBasicInstantMessaging)jabberProvider.getOperationSet(OperationSetBasicInstantMessaging.class);
     	    	
     	String message = "I am inviting you to the conference. Please, click the link " + invitationUrlForSend;
-    	Message msg = basicInstMsgImpl.createMessage( message);
-    	basicInstMsgImpl.sendInstantMessage( to ,  msg);  	
-
+				
+		Message msg = basicInstMsgImpl.createMessage(message);
+		basicInstMsgImpl.sendInstantMessage(to ,  msg);
     }
 
     private boolean conferenceCreated(String response) {
@@ -112,7 +138,6 @@ public class OpenmeetingsPluginMenuItem
         }
 
         if ( url.length() == 0 ) {
-
             System.out.println( "Usage: OpenURI [URI [URI ... ]]" );
             System.exit( 0 );
         }
@@ -129,8 +154,7 @@ public class OpenmeetingsPluginMenuItem
              java.net.URI uri = new java.net.URI( url );
               desktop.browse( uri );
           }
-         catch ( Exception e ) {
-
+         catch (Exception e) {
              System.err.println( e.getMessage() );
          }       
     	
