@@ -407,7 +407,7 @@
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
 			<jvmarg value="-Xms1024M" />
 			<jvmarg value="-Xmx1024M" />
-			<arg line="--runtime=${flash.runtime} --dir ${out.dir.swf} --onerror warn ${flash.main.file}" />
+			<arg line="--runtime=${flash.runtime} --dir &quot;${out.dir.swf}&quot; --onerror warn ${flash.main.file}" />
 		</java>
 	</target>
 	
