@@ -392,6 +392,7 @@
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug" />
 
 	<target name="-compile.flash" description="compile flash application">
+		<!-- commented for now
 		<echo message="flash.src.dir == '${flash.src.dir}'" />
 		<echo message="classpathref == '${laszlo.lib}'" />
 		<echo message="laszlo.home == '${laszlo.home}'" />
@@ -400,7 +401,7 @@
 		<echo message="flash.runtime == '${flash.runtime}'" />
 		<echo message="out.dir.swf == '${out.dir.swf}'" />
 		<echo message="flash.main.file == '${flash.main.file}'" />
-
+		-->
 		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="laszlo.lib">
 			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
 			<jvmarg value="-Dlzdebug=${laszlo.debug}" />
