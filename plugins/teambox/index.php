@@ -47,23 +47,24 @@ if (!$logged) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
-<!--link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/application-37543c3d9d17e9c1f80cadeffa6f73bf.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="https://d238xsvyykqg39.cloudfront.net/assets/public-61885d5db2e6b3192d52d9e3c742ba00.css" media="screen" /-->
+<link rel="stylesheet" type="text/css" href="css/teambox.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
 <body>
 
-<div style="text-align: center;">
+<br>
+<div class="main-div">
 <?php
 
 if (0 == count($organizations)) {
     echo '<p>You do not participate in any organization and project, so you can not enter any conference room</p>';
 } else {
-    echo '<p>Please, choose the project or the organization which conference room you want to enter:</p>';
+    echo '<p class="table-title">Please, choose the project or the organization which conference room you want to enter:</p>';
+    echo '<br>';
 
     echo '<table class="table-with-borders">';
     echo '<tr>';
-        echo '<td>Organizations:</td>';
-        echo '<td>Projects:</td>';
+        echo '<td><p class="table-title">Organizations:</p></td>';
+        echo '<td><p class="table-title">Projects:</p></td>';
     echo '</tr>';
 
     $sortedOrgs = getSortedOrganizations($organizations);
@@ -81,7 +82,13 @@ if (0 == count($organizations)) {
                 if (0 == count($orgProjs)) {
                     echo '&nbsp';
                 }
+                $first = true;
                 foreach ($orgProjs as $project) {
+                    if ($first) {
+                        $first = false;
+                    } else {
+                        echo '<div class="space-div"></div>';
+                    }
                     $url = $omService->getInvitationForProject($organization, $project, $account);
                     echo '<p><a class="button" href="'.$url.'"><span>'.$project->name.'</span></a></p>';
                 }

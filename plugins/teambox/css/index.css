@@ -1,3 +1,7 @@
+html, body {
+	background-color: transparent;
+}
+
 .button-primary, .button-danger, .button {
 	width: 200px;
 	white-space: nowrap;
@@ -8,6 +12,7 @@
 table {
 	margin-left: auto;
 	margin-right: auto;
+	padding-top: 0px;
 }
 
 table td {
@@ -17,4 +22,19 @@ table td {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	border-bottom: 1px solid grey;
+}
+
+.space-div {
+	height: 5px;
+	width: 0px;
+}
+
+.table-title {
+	font: bold;
+	font-size: 12px;
+	color: #535353;
+}
+
+.main-div {
+	text-align: center;
 }
