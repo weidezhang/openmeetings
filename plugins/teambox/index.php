@@ -24,8 +24,8 @@ $CFG = parse_ini_file('config/settings.ini');
 
 require_once('rest_lib/TeamBoxRestService.php');
 require_once('rest_lib/OpenMeetingsRestService.php');
+require_once('rest_lib/TeamboxUtils.php');
 require_once('oauthLogin.php');
-require_once('TeamboxUtils.php');
 
 $token = getTeamBoxAccessToken();
 

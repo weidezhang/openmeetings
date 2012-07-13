@@ -54,4 +54,30 @@ function getSortedOrganizations($organizations) {
     return $result;
 }
 
+function getLanguageId($lang) {
+    $languages = array(
+        'ar'     => 14,
+        'bt'     => 1,
+        'ca'     => 29,
+        'de'     => 2,
+        'en'     => 1,
+        'es'     => 8,
+        'fr'     => 4,
+        'it'     => 5,
+        'ko'     => 13,
+        'pl'     => 25,
+        'pt-BR'  => 7,
+        'ru'     => 9,
+        'si'     => 1,
+        'tr'     => 18,
+        'zh'     => 22
+    );
+
+    if (array_key_exists($lang, $languages)) {
+        return $languages[$lang];
+    } else {
+        return 0;
+    }
+}
+
 ?>

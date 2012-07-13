@@ -20,6 +20,7 @@
 */
 
 require_once('RestService.php');
+require_once('TeamboxUtils.php');
 
 class OpenMeetingsRestService extends RestService {
     
@@ -150,7 +151,8 @@ class OpenMeetingsRestService extends RestService {
             die("Can't create a secure hash: ".$name);
         }
 
-        $url = $this->omHashUrl.$hash;
+        $langId = getLanguageId($account->locale);
+        $url = $this->omHashUrl.$hash.'&language='.$langId;
     
         mysql_close($link);
         return $url;
