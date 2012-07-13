@@ -12,6 +12,14 @@
 /************************************************************************/
 // $Id: add_group_meetings.php 7575 2008-06-02 18:17:14Z hwong $
 
+<<<<<<< HEAD
+		ini_set('display_errors',1);  
+
+		// Report all PHP errors (notices, errors, warnings, etc.)  
+		error_reporting(E_ALL);
+
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 define('AT_INCLUDE_PATH', '../../include/');
 require (AT_INCLUDE_PATH.'vitals.inc.php');
 require ('lib/openmeetings.class.php');
@@ -29,6 +37,23 @@ if (isset($_GET['group_id'])){
 	if (authenticate(AT_PRIV_OPENMEETINGS, true)){
 		$sql = 'SELECT g.title FROM '.TABLE_PREFIX."groups g WHERE g.group_id=$group_id";
 	} else {
+<<<<<<< HEAD
+		
+		$sql = 'SELECT g.title FROM '.TABLE_PREFIX."groups_members gm INNER JOIN ".TABLE_PREFIX."groups g WHERE gm.group_id=$group_id AND gm.member_id=$_SESSION[member_id]";
+	}
+	
+	//TODO
+	//Not working even with SOAP implementation
+	/*
+	if (mysql_numrows($result) <= 0){
+		$msg->addError('OPENMEETINGS_ADD_FAILED');
+		header('index.php');
+		exit('Error: Cannot add openmeetings room');
+	} 
+	$result = mysql_query($sql, $db);
+	$row = mysql_fetch_assoc($result);
+	*/
+=======
 		$sql = 'SELECT g.title FROM '.TABLE_PREFIX."groups_members gm INNER JOIN ".TABLE_PREFIX."groups g WHERE gm.group_id=$group_id AND gm.member_id=$_SESSION[member_id]";
 	}
 	if (mysql_numrows($result) <= 0){
@@ -38,6 +63,7 @@ if (isset($_GET['group_id'])){
 	} 
 	$result = mysql_query($sql, $db);
 	$row = mysql_fetch_assoc($result);
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 }
 
 //Initiate Openmeeting
@@ -57,6 +83,10 @@ if ($_row['title']!=''){
 //Form action
 //Handle form action
 if (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POST['room_id']))) {
+<<<<<<< HEAD
+	
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	//mysql escape
 	$_POST['openmeetings_roomtype']				= intval($_POST['openmeetings_roomtype']);
 	$_POST['openmeetings_num_of_participants']	= intval($_POST['openmeetings_num_of_participants']);
@@ -79,9 +109,16 @@ if (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POS
 		} else {
 			$room_name = 'course_'.$course_id;
 		}
+<<<<<<< HEAD
+		
+		//add the room with the given parameters.
+		$om_obj->om_addRoom($room_name, $_POST);
+		//exit('stop here');
+=======
 
 		//add the room with the given parameters.
 		$om_obj->om_addRoom($room_name, $_POST);
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		$msg->addFeedback('OPENMEETINGS_ADDED_SUCEEDED');
 		header('Location: index.php');
 		exit;
@@ -104,6 +141,10 @@ if (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POS
 	$room_obj = $om_obj->om_getRoomById($room_id);
 
 	//Assign existing variables to the room
+<<<<<<< HEAD
+	/*
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	$_POST['openmeetings_roomtype']				= intval($room_obj['return']['roomtype']['roomtypes_id']);
 	$_POST['openmeetings_room_name']			= $addslashes($room_obj['return']['name']);
 	$_POST['openmeetings_num_of_participants']	= $addslashes($room_obj['return']['numberOfPartizipants']);
@@ -116,7 +157,23 @@ if (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POS
 	(($room_obj['return']['showFilesPanel'])=='true')?$_POST['openmeetings_show_fp']=1:$_POST['openmeetings_show_fp']=0;
 	$_POST['openmeetings_fp_w']					= intval($room_obj['return']['filesPanelWidth']);
 	$_POST['openmeetings_fp_h']					= intval($room_obj['return']['filesPanelHeight']);
+<<<<<<< HEAD
+	*/
+	$_POST['openmeetings_roomtype']				= intval($room_obj['roomtypes_id']);
+	$_POST['openmeetings_room_name']			= $addslashes($room_obj['name']);
+	$_POST['openmeetings_num_of_participants']	= $addslashes($room_obj['numberOfPartizipants']);
+	(($room_obj['ispublic'])=='true')?$_POST['openmeetings_ispublic']=1:$_POST['openmeetings_ispublic']=0;
+	$_POST['openmeetings_vid_w']				= intval($room_obj['videoPodWidth']);
+	$_POST['openmeetings_vid_h']				= intval($room_obj['videoPodHeight']);
+	(($room_obj['return']['showWhiteBoard'])=='true')?$_POST['openmeetings_show_wb']=1:$_POST['openmeetings_show_wb']=0;
+	$_POST['openmeetings_wb_w']					= intval($room_obj['whiteBoardPanelWidth']);
+	$_POST['openmeetings_wb_h']					= intval($room_obj['whiteBoardPanelHeight']);
+	(($room_obj['return']['showFilesPanel'])=='true')?$_POST['openmeetings_show_fp']=1:$_POST['openmeetings_show_fp']=0;
+	$_POST['openmeetings_fp_w']					= intval($room_obj['filesPanelWidth']);
+	$_POST['openmeetings_fp_h']					= intval($room_obj['filesPanelHeight']);
+=======
 
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	include (AT_INCLUDE_PATH.'header.inc.php');
 	include ('html/update_room.inc.php');
 	include (AT_INCLUDE_PATH.'footer.inc.php'); 
@@ -138,4 +195,8 @@ if ($room_id == false) {
 	include ('html/edit_room.inc.php');
 }
 require (AT_INCLUDE_PATH.'footer.inc.php'); 
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82

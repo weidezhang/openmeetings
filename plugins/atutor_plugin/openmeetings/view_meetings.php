@@ -52,9 +52,18 @@ $_GET['sid']		= addslashes($_GET['sid']);
 ?>
 
 <div>
+<<<<<<< HEAD
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>" onclick="window.open('<?php echo $_config['openmeetings_location']; ?>/?roomid=<?php echo $_GET['room_id']; ?>&sid=<?php echo $_GET['sid'];?>','marratechwin','width=800,height=720,scrollbars=yes, resizable=yes'); return false"><?php echo  _AT('openmeetings_own_window'); ?></a> </li>
+
+<iframe name="openmeetings" id="openmeetings" title="Openmeetings" frameborder="1" scrolling="auto" src="<?php echo $_config['openmeetings_location']; ?>/?roomid=<?php echo $_GET['room_id']; ?>&sid=<?php echo $_GET['sid'];?>" height="700" width="90%" align="center" style="border:thin white solid; align:center;" allowautotransparency="true"></iframe>
+
+</div>
+<?php require (AT_INCLUDE_PATH.'footer.inc.php'); ?>
+=======
 <a href="<?php echo $_SERVER['PHP_SELF']; ?>" onclick="window.open('<?php echo $_config['openmeetings_location']; ?>/main.lzx.lzr=swf8.swf?roomid=<?php echo $_GET['room_id']; ?>&sid=<?php echo $_GET['sid'];?>','marratechwin','width=800,height=720,scrollbars=yes, resizable=yes'); return false"><?php echo  _AT('openmeetings_own_window'); ?></a> </li>
 
 <iframe name="openmeetings" id="openmeetings" title="Openmeetings" frameborder="1" scrolling="auto" src="<?php echo $_config['openmeetings_location']; ?>/main.lzx.lzr=swf8.swf?roomid=<?php echo $_GET['room_id']; ?>&sid=<?php echo $_GET['sid'];?>" height="700" width="90%" align="center" style="border:thin white solid; align:center;" allowautotransparency="true"></iframe>
 
 </div>
 <?php require (AT_INCLUDE_PATH.'footer.inc.php'); ?>
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82

@@ -1,0 +1,87 @@
+setUserObjectAndGenerateRoomHash
+
+	Type	Fieldname	Description
+	String	SID	The SID from getSession
+	String	username	any username
+	String	firstname	any firstname
+	String	lastname	any lastname
+	String	profilePictureUrl	any profilePictureUrl
+	String	email	any email
+	String	externalUserId	if you have any external user Id you may set it here
+	String	externalUserType	you can specify your system-name here, for example "moodle"
+	Long	room_id	the room id the user should be logged in
+	int	becomeModeratorAsInt	0 means no Moderator, 1 means Moderator
+	int	showAudioVideoTestAsInt	0 means don't show Audio/Video Test, 1 means show Audio/Video 
+		Test Application before the user is logged into the room
+
+
+loginUser 
+
+	Type	Fieldname	Description
+	String	SID	The SID from getSession
+	String	username	Username from OpenMeetings, the user has to have Admin-rights
+	String	userpass	Userpass from OpenMeetings
+
+
+getSession 
+
+	(no params)
+
+
+addRoom (DEPRECATED -> use addRoomWithModeration)
+addRoomWithModeration
+
+	Type	Fieldname	Description
+	String	SID	The SID of the User. This SID must be marked as Loggedin
+	String	name	Name of the Room
+	Long	roomtypes_id	Type of that room (1 = Conference, 2 = Audience, 3 = Restricted, 4 = Interview)
+	String	comment	any comment
+	Long	numberOfPartizipants	the maximum users allowed in this room
+	Boolean	ispublic	If this room is public (use true if you don't deal with different Organizations)
+	Boolean	appointment	is it a Calendar Room (use false by default)
+	Boolean	isDemoRoom	is it a Demo Room with limited time (use false by default)
+	Integer	demoTime	time in seconds after the user will be logged out (only enabled if isDemoRoom is true)
+	Boolean	isModeratedRoom	Users have to wait untill a Moderator arrives. Use the becomeModerator param in
+				 setUserObjectAndGenerateRoomHash to set a user as default Moderator
+
+
+getErrorByCode
+
+	Type	Fieldname	Description
+	String	SID	The SID from getSession
+	long	errorid	the error id (negative Value here!)
+	long	language_id	The id of the language
+
+
+getRoomById
+
+	Type	Fieldname	Description
+	String	SID	The SID of the User. This SID must be marked as Loggedin
+	long	rooms_id	the room id
+
+
+updateRoom (DEPRECATED -> use updateRoomWithModeration)
+updateRoomWithModeration
+
+	Type	Fieldname	Description
+	String	SID	The SID of the User. This SID must be marked as Loggedin
+	Long	room_id	the room id to update
+	String	name	new name of the room
+	Long	roomtypes_id	new type of room (1 = Conference, 2 = Audience, 3 = Restricted, 4 = Interview)
+	String	comment	new comment
+	Long	numberOfPartizipants	new numberOfParticipants
+	Boolean	ispublic	is public
+	Boolean	appointment	if the room is an appointment
+	Boolean	isDemoRoom	is it a Demo Room with limited time? (use false if not sure what that means)
+	Integer	demoTime	time in seconds after the user will be logged out (only enabled if isDemoRoom is true)
+	Boolean	isModeratedRoom	Users have to wait until a Moderator arrives. Use the becomeModerator parameter 
+				in setUserObjectAndGenerateRoomHash to set a user as default Moderator
+
+
+deleteRoom
+
+	Type	Fieldname	Description
+	String	SID	The SID of the User. This SID must be marked as Loggedin
+	long	rooms_id	
+
+

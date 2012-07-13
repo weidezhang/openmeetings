@@ -34,17 +34,28 @@
 </div>
 
 <!-- Video settings -->
+<<<<<<< HEAD
+<!--<div class="row">
+=======
 <div class="row">
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<p><label for="openmeetings_vid_w"><?php echo _AT('openmeetings_vid_w'); ?></label></p>	
 	<input type="text" name="openmeetings_vid_w" value="<?php echo $_POST['openmeetings_vid_w']; ?>" id="openmeetings_vid_w" size="20" />
 </div>
 <div class="row">
 	<p><label for="openmeetings_vid_h"><?php echo _AT('openmeetings_vid_h'); ?></label></p>	
 	<input type="text" name="openmeetings_vid_h" value="<?php echo $_POST['openmeetings_vid_h']; ?>" id="openmeetings_vid_h" size="20" />
+<<<<<<< HEAD
+</div>-->
+
+<!-- Whiteboard settings -->
+<!--<div class="row">
+=======
 </div>
 
 <!-- Whiteboard settings -->
 <div class="row">
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<?php
 		($_POST['openmeetings_show_wb']== 1)? $om_show_wb_y = 'checked="checked"' : $om_show_wb_n = 'checked="checked"';
 	?>
@@ -60,10 +71,17 @@
 <div class="row">
 	<p><label for="openmeetings_wb_h"><?php echo _AT('openmeetings_wb_h'); ?></label></p>	
 	<input type="text" name="openmeetings_wb_h" value="<?php echo $_POST['openmeetings_wb_h']; ?>" id="openmeetings_wb_h" size="20" />
+<<<<<<< HEAD
+</div>-->
+
+<!-- File Panel settings -->
+<!--<div class="row">
+=======
 </div>
 
 <!-- File Panel settings -->
 <div class="row">
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<?php
 		($_POST['openmeetings_show_fp']== 1)? $om_show_fp_y = 'checked="checked"' : $om_show_fp_n = 'checked="checked"';
 	?>
@@ -78,4 +96,8 @@
 <div class="row">
 	<p><label for="openmeetings_fp_h"><?php echo _AT('openmeetings_fp_h'); ?></label></p>	
 	<input type="text" name="openmeetings_fp_h" value="<?php echo $_POST['openmeetings_fp_h']; ?>" id="openmeetings_fp_h" size="20" />
+<<<<<<< HEAD
+</div>-->
+=======
 </div>
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82

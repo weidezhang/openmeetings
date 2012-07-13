@@ -37,6 +37,10 @@ class SOAP_openmeetings {
 		//check session id
 		if (!$getSession_obj){
 			$this->_sid = session_id();  //openmeeting will return error code on this
+<<<<<<< HEAD
+			exit('Error: No variable $getSession_obj');
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		} else {
 			$this->_sid = $getSession_obj['return']['session_id'];
 		}
@@ -53,6 +57,10 @@ class SOAP_openmeetings {
         if (!isset($parameters["username"])) {
             return false;
         }
+<<<<<<< HEAD
+	
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
         return $this->_performAPICall(
           "loginUser",
 
@@ -235,4 +243,8 @@ class SOAP_openmeetings {
 		return $this->_soapClient->getError();
 	}
 }
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82

@@ -33,6 +33,11 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 $om_obj = new Openmeetings($course_id, $_SESSION['member_id']);
 
 //Login
+<<<<<<< HEAD
+// failing here
+
+=======
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 $om_obj->om_login();
 
 //Handles form actions
@@ -54,4 +59,8 @@ include_once('html/course_meeting.inc.php');
 include_once('html/group_meeting.inc.php');
 
 require (AT_INCLUDE_PATH.'footer.inc.php');
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
