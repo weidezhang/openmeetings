@@ -47,6 +47,7 @@ if (!$logged) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
+<link rel="stylesheet" type="text/css" href="css/teambox-print.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/teambox.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
 <body>
