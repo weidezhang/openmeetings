@@ -26,7 +26,7 @@ limitations under the License.
     <!-- ====================================================================== -->
     <html>
         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
                                                     <meta name="author" value="
 			OpenMeetings Team
@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings [Incubating] - Upgrade</title>
+            <title>Apache OpenMeetings [Incubating] - Release Guide</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -123,6 +123,12 @@ limitations under the License.
 					            	else if (document.location.href.indexOf("http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings") > 0) {
 					            		currentLocation = "InstallationandUpgrade";
 					            		currentLink = "http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings".substr(1, "http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings".length);
+					            	} 
+					            	
+					        				        							            					            	
+					            	else if (document.location.href.indexOf("/CommandLineAdmin.html") > 0) {
+					            		currentLocation = "InstallationandUpgrade";
+					            		currentLink = "/CommandLineAdmin.html".substr(1, "/CommandLineAdmin.html".length);
 					            	} 
 					            	
 					        				        		    										        					            					            	
@@ -315,6 +321,10 @@ limitations under the License.
 				            				currentLocation = "Configuration";
 					            			currentLink = "/ConferenceRoomLayoutOptions.html".substr(1, "/ConferenceRoomLayoutOptions.html".length);
 						            	} 
+				            						            			else if (document.location.href.indexOf("/HotKeys.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/HotKeys.html".substr(1, "/HotKeys.html".length);
+						            	} 
 				            							        				        							            				            						            			else if (document.location.href.indexOf("/WebappNamePath.html") > 0) {
 				            				currentLocation = "Configuration";
 					            			currentLink = "/WebappNamePath.html".substr(1, "/WebappNamePath.html".length);
@@ -350,6 +360,10 @@ limitations under the License.
 				            						            			else if (document.location.href.indexOf("/FFMPEGVersionSwitch.html") > 0) {
 				            				currentLocation = "Configuration";
 					            			currentLink = "/FFMPEGVersionSwitch.html".substr(1, "/FFMPEGVersionSwitch.html".length);
+						            	} 
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/ClusteringManual.html") > 0) {
+				            				currentLocation = "Configuration";
+					            			currentLink = "/ClusteringManual.html".substr(1, "/ClusteringManual.html".length);
 						            	} 
 				            							        				        							            				            						            			else if (document.location.href.indexOf("/GetVersionInfo.html") > 0) {
 				            				currentLocation = "Configuration";
@@ -456,6 +470,8 @@ limitations under the License.
 <br/>
 	        		        	            	            	    <a href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings">Tutorials</a>
 <br/>
+	        		        	            	            	    <a href="./CommandLineAdmin.html">Command Line Admin</a>
+<br/>
 	        		            	</div>
         	<h3><a href="#Community">Community</a></h3>
     	<div  width="100%">
@@ -550,6 +566,8 @@ limitations under the License.
 <br/>
 	            			            			    <a href="./ConferenceRoomLayoutOptions.html">Room layout options</a>
 <br/>
+	            			            			    <a href="./HotKeys.html">Hot Keys</a>
+<br/>
 	            			        		        	            	            	<b>Customization</b><br/>
 	            			            			    <a href="./WebappNamePath.html">Webapp name/path</a>
 <br/>
@@ -571,6 +589,9 @@ limitations under the License.
 <br/>
 	            			            			    <a href="./FFMPEGVersionSwitch.html">FFMPEG Version Switch</a>
 <br/>
+	            			        		        	            	            	<b>Clustering</b><br/>
+	            			            			    <a href="./ClusteringManual.html">Clustering (Manual)</a>
+<br/>
 	            			        		        	            	            	<b>Misc</b><br/>
 	            			            			    <a href="./GetVersionInfo.html">Get version info</a>
 <br/>
@@ -586,66 +607,44 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Where to find language files"><strong>Where to find language files</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <p>You can find all current language files here: </p>
-                                                <p>
-				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/" rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/
-				</a>
-			</p>
-                                                <p>Just take one file and translate it to your language. </p>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Import and export of Language Files"><strong>Import and export of Language Files</strong></a>
-          <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
-        </font>
-      </td></tr>
-      <tr><td>
-        <blockquote>
-                                    <ul>
-				<li>
-					Use the
-					<a href="LanguageEditor.html">LanguageEditor</a>
-					for translation
-				</li>
-				<li>
-					with the
-					<a href="LanguageEditor.html">LanguageEditor</a>
-					you can import and export Language Files
-				</li>
-			</ul>
-                            </blockquote>
-        </p>
-      </td></tr>
-      <tr><td><br/></td></tr>
-    </table>
-                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td ><!-- bgcolor="#EEEEEE" -->
-        <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="How to add it as installation option"><strong>How to add it as installation option</strong></a>
+          <a name="How to update Apache OpenMeetings incubator website"><strong>How to update Apache OpenMeetings incubator website</strong></a>
           <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
         </font>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <p>
-				Once you have finished the translation you can add a new node to:
-				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml" rel="nofollow">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/WebContent/languages/languages.xml
+				Required software:
+				<ul>
+					<li>Sun JDK6</li>
+					<li>Apache ANT (1.8 or later)</li>
+				</ul>
+			</p>
+                                                <p>
+				OpenMeetings website (
+				<a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a>
+				) is a copy from the SVN repository.
+				<br />
+				The file in the SVN to be synced are at:
+				<br />
+				<a href="http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/">http://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/docs/
 				</a>
 			</p>
-                                                <p>the name of the language should match the name of the file. Once
-				this is done the Language file will automatically be imported during
-				installation and will be an option at login.
+                                                <p>
+				To update the website you checkout trunk:
+				<br />
+				<a href="https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/">https://svn.apache.org/repos/asf/incubator/openmeetings/trunk/singlewebapp/
+				</a> <br />
+				edit the files in the folder <tt>xdocs</tt><br />
+				then you run the command:
+				<div class="xmlcode">
+					ant anakia
+				</div>
+				control the output locally in the folder <tt>docs</tt><br />
+				And then checkin into the SVN <i>both</i> the edited xml and generated html files.
+			</p>
+                                                <p>
+				Changes to the website should be online immediately.
 			</p>
                             </blockquote>
         </p>
