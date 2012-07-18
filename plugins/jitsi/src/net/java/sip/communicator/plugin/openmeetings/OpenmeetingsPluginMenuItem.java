@@ -1,8 +1,7 @@
 /*
  * Jitsi, the OpenSource Java VoIP and Instant Messaging client.
- *
- * Distributable under LGPL license.
- * See terms of license at gnu.org.
+ * 
+ * Distributable under LGPL license. See terms of license at gnu.org.
  */
 package net.java.sip.communicator.plugin.openmeetings;
 
@@ -33,142 +32,177 @@ public class OpenmeetingsPluginMenuItem
     private JMenuItem menuItem;
 
     private MetaContact metaContact;
-    
+
     private BundleContext bc;
 
     /**
      * Creates an instance of <tt>OpenmeetingsPluginMenuItem</tt>.
-     * @param  
+     * 
+     * @param
      */
-    public OpenmeetingsPluginMenuItem( BundleContext bc_)
+    public OpenmeetingsPluginMenuItem(BundleContext bc_)
     {
-        super(Container.CONTAINER_CONTACT_RIGHT_BUTTON_MENU);        
+        super(Container.CONTAINER_CONTACT_RIGHT_BUTTON_MENU);
         this.bc = bc_;
-        OpenmeetingsConfigManager.getInstance().setContext( bc_ );
+        OpenmeetingsConfigManager.getInstance().setContext(bc_);
     }
- 
+
     /**
-     * Listens for events triggered by user clicks on this menu item. Opens
-     * the <tt>PluginDialog</tt>.
+     * Listens for events triggered by user clicks on this menu item. Opens the
+     * <tt>PluginDialog</tt>.
      */
     public void actionPerformed(ActionEvent e)
-    { 
-    	Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
+    {
+        Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 
-		ServiceReference cRef[];
-		try {
-			cRef = bc.getServiceReferences(ProtocolProviderService.class.getName(), null);
-		} catch (InvalidSyntaxException e1) {
-			logger.error(e1.getMessage());
-			return;
-		}
-		ProtocolProviderService jabberProvider = null;
-		
-		for (int i = 0; i < cRef.length; i++) {
-			ProtocolProviderService provider = (ProtocolProviderService) bc.getService(cRef[i]);
-			logger.info("found " + provider.getClass().getName());
-			if (provider.getClass().getName().indexOf("Jabber") >= 0) {
-				jabberProvider = provider;
-				break;
-			}
-		}
-		if (jabberProvider == null) {
-			logger.error("cannot find jabber service");
-			return;
-		}
+        ServiceReference cRef[];
+        try
+        {
+            cRef =
+                bc.getServiceReferences(
+                    ProtocolProviderService.class.getName(), null);
+        }
+        catch (InvalidSyntaxException e1)
+        {
+            logger.error(e1.getMessage());
+            return;
+        }
+        ProtocolProviderService jabberProvider = null;
 
-      	String invitationUrl = null;
+        for (int i = 0; i < cRef.length; i++)
+        {
+            ProtocolProviderService provider =
+                (ProtocolProviderService) bc.getService(cRef[i]);
+            logger.info("found " + provider.getClass().getName());
+            if (provider.getClass().getName().indexOf("Jabber") >= 0)
+            {
+                jabberProvider = provider;
+                break;
+            }
+        }
+        if (jabberProvider == null)
+        {
+            logger.error("cannot find jabber service");
+            return;
+        }
 
-//		System.getProperties().put("http.proxyHost", "10.10.2.254");
-//		System.getProperties().put("http.proxyPort", "3128");
-		logger.info("getting invitation for " + OpenmeetingsConfigManager.getInstance().getLogin());
-		try {
-			invitationUrl = OpenmeetingsConfigManager.getInstance().getInvitationUrl(
-											OpenmeetingsConfigManager.getInstance().getLogin());
-		} catch (Exception e1) {
-			logger.info(e1.getMessage());			
-		}
-    	if (invitationUrl == null) {
-    		logger.info("Can't get invitation URL");
-    		return;
-    	}
-    	
-    	openUrl( invitationUrl );
+        String invitationUrl = null;
+
+        // System.getProperties().put("http.proxyHost", "10.10.2.254");
+        // System.getProperties().put("http.proxyPort", "3128");
+        logger.info("getting invitation for "
+            + OpenmeetingsConfigManager.getInstance().getLogin());
+        try
+        {
+            invitationUrl =
+                OpenmeetingsConfigManager.getInstance().getInvitationUrl(
+                    OpenmeetingsConfigManager.getInstance().getLogin());
+        }
+        catch (Exception e1)
+        {
+            logger.info(e1.getMessage());
+        }
+        if (invitationUrl == null)
+        {
+            logger.info("Can't get invitation URL");
+            return;
+        }
+
+        openUrl(invitationUrl);
 
         // bring main window to front
         Window[] windows = Window.getWindows();
-        for (Window w : windows) {
-            if (null == w.getOwner() && w.isVisible()) {
+        for (Window w : windows)
+        {
+            if (null == w.getOwner() && w.isVisible())
+            {
                 w.toFront();
             }
         }
-    	
-    	Contact to = metaContact.getDefaultContact();
-      	String invitationUrlForSend = null;
-		try {
-			invitationUrlForSend = OpenmeetingsConfigManager.getInstance().getInvitationUrl(to.getDisplayName());
-		} catch (Exception e1) {
-			logger.info(e1.getMessage());			
-		}
-    	if( invitationUrl.equals(null)){
-    		logger.info("Can't get invitation URL For send");
-    		return;
-    	}
-//		System.getProperties().remove("http.proxyHost");
-//		System.getProperties().remove("http.proxyPort");
-   	
-    	OperationSetBasicInstantMessaging basicInstMsgImpl =
-    		(OperationSetBasicInstantMessaging)jabberProvider.getOperationSet(OperationSetBasicInstantMessaging.class);
-    	    	
-        String message = OpenmeetingsPluginActivator.resourceService
+
+        Contact to = metaContact.getDefaultContact();
+        String invitationUrlForSend = null;
+        try
+        {
+            invitationUrlForSend =
+                OpenmeetingsConfigManager.getInstance().getInvitationUrl(
+                    to.getDisplayName());
+        }
+        catch (Exception e1)
+        {
+            logger.info(e1.getMessage());
+        }
+        if (invitationUrl.equals(null))
+        {
+            logger.info("Can't get invitation URL For send");
+            return;
+        }
+        // System.getProperties().remove("http.proxyHost");
+        // System.getProperties().remove("http.proxyPort");
+
+        OperationSetBasicInstantMessaging basicInstMsgImpl =
+            (OperationSetBasicInstantMessaging) jabberProvider
+                .getOperationSet(OperationSetBasicInstantMessaging.class);
+
+        String message =
+            OpenmeetingsPluginActivator.resourceService
                 .getI18NString("plugin.openmeetings.INVITE_MESSAGE");
-    	message += "\n" + invitationUrlForSend;
-				
-		Message msg = basicInstMsgImpl.createMessage(message);
-		basicInstMsgImpl.sendInstantMessage(to ,  msg);
+        message += "\n" + invitationUrlForSend;
+
+        Message msg = basicInstMsgImpl.createMessage(message);
+        basicInstMsgImpl.sendInstantMessage(to, msg);
     }
 
-    private boolean conferenceCreated(String response) {
-		
-    	if( response.contains("It works!"))
-    		return true;
-    	
-		return false;
-	}
+    private boolean conferenceCreated(String response)
+    {
 
-	private void openUrl(String url){
-		
-		if( url == null )
-			return;
-    	
-    	if( !java.awt.Desktop.isDesktopSupported() ) {
+        if (response.contains("It works!"))
+            return true;
 
-            System.err.println( "Desktop is not supported (fatal)" );
-            System.exit( 1 );
+        return false;
+    }
+
+    private void openUrl(String url)
+    {
+
+        if (url == null)
+            return;
+
+        if (!java.awt.Desktop.isDesktopSupported())
+        {
+
+            System.err.println("Desktop is not supported (fatal)");
+            System.exit(1);
         }
 
-        if ( url.length() == 0 ) {
-            System.out.println( "Usage: OpenURI [URI [URI ... ]]" );
-            System.exit( 0 );
+        if (url.length() == 0)
+        {
+            System.out.println("Usage: OpenURI [URI [URI ... ]]");
+            System.exit(0);
         }
 
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
 
-        if( !desktop.isSupported( java.awt.Desktop.Action.BROWSE ) ) {
+        if (!desktop.isSupported(java.awt.Desktop.Action.BROWSE))
+        {
 
-            System.err.println( "Desktop doesn't support the browse action (fatal)" );
-            System.exit( 1 );
+            System.err
+                .println("Desktop doesn't support the browse action (fatal)");
+            System.exit(1);
         }
 
-        try {
-             java.net.URI uri = new java.net.URI( url );
-              desktop.browse( uri );
-          }
-         catch (Exception e) {
-             System.err.println( e.getMessage() );
-         }       
-    	
+        try
+        {
+            java.net.URI uri = new java.net.URI(url);
+            desktop.browse(uri);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.getMessage());
+        }
+
     }
+
     /*
      * Implements PluginComponent#getComponent().
      */
@@ -187,12 +221,13 @@ public class OpenmeetingsPluginMenuItem
      */
     public String getName()
     {
-        return OpenmeetingsPluginActivator.resourceService.getI18NString("plugin.openmeetings.MENU_ITEM");
+        return OpenmeetingsPluginActivator.resourceService
+            .getI18NString("plugin.openmeetings.MENU_ITEM");
     }
 
     /**
      * Sets the current <tt>MetaContact</tt>. This in the case of the contact
-     * right button menu container would be the underlying contact in the 
+     * right button menu container would be the underlying contact in the
      * contact list.
      * 
      * @param metaContact the <tt>MetaContact</tt> to set.

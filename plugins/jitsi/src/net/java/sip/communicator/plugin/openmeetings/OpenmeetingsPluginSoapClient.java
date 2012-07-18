@@ -32,273 +32,338 @@ import org.w3c.dom.NodeList;
 
 import net.java.sip.communicator.util.Logger;
 
-public class OpenmeetingsPluginSoapClient {
+public class OpenmeetingsPluginSoapClient
+{
 
-	String serverUrl;
-	Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
+    String serverUrl;
 
-	
-	private static final String NAMESPACE_PREFIX = "openmeetings";
-	
-	public OpenmeetingsPluginSoapClient(){
-		super();
-	}
-	
-	public String getSID( String username, String password ) throws Exception {
-		final SOAPMessage soapMessage = getSoapMessage();
-		final SOAPBody soapBody = soapMessage.getSOAPBody();
-		final SOAPElement sessionElement = soapBody.addChildElement("getSession", NAMESPACE_PREFIX);
-	
-		soapMessage.saveChanges();
-		
-		logger.info("\n Soap request to " + getUserServiceUrl() + "\n");
-		logMessage(soapMessage);
-		
-		final SOAPConnection soapConnection = getSoapConnection();
-		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getUserServiceUrl());
-		logger.info("\n Soap response:\n");
-//		soapMessageReply.writeTo(System.out);
-//		System.out.println();
+    Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 
-		//final String textContent = soapMessageReply.getSOAPBody().getChildElement();
-		//logger.info( "SID = " + textContent);
-		
-		soapConnection.close();
-		
-		SOAPBody responseBody = soapMessageReply.getSOAPBody();
+    private static final String NAMESPACE_PREFIX = "openmeetings";
 
-		String sid = null;
-		
-		
-		final Node getSessionResponse = responseBody.getFirstChild();
-		final Node returnResult = getSessionResponse.getFirstChild();
+    public OpenmeetingsPluginSoapClient()
+    {
+        super();
+    }
 
-		final NodeList childNodes = returnResult.getChildNodes();
-		sid = childNodes.item(5).getTextContent();		
+    public String getSID(String username, String password) throws Exception
+    {
+        final SOAPMessage soapMessage = getSoapMessage();
+        final SOAPBody soapBody = soapMessage.getSOAPBody();
+        final SOAPElement sessionElement =
+            soapBody.addChildElement("getSession", NAMESPACE_PREFIX);
 
-		return sid;
-	}
+        soapMessage.saveChanges();
 
-	public void logMessage(SOAPMessage msg) {
-	    try {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			msg.writeTo(out);
-			logger.info(new String(out.toByteArray()) + "\n\n");
-		} catch (Exception e) {
-		    logger.error(e);
-		}
-	}
+        logger.info("\n Soap request to " + getUserServiceUrl() + "\n");
+        logMessage(soapMessage);
 
-	
-	private String login(final String sid, final String username, final String password) throws SOAPException, IOException {
-		final SOAPMessage soapMessage = getSoapMessage();
-		final SOAPBody soapBody = soapMessage.getSOAPBody();
-		final SOAPElement loginElement = soapBody.addChildElement("loginUser", NAMESPACE_PREFIX);
+        final SOAPConnection soapConnection = getSoapConnection();
+        final SOAPMessage soapMessageReply =
+            soapConnection.call(soapMessage, getUserServiceUrl());
+        logger.info("\n Soap response:\n");
+        // soapMessageReply.writeTo(System.out);
+        // System.out.println();
 
-		loginElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
-		loginElement.addChildElement("username", NAMESPACE_PREFIX).addTextNode(username);
-		loginElement.addChildElement("userpass", NAMESPACE_PREFIX).addTextNode(password);
+        // final String textContent =
+        // soapMessageReply.getSOAPBody().getChildElement();
+        // logger.info( "SID = " + textContent);
 
-//		System.out.println("\nLOGIN REQUEST:\n");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
-		
-		soapMessage.saveChanges();
+        soapConnection.close();
 
-		final SOAPConnection soapConnection = getSoapConnection();
-		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getUserServiceUrl());
-		final String textContent = soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
+        SOAPBody responseBody = soapMessageReply.getSOAPBody();
 
-//		System.out.println("\nLOGIN RESPONSE:\n");
-//		soapMessageReply.writeTo(System.out);
-//		System.out.println();
-//		
-//		System.out.println( "LOGIN =  " + textContent);
-//		
-		if( !textContent.equals("1")	)
-			JOptionPane.showMessageDialog(null,OpenmeetingsPluginActivator.resourceService.
-								getI18NString("plugin.openmeetings.ERROR_LOGIN_MSG"));
-	
-		soapConnection.close();
+        String sid = null;
 
-		return textContent;
-	}
-	public String getInvitationHash(final String username, final String password, final String displayedName) throws Exception {
-		final SOAPMessage soapMessage = getSoapMessage();
-		final SOAPBody soapBody = soapMessage.getSOAPBody();
-		final SOAPElement requestElement = soapBody.addChildElement("getInvitationHash", NAMESPACE_PREFIX);
+        final Node getSessionResponse = responseBody.getFirstChild();
+        final Node returnResult = getSessionResponse.getFirstChild();
 
-		logger.info(username + ":" + password + ":" + displayedName);
-		
-		String sid = getSID(username, password);
-		String error_id = null;
-		try {
-			error_id = login(sid, username, password);
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-		}		
-		
-		if( !error_id.equals( "1" ) ){
-			logger.info("User cant login!");
-			return null;
-		}
-			
-		String room_id = getAvailableRooms(sid);
-		
-		requestElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
-		requestElement.addChildElement("username", NAMESPACE_PREFIX).addTextNode( displayedName );
-		requestElement.addChildElement("room_id", NAMESPACE_PREFIX).addTextNode(room_id);
-				
-		soapMessage.saveChanges();
+        final NodeList childNodes = returnResult.getChildNodes();
+        sid = childNodes.item(5).getTextContent();
 
-		logger.info("\nGET INVITATION REQUEST:\n");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
-		
-		final SOAPConnection soapConnection = getSoapConnection();
-		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getJabberServiceUrl());
-		
-		logger.info("\nGET INVITATION RESPONSE:\n");
-//		soapMessageReply.writeTo(System.out);
-//		System.out.println();
-		
-		final String textContent = soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
+        return sid;
+    }
 
-		logger.info( "INVITATION RESPONSE =  " + textContent);
-		soapConnection.close();		
+    public void logMessage(SOAPMessage msg)
+    {
+        try
+        {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            msg.writeTo(out);
+            logger.info(new String(out.toByteArray()) + "\n\n");
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+        }
+    }
 
-		return textContent;
-	}
-	
-	private String getAvailableRooms( final String sid ) throws SOAPException, IOException, TransformerException {
-		final SOAPMessage soapMessage = getSoapMessage();
-		final SOAPBody soapBody = soapMessage.getSOAPBody();
-			
-		final SOAPElement elemCodeElement = soapBody.addChildElement("getAvailableRooms",NAMESPACE_PREFIX);
+    private String login(final String sid, final String username,
+        final String password) throws SOAPException, IOException
+    {
+        final SOAPMessage soapMessage = getSoapMessage();
+        final SOAPBody soapBody = soapMessage.getSOAPBody();
+        final SOAPElement loginElement =
+            soapBody.addChildElement("loginUser", NAMESPACE_PREFIX);
 
-		elemCodeElement.addChildElement("SID", "rooms").addTextNode(sid);
-		
-//		System.out.println("\nGET_AVAILABLE_ROOMS REQUEST:\n");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
-		
-		soapMessage.saveChanges();
+        loginElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
+        loginElement.addChildElement("username", NAMESPACE_PREFIX).addTextNode(
+            username);
+        loginElement.addChildElement("userpass", NAMESPACE_PREFIX).addTextNode(
+            password);
 
-		final SOAPConnection soapConnection = getSoapConnection();
-		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getJabberServiceUrl());
-		final String textContent = soapMessageReply.getSOAPBody().getTextContent();
+        // System.out.println("\nLOGIN REQUEST:\n");
+        // soapMessage.writeTo(System.out);
+        // System.out.println();
 
-//		System.out.println("\nGET_AVAILABLE_ROOMS RESPONSE:\n");
-//		soapMessageReply.writeTo(System.out);
-//		System.out.println();
-		
-		
-		final Node getRoomsResponse = soapMessageReply.getSOAPBody();
-		final Node getFirstRoomResult = getRoomsResponse.getFirstChild().getFirstChild();
+        soapMessage.saveChanges();
 
-		String rooms_id = new String();
-		final NodeList childNodes = getFirstRoomResult.getChildNodes();
-		int count = childNodes.getLength();
-		for( int i = 0; i < count; ++i ){
-		    String nodeName = childNodes.item( i ).getNodeName();		   
-		    if( nodeName.contains("rooms_id")){		      
-		        rooms_id = childNodes.item(i).getTextContent();
-		    }		        
-		}
-						
-//		System.out.println( "GET_AVAILABLE_ROOMS RESULT =  " + rooms_id );
-		soapConnection.close();
-		
-		return rooms_id;
-	}
+        final SOAPConnection soapConnection = getSoapConnection();
+        final SOAPMessage soapMessageReply =
+            soapConnection.call(soapMessage, getUserServiceUrl());
+        final String textContent =
+            soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
 
+        // System.out.println("\nLOGIN RESPONSE:\n");
+        // soapMessageReply.writeTo(System.out);
+        // System.out.println();
+        //
+        // System.out.println( "LOGIN =  " + textContent);
+        //
+        if (!textContent.equals("1"))
+            JOptionPane.showMessageDialog(null,
+                OpenmeetingsPluginActivator.resourceService
+                    .getI18NString("plugin.openmeetings.ERROR_LOGIN_MSG"));
 
-	private String getErrorCode( final String sid, final String error_id ) throws SOAPException, IOException {
-		final SOAPMessage soapMessage = getSoapMessage();
-		final SOAPBody soapBody = soapMessage.getSOAPBody();
-		final SOAPElement errorCodeElement = soapBody.addChildElement("getErrorByCode", NAMESPACE_PREFIX);
+        soapConnection.close();
 
-		errorCodeElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
-		errorCodeElement.addChildElement("errorid", NAMESPACE_PREFIX).addTextNode(error_id);
-		errorCodeElement.addChildElement("language_id", NAMESPACE_PREFIX).addTextNode("0");
+        return textContent;
+    }
 
-//		System.out.println("\nERROR CODE REQUEST:\n");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
-		
-		soapMessage.saveChanges();
+    public String getInvitationHash(final String username,
+        final String password, final String displayedName) throws Exception
+    {
+        final SOAPMessage soapMessage = getSoapMessage();
+        final SOAPBody soapBody = soapMessage.getSOAPBody();
+        final SOAPElement requestElement =
+            soapBody.addChildElement("getInvitationHash", NAMESPACE_PREFIX);
 
-		final SOAPConnection soapConnection = getSoapConnection();
-		final SOAPMessage soapMessageReply = soapConnection.call(soapMessage, getUserServiceUrl());
-		final String textContent = soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
+        logger.info(username + ":" + password + ":" + displayedName);
 
-//		System.out.println("\nERROR CODE RESPONSE:\n");
-//		soapMessageReply.writeTo(System.out);
-//		System.out.println();
-//		
-//		System.out.println( "ERROR RESULT =  " + textContent);
-		soapConnection.close();
-		
-		return textContent;
-	}
+        String sid = getSID(username, password);
+        String error_id = null;
+        try
+        {
+            error_id = login(sid, username, password);
+        }
+        catch (Exception e)
+        {
+            logger.info(e.getMessage());
+        }
 
-	private SOAPConnection getSoapConnection() throws UnsupportedOperationException, SOAPException {
-		
-		final SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-		final SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+        if (!error_id.equals("1"))
+        {
+            logger.info("User cant login!");
+            return null;
+        }
 
-		return soapConnection;
-	}
-	
-	private SOAPMessage getSoapMessage() throws SOAPException {
-		final MessageFactory messageFactory = javax.xml.soap.MessageFactory.newInstance();
-		final SOAPMessage soapMessage = messageFactory.createMessage();
+        String room_id = getAvailableRooms(sid);
 
-		// Object for message parts
-		final SOAPPart soapPart = soapMessage.getSOAPPart();
-		final SOAPEnvelope envelope = soapPart.getEnvelope();
+        requestElement.addChildElement("SID", NAMESPACE_PREFIX)
+            .addTextNode(sid);
+        requestElement.addChildElement("username", NAMESPACE_PREFIX)
+            .addTextNode(displayedName);
+        requestElement.addChildElement("room_id", NAMESPACE_PREFIX)
+            .addTextNode(room_id);
 
-		envelope.addNamespaceDeclaration("xsd", "http://www.w3.org/2001/XMLSchema");
-		envelope.addNamespaceDeclaration("xsd", "http://basic.beans.data.app.openmeetings.org/xsd");
-		envelope.addNamespaceDeclaration("xsd", "http://basic.beans.persistence.app.openmeetings.org/xsd");
-		envelope.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		envelope.addNamespaceDeclaration("enc", "http://schemas.xmlsoap.org/soap/encoding/");
-		envelope.addNamespaceDeclaration("env", "http://schemas.xmlsoap.org/soap/envelop/");
-		
+        soapMessage.saveChanges();
 
-		envelope.addNamespaceDeclaration(NAMESPACE_PREFIX, "http://services.axis.openmeetings.org");
-		envelope.addNamespaceDeclaration( "rooms", "http://rooms.beans.persistence.app.openmeetings.org/xsd");
+        logger.info("\nGET INVITATION REQUEST:\n");
+        // soapMessage.writeTo(System.out);
+        // System.out.println();
 
-		envelope.setEncodingStyle("http://schemas.xmlsoap.org/soap/encoding/");
+        final SOAPConnection soapConnection = getSoapConnection();
+        final SOAPMessage soapMessageReply =
+            soapConnection.call(soapMessage, getJabberServiceUrl());
 
-		return soapMessage;
-	}
-	
-	private void addSID( final String sid, final SOAPMessage soapMessage) 
-	throws SOAPException {
-		final SOAPHeader header = soapMessage.getSOAPHeader();
-		final SOAPElement sidHeader = header.addChildElement("SID", NAMESPACE_PREFIX);
-		sidHeader.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
-	}
+        logger.info("\nGET INVITATION RESPONSE:\n");
+        // soapMessageReply.writeTo(System.out);
+        // System.out.println();
 
+        final String textContent =
+            soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
 
-	
-	public void setServerUrl(String serverUrl_){
-		serverUrl = serverUrl_;
-	}
+        logger.info("INVITATION RESPONSE =  " + textContent);
+        soapConnection.close();
 
-	private String getServerUrl(){
-		return serverUrl;
-	}
+        return textContent;
+    }
 
-	private String getUserServiceUrl(){
-		String url = getServerUrl() + "services/UserService?wsdl";
-		System.out.println( "URL = " + url);
-		return url;
-	}
-	private String getJabberServiceUrl(){
-		String url = getServerUrl() + "services/JabberService?wsdl";
-		System.out.println( "URL = " + url);
-		return url;
-	}
+    private String getAvailableRooms(final String sid)
+        throws SOAPException,
+        IOException,
+        TransformerException
+    {
+        final SOAPMessage soapMessage = getSoapMessage();
+        final SOAPBody soapBody = soapMessage.getSOAPBody();
+
+        final SOAPElement elemCodeElement =
+            soapBody.addChildElement("getAvailableRooms", NAMESPACE_PREFIX);
+
+        elemCodeElement.addChildElement("SID", "rooms").addTextNode(sid);
+
+        // System.out.println("\nGET_AVAILABLE_ROOMS REQUEST:\n");
+        // soapMessage.writeTo(System.out);
+        // System.out.println();
+
+        soapMessage.saveChanges();
+
+        final SOAPConnection soapConnection = getSoapConnection();
+        final SOAPMessage soapMessageReply =
+            soapConnection.call(soapMessage, getJabberServiceUrl());
+        final String textContent =
+            soapMessageReply.getSOAPBody().getTextContent();
+
+        // System.out.println("\nGET_AVAILABLE_ROOMS RESPONSE:\n");
+        // soapMessageReply.writeTo(System.out);
+        // System.out.println();
+
+        final Node getRoomsResponse = soapMessageReply.getSOAPBody();
+        final Node getFirstRoomResult =
+            getRoomsResponse.getFirstChild().getFirstChild();
+
+        String rooms_id = new String();
+        final NodeList childNodes = getFirstRoomResult.getChildNodes();
+        int count = childNodes.getLength();
+        for (int i = 0; i < count; ++i)
+        {
+            String nodeName = childNodes.item(i).getNodeName();
+            if (nodeName.contains("rooms_id"))
+            {
+                rooms_id = childNodes.item(i).getTextContent();
+            }
+        }
+
+        // System.out.println( "GET_AVAILABLE_ROOMS RESULT =  " + rooms_id );
+        soapConnection.close();
+
+        return rooms_id;
+    }
+
+    private String getErrorCode(final String sid, final String error_id)
+        throws SOAPException,
+        IOException
+    {
+        final SOAPMessage soapMessage = getSoapMessage();
+        final SOAPBody soapBody = soapMessage.getSOAPBody();
+        final SOAPElement errorCodeElement =
+            soapBody.addChildElement("getErrorByCode", NAMESPACE_PREFIX);
+
+        errorCodeElement.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(
+            sid);
+        errorCodeElement.addChildElement("errorid", NAMESPACE_PREFIX)
+            .addTextNode(error_id);
+        errorCodeElement.addChildElement("language_id", NAMESPACE_PREFIX)
+            .addTextNode("0");
+
+        // System.out.println("\nERROR CODE REQUEST:\n");
+        // soapMessage.writeTo(System.out);
+        // System.out.println();
+
+        soapMessage.saveChanges();
+
+        final SOAPConnection soapConnection = getSoapConnection();
+        final SOAPMessage soapMessageReply =
+            soapConnection.call(soapMessage, getUserServiceUrl());
+        final String textContent =
+            soapMessageReply.getSOAPBody().getFirstChild().getTextContent();
+
+        // System.out.println("\nERROR CODE RESPONSE:\n");
+        // soapMessageReply.writeTo(System.out);
+        // System.out.println();
+        //
+        // System.out.println( "ERROR RESULT =  " + textContent);
+        soapConnection.close();
+
+        return textContent;
+    }
+
+    private SOAPConnection getSoapConnection()
+        throws UnsupportedOperationException,
+        SOAPException
+    {
+
+        final SOAPConnectionFactory soapConnectionFactory =
+            SOAPConnectionFactory.newInstance();
+        final SOAPConnection soapConnection =
+            soapConnectionFactory.createConnection();
+
+        return soapConnection;
+    }
+
+    private SOAPMessage getSoapMessage() throws SOAPException
+    {
+        final MessageFactory messageFactory =
+            javax.xml.soap.MessageFactory.newInstance();
+        final SOAPMessage soapMessage = messageFactory.createMessage();
+
+        // Object for message parts
+        final SOAPPart soapPart = soapMessage.getSOAPPart();
+        final SOAPEnvelope envelope = soapPart.getEnvelope();
+
+        envelope.addNamespaceDeclaration("xsd",
+            "http://www.w3.org/2001/XMLSchema");
+        envelope.addNamespaceDeclaration("xsd",
+            "http://basic.beans.data.app.openmeetings.org/xsd");
+        envelope.addNamespaceDeclaration("xsd",
+            "http://basic.beans.persistence.app.openmeetings.org/xsd");
+        envelope.addNamespaceDeclaration("xsi",
+            "http://www.w3.org/2001/XMLSchema-instance");
+        envelope.addNamespaceDeclaration("enc",
+            "http://schemas.xmlsoap.org/soap/encoding/");
+        envelope.addNamespaceDeclaration("env",
+            "http://schemas.xmlsoap.org/soap/envelop/");
+
+        envelope.addNamespaceDeclaration(NAMESPACE_PREFIX,
+            "http://services.axis.openmeetings.org");
+        envelope.addNamespaceDeclaration("rooms",
+            "http://rooms.beans.persistence.app.openmeetings.org/xsd");
+
+        envelope.setEncodingStyle("http://schemas.xmlsoap.org/soap/encoding/");
+
+        return soapMessage;
+    }
+
+    private void addSID(final String sid, final SOAPMessage soapMessage)
+        throws SOAPException
+    {
+        final SOAPHeader header = soapMessage.getSOAPHeader();
+        final SOAPElement sidHeader =
+            header.addChildElement("SID", NAMESPACE_PREFIX);
+        sidHeader.addChildElement("SID", NAMESPACE_PREFIX).addTextNode(sid);
+    }
+
+    public void setServerUrl(String serverUrl_)
+    {
+        serverUrl = serverUrl_;
+    }
+
+    private String getServerUrl()
+    {
+        return serverUrl;
+    }
+
+    private String getUserServiceUrl()
+    {
+        String url = getServerUrl() + "services/UserService?wsdl";
+        System.out.println("URL = " + url);
+        return url;
+    }
+
+    private String getJabberServiceUrl()
+    {
+        String url = getServerUrl() + "services/JabberService?wsdl";
+        System.out.println("URL = " + url);
+        return url;
+    }
 }
