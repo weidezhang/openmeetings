@@ -9,7 +9,7 @@ package net.java.sip.communicator.plugin.openmeetings;
 import java.awt.*;
 import java.awt.event.*;
 
-import net.java.sip.communicator.plugin.otr.OtrActivator;
+import net.java.sip.communicator.impl.gui.main.MainFrame;
 import net.java.sip.communicator.service.protocol.Message;
 import net.java.sip.communicator.service.protocol.Contact;
 import net.java.sip.communicator.service.protocol.OperationSetBasicInstantMessaging;
@@ -93,7 +93,15 @@ public class OpenmeetingsPluginMenuItem
     		return;
     	}
     	
-    	openUrl( invitationUrl );    	
+    	openUrl( invitationUrl );
+
+        // bring main window to front
+        Window[] windows = Window.getWindows();
+        for (Window w : windows) {
+            if (null == w.getOwner() && w.isVisible()) {
+                w.toFront();
+            }
+        }
     	
     	Contact to = metaContact.getDefaultContact();
       	String invitationUrlForSend = null;
@@ -112,7 +120,9 @@ public class OpenmeetingsPluginMenuItem
     	OperationSetBasicInstantMessaging basicInstMsgImpl =
     		(OperationSetBasicInstantMessaging)jabberProvider.getOperationSet(OperationSetBasicInstantMessaging.class);
     	    	
-    	String message = "I am inviting you to the conference. Please, click the link " + invitationUrlForSend;
+        String message = OpenmeetingsPluginActivator.resourceService
+                .getI18NString("plugin.openmeetings.INVITE_MESSAGE");
+    	message += "\n" + invitationUrlForSend;
 				
 		Message msg = basicInstMsgImpl.createMessage(message);
 		basicInstMsgImpl.sendInstantMessage(to ,  msg);
