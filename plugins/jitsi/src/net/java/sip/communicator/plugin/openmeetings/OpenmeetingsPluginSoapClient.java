@@ -62,13 +62,7 @@ public class OpenmeetingsPluginSoapClient
         final SOAPMessage soapMessageReply =
             soapConnection.call(soapMessage, getUserServiceUrl());
         logger.info("\n Soap response:\n");
-        // soapMessageReply.writeTo(System.out);
-        // System.out.println();
-
-        // final String textContent =
-        // soapMessageReply.getSOAPBody().getChildElement();
-        // logger.info( "SID = " + textContent);
-
+        logMessage(soapMessageReply);
         soapConnection.close();
 
         SOAPBody responseBody = soapMessageReply.getSOAPBody();
@@ -212,9 +206,8 @@ public class OpenmeetingsPluginSoapClient
 
         elemCodeElement.addChildElement("SID", "rooms").addTextNode(sid);
 
-        // System.out.println("\nGET_AVAILABLE_ROOMS REQUEST:\n");
-        // soapMessage.writeTo(System.out);
-        // System.out.println();
+        logger.info("\nGET_AVAILABLE_ROOMS REQUEST:\n");
+        logMessage(soapMessage);
 
         soapMessage.saveChanges();
 
@@ -224,10 +217,9 @@ public class OpenmeetingsPluginSoapClient
         final String textContent =
             soapMessageReply.getSOAPBody().getTextContent();
 
-        // System.out.println("\nGET_AVAILABLE_ROOMS RESPONSE:\n");
-        // soapMessageReply.writeTo(System.out);
-        // System.out.println();
-
+        logger.info("\nGET_AVAILABLE_ROOMS RESPONSE:\n");
+        logMessage(soapMessageReply);
+        
         final Node getRoomsResponse = soapMessageReply.getSOAPBody();
         final Node getFirstRoomResult =
             getRoomsResponse.getFirstChild().getFirstChild();
@@ -244,7 +236,7 @@ public class OpenmeetingsPluginSoapClient
             }
         }
 
-        // System.out.println( "GET_AVAILABLE_ROOMS RESULT =  " + rooms_id );
+        System.out.println("GET_AVAILABLE_ROOMS RESULT =  " + rooms_id);
         soapConnection.close();
 
         return rooms_id;
