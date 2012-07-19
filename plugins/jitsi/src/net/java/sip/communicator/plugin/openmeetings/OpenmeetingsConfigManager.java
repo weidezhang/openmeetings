@@ -117,7 +117,7 @@ public class OpenmeetingsConfigManager
         } else if ("ru".equals(language)) {
             id = 9;
         } else if ("si".equals(language)) {
-            id = 0;
+            id = 1;
         } else if ("sq".equals(language)) {
             id = 1;
         } else if ("tr".equals(language)) {
