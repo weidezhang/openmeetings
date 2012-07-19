@@ -23,6 +23,8 @@ public class OpenmeetingsConfigManager
 
     private String password;
 
+    private String proxy;
+
     private OpenmeetingsPluginSoapClient soapClient;
 
     private static BundleContext bundleContext;
@@ -64,6 +66,7 @@ public class OpenmeetingsConfigManager
         String server = getServer();
         String uriContext = getOmUriContext();
         soapClient.setServerUrl(protoPrefix + server + uriContext);
+        soapClient.setProxy(getProxy());
 
         String invitationHash = null;
 
@@ -238,7 +241,20 @@ public class OpenmeetingsConfigManager
         password = encryptionEngine.decrypt(value);
         return password;
     }
+    
+    public void setProxy(String proxy)
+    {
+        this.proxy = proxy;
+        getConfigurationService().setProperty("plugin.openmeetings.PROXY",
+            proxy);
+    }
 
+    public String getProxy()
+    {
+        proxy = (String) getConfigurationService().getProperty("plugin.openmeetings.PROXY");
+        return proxy;
+    }
+    
     public void setContext(BundleContext bc)
     {
         bundleContext = bc;

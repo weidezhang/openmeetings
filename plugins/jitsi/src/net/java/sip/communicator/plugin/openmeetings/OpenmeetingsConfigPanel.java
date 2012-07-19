@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import net.java.sip.communicator.util.Logger;
 import net.java.sip.communicator.util.swing.*;
 
 import org.osgi.framework.*;
@@ -17,11 +19,15 @@ public class OpenmeetingsConfigPanel
 	 */
     private static final long serialVersionUID = 1L;
 
+    Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
+
     private final JTextField teServer = new JTextField(20);
 
     private final JTextField teLogin = new JTextField(20);
 
     private final JPasswordField tePassword = new JPasswordField(20);
+
+    private final JTextField teProxy = new JTextField(20);
 
     private final JTextField fakeField = new JTextField(20);
 
@@ -34,6 +40,8 @@ public class OpenmeetingsConfigPanel
     private String login;
 
     private String password;
+
+    private String proxy;
 
     public OpenmeetingsConfigPanel()
         throws Exception
@@ -81,11 +89,22 @@ public class OpenmeetingsConfigPanel
         JLabel lblPassword =
             new JLabel(
                 OpenmeetingsPluginActivator.resourceService
-                    .getI18NString("plugin.openmeetings.PASWWORD"));
+                    .getI18NString("plugin.openmeetings.PASSWORD"));
         lblPassword.setPreferredSize(prefSize);
         passwordPanel.setAlignmentX(LEFT_ALIGNMENT);
         passwordPanel.add(lblPassword);
         passwordPanel.add(tePassword);
+        
+        JPanel proxyPanel = new TransparentPanel();
+        proxyPanel.setLayout(new BoxLayout(proxyPanel, BoxLayout.LINE_AXIS));
+        JLabel lblProxy =
+            new JLabel(
+                OpenmeetingsPluginActivator.resourceService
+                    .getI18NString("plugin.openmeetings.PROXY"));
+        lblProxy.setPreferredSize(prefSize);
+        proxyPanel.setAlignmentX(LEFT_ALIGNMENT);
+        proxyPanel.add(lblProxy);
+        proxyPanel.add(teProxy);        
 
         OpenmeetingsConfigManager cfg = OpenmeetingsConfigManager.getInstance();
         String serverUri = cfg.getServer();
@@ -94,10 +113,13 @@ public class OpenmeetingsConfigPanel
             serverUri =
                 cfg.getProtoPrefix() + serverUri + cfg.getOmUriContext();
         }
+
         teServer.setText(serverUri);
         teLogin.setText(OpenmeetingsConfigManager.getInstance().getLogin());
         tePassword.setText(OpenmeetingsConfigManager.getInstance()
             .getPassword());
+        teProxy.setText(OpenmeetingsConfigManager.getInstance()
+            .getProxy());
 
         JPanel buttonPanel = new TransparentPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
@@ -120,15 +142,11 @@ public class OpenmeetingsConfigPanel
         omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
         omPanel.add(passwordPanel);
         omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
+        omPanel.add(proxyPanel);
+        omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
         omPanel.add(buttonPanel);
 
         add(omPanel, BorderLayout.PAGE_START);
-    }
-
-    public String getTest()
-    {
-
-        return "Hello!!!!";
     }
 
     public void setServer(String server)
@@ -160,6 +178,16 @@ public class OpenmeetingsConfigPanel
     public String getPassword()
     {
         return password;
+    }
+
+    public void setProxy(String proxy)
+    {
+        this.proxy = proxy;
+    }
+
+    public String getProxy()
+    {
+        return proxy;
     }
 
     private class ButtonOkListener
@@ -198,13 +226,14 @@ public class OpenmeetingsConfigPanel
             cfg.setProtoPrefix(protoPrefix);
             cfg.setOmUriContext(uriContext);
             cfg.setLogin(teLogin.getText());
+            cfg.setProxy(proxy);
             try
             {
                 cfg.setPassword(new String(tePassword.getPassword()));
             }
             catch (Exception e1)
             {
-                e1.printStackTrace();
+                logger.error(e1);
             }
         }
     }
