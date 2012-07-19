@@ -5,10 +5,8 @@
  */
 package net.java.sip.communicator.plugin.openmeetings;
 
-import java.awt.*;
 import java.awt.event.*;
 
-import net.java.sip.communicator.impl.gui.main.MainFrame;
 import net.java.sip.communicator.service.protocol.Message;
 import net.java.sip.communicator.service.protocol.Contact;
 import net.java.sip.communicator.service.protocol.OperationSetBasicInstantMessaging;
@@ -38,7 +36,7 @@ public class OpenmeetingsPluginMenuItem
     /**
      * Creates an instance of <tt>OpenmeetingsPluginMenuItem</tt>.
      * 
-     * @param
+     * @param bc_ bundle context
      */
     public OpenmeetingsPluginMenuItem(BundleContext bc_)
     {
@@ -55,34 +53,9 @@ public class OpenmeetingsPluginMenuItem
     {
         Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 
-        ServiceReference cRef[];
-        try
-        {
-            cRef =
-                bc.getServiceReferences(
-                    ProtocolProviderService.class.getName(), null);
-        }
-        catch (InvalidSyntaxException e1)
-        {
-            logger.error(e1.getMessage());
-            return;
-        }
-        ProtocolProviderService jabberProvider = null;
-
-        for (int i = 0; i < cRef.length; i++)
-        {
-            ProtocolProviderService provider =
-                (ProtocolProviderService) bc.getService(cRef[i]);
-            logger.info("found " + provider.getClass().getName());
-            if (provider.getClass().getName().indexOf("Jabber") >= 0)
-            {
-                jabberProvider = provider;
-                break;
-            }
-        }
+        ProtocolProviderService jabberProvider = OpenmeetingsPluginMenuItem.getJabberProtocol(bc, logger);
         if (jabberProvider == null)
         {
-            logger.error("cannot find jabber service");
             return;
         }
 
@@ -108,18 +81,6 @@ public class OpenmeetingsPluginMenuItem
             return;
         }
 
-        openUrl(invitationUrl);
-
-        // bring main window to front
-        Window[] windows = Window.getWindows();
-        for (Window w : windows)
-        {
-            if (null == w.getOwner() && w.isVisible())
-            {
-                w.toFront();
-            }
-        }
-
         Contact to = metaContact.getDefaultContact();
         String invitationUrlForSend = null;
         try
@@ -132,17 +93,12 @@ public class OpenmeetingsPluginMenuItem
         {
             logger.info(e1.getMessage());
         }
-        if (invitationUrl.equals(null))
-        {
-            logger.info("Can't get invitation URL For send");
-            return;
-        }
+
         // System.getProperties().remove("http.proxyHost");
         // System.getProperties().remove("http.proxyPort");
 
-        OperationSetBasicInstantMessaging basicInstMsgImpl =
-            (OperationSetBasicInstantMessaging) jabberProvider
-                .getOperationSet(OperationSetBasicInstantMessaging.class);
+        OperationSetBasicInstantMessaging basicInstMsgImpl = jabberProvider
+                    .getOperationSet(OperationSetBasicInstantMessaging.class);
 
         String message =
             OpenmeetingsPluginActivator.resourceService
@@ -151,56 +107,14 @@ public class OpenmeetingsPluginMenuItem
 
         Message msg = basicInstMsgImpl.createMessage(message);
         basicInstMsgImpl.sendInstantMessage(to, msg);
-    }
 
-    private boolean conferenceCreated(String response)
-    {
-
-        if (response.contains("It works!"))
-            return true;
-
-        return false;
-    }
-
-    private void openUrl(String url)
-    {
-
-        if (url == null)
-            return;
-
-        if (!java.awt.Desktop.isDesktopSupported())
+        ServiceReference uiServiceRef = bc.getServiceReference(UIService.class.getName());
+        UIService uiService = (UIService)bc.getService(uiServiceRef);
+        Chat chat = uiService.getChat(metaContact.getDefaultContact());
+        if (null != chat)
         {
-
-            System.err.println("Desktop is not supported (fatal)");
-            System.exit(1);
+            chat.setChatVisible(true);
         }
-
-        if (url.length() == 0)
-        {
-            System.out.println("Usage: OpenURI [URI [URI ... ]]");
-            System.exit(0);
-        }
-
-        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-
-        if (!desktop.isSupported(java.awt.Desktop.Action.BROWSE))
-        {
-
-            System.err
-                .println("Desktop doesn't support the browse action (fatal)");
-            System.exit(1);
-        }
-
-        try
-        {
-            java.net.URI uri = new java.net.URI(url);
-            desktop.browse(uri);
-        }
-        catch (Exception e)
-        {
-            System.err.println(e.getMessage());
-        }
-
     }
 
     /*
@@ -237,5 +151,37 @@ public class OpenmeetingsPluginMenuItem
     public void setCurrentContact(MetaContact metaContact)
     {
         this.metaContact = metaContact;
+    }
+
+    public static ProtocolProviderService getJabberProtocol(BundleContext bc, Logger logger)
+    {
+        ServiceReference cRef[];
+        try
+        {
+            cRef = bc.getServiceReferences(ProtocolProviderService.class.getName(), null);
+        }
+        catch (InvalidSyntaxException e1)
+        {
+            logger.error(e1.getMessage());
+            return null;
+        }
+
+        ProtocolProviderService jabberProvider = null;
+        for (ServiceReference aCRef : cRef)
+        {
+            ProtocolProviderService provider = (ProtocolProviderService) bc.getService(aCRef);
+            if (provider.getClass().getName().contains("Jabber"))
+            {
+                jabberProvider = provider;
+                break;
+            }
+        }
+
+        if (null == jabberProvider)
+        {
+            logger.error("cannot find jabber service");
+        }
+
+        return jabberProvider;
     }
 }
