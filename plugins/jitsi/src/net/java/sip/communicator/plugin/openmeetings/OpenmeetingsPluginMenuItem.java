@@ -20,7 +20,6 @@ import org.osgi.framework.InvalidSyntaxException;
 
 import net.java.sip.communicator.service.contactlist.*;
 import net.java.sip.communicator.service.gui.*;
-import net.java.sip.communicator.service.gui.Container;
 import net.java.sip.communicator.util.*;
 
 public class OpenmeetingsPluginMenuItem
@@ -53,6 +52,11 @@ public class OpenmeetingsPluginMenuItem
     {
         Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 
+        ServiceReference uiServiceRef = bc.getServiceReference(UIService.class.getName());
+        UIService uiService = (UIService) bc.getService(uiServiceRef);
+        Chat chat = uiService.getChat(metaContact.getDefaultContact());
+        chat.setChatVisible(true);
+
         ProtocolProviderService jabberProvider = OpenmeetingsPluginMenuItem.getJabberProtocol(bc, logger);
         if (jabberProvider == null)
         {
@@ -61,8 +65,6 @@ public class OpenmeetingsPluginMenuItem
 
         String invitationUrl = null;
 
-        // System.getProperties().put("http.proxyHost", "10.10.2.254");
-        // System.getProperties().put("http.proxyPort", "3128");
         logger.info("getting invitation for "
             + OpenmeetingsConfigManager.getInstance().getLogin());
         try
@@ -77,7 +79,7 @@ public class OpenmeetingsPluginMenuItem
         }
         if (invitationUrl == null)
         {
-            logger.info("Can't get invitation URL");
+            logger.error("Can't get invitation URL");
             return;
         }
 
@@ -94,9 +96,6 @@ public class OpenmeetingsPluginMenuItem
             logger.info(e1.getMessage());
         }
 
-        // System.getProperties().remove("http.proxyHost");
-        // System.getProperties().remove("http.proxyPort");
-
         OperationSetBasicInstantMessaging basicInstMsgImpl = jabberProvider
                     .getOperationSet(OperationSetBasicInstantMessaging.class);
 
@@ -108,13 +107,11 @@ public class OpenmeetingsPluginMenuItem
         Message msg = basicInstMsgImpl.createMessage(message);
         basicInstMsgImpl.sendInstantMessage(to, msg);
 
-        ServiceReference uiServiceRef = bc.getServiceReference(UIService.class.getName());
-        UIService uiService = (UIService)bc.getService(uiServiceRef);
-        Chat chat = uiService.getChat(metaContact.getDefaultContact());
-        if (null != chat)
-        {
-            chat.setChatVisible(true);
-        }
+        message = OpenmeetingsPluginActivator.resourceService
+            .getI18NString("plugin.openmeetings.ENTER_MESSAGE") + "\n" + invitationUrl; 
+        chat.addMessage(null, System.currentTimeMillis(), Chat.SYSTEM_MESSAGE,
+            message, "plain/text");
+        
     }
 
     /*
