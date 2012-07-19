@@ -7,6 +7,8 @@ import net.java.sip.communicator.util.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import java.util.Locale;
+
 public class OpenmeetingsConfigManager
 {
     Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
@@ -79,7 +81,51 @@ public class OpenmeetingsConfigManager
         if (invitationHash == null)
             return null;
 
-        return createInvitationUrl(invitationHash);
+        String invitationUrl = createInvitationUrl(invitationHash);
+        return addLanguageTag(invitationUrl);
+    }
+
+    private String addLanguageTag(String invitationUrl) {
+        String language = Locale.getDefault().getLanguage();
+        int id = 1;
+        if ("ar".equals(language)) {
+            id = 14;
+        } else if ("bg".equals(language)) {
+            id = 30;
+        } else if ("cs".equals(language)) {
+            id = 22;
+        } else if ("de".equals(language)) {
+            id = 2;
+        } else if ("el".equals(language)) {
+            id = 26;
+        } else if ("es".equals(language)) {
+            id = 8;
+        } else if ("fr".equals(language)) {
+            id = 4;
+        } else if ("id".equals(language)) {
+            id = 16;
+        } else if ("it".equals(language)) {
+            id = 5;
+        } else if ("nl".equals(language)) {
+            id = 27;
+        } else if ("pl".equals(language)) {
+            id = 25;
+        } else if ("pt".equals(language)) {
+            id = 6;
+        } else if ("ro".equals(language)) {
+            id = 1;
+        } else if ("ru".equals(language)) {
+            id = 9;
+        } else if ("si".equals(language)) {
+            id = 0;
+        } else if ("sq".equals(language)) {
+            id = 1;
+        } else if ("tr".equals(language)) {
+            id = 18;
+        } else if ("zh".equals(language)) {
+            id = 11;
+        }
+        return invitationUrl + "&language=" + id;
     }
 
     public static ConfigurationService getConfigurationService()
