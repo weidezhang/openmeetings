@@ -259,9 +259,12 @@ public class OpenmeetingsPluginSoapClient
     
     public void setProxy(String proxy) throws Exception
     {
+        logger.info("SOAP proxy [" + proxy + "]");
         if ((proxy != null) && (proxy.length() > 0))
         {
             URI u = new URI(proxy);
+            logger.info("SOAP proxy host " + u.getHost());
+            logger.info("SOAP proxy port " + u.getPort());
             System.getProperties().put("http.proxyHost", u.getHost());
             System.getProperties().put("http.proxyPort", u.getPort());
         }

@@ -41,8 +41,6 @@ public class OpenmeetingsConfigPanel
 
     private String password;
 
-    private String proxy;
-
     public OpenmeetingsConfigPanel()
         throws Exception
     {
@@ -180,16 +178,6 @@ public class OpenmeetingsConfigPanel
         return password;
     }
 
-    public void setProxy(String proxy)
-    {
-        this.proxy = proxy;
-    }
-
-    public String getProxy()
-    {
-        return proxy;
-    }
-
     private class ButtonOkListener
         implements ActionListener
     {
@@ -226,7 +214,7 @@ public class OpenmeetingsConfigPanel
             cfg.setProtoPrefix(protoPrefix);
             cfg.setOmUriContext(uriContext);
             cfg.setLogin(teLogin.getText());
-            cfg.setProxy(proxy);
+            cfg.setProxy(teProxy.getText());
             try
             {
                 cfg.setPassword(new String(tePassword.getPassword()));
