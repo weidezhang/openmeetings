@@ -90,7 +90,7 @@ class openmeetings_gateway {
 				. "&userpass=" . urlencode($this->params->get('password'))
 				);
 
-			return -1 == $this->checkResult($restService, $result);
+			return -1 != $this->checkResult($restService, $result);
 		}
 		return false;
 	}
@@ -98,11 +98,9 @@ class openmeetings_gateway {
 	function getFlvRecordingByExternalUserId($user_id) {
 		$restService = $this->getRestService();
 		
-		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalUserId?" .
+		$result = $restService->call($this->getUrl()."RoomService/getFlvRecordingByExternalUserId?" .
 				"SID=".$this->session_id .
-				"&externalUserId=" . $user_id;
-		
-		$result = $restService->call($url,"");
+				"&externalUserId=" . $user_id);
 			
 		return $this->checkResult($restService, $result);
 	}
@@ -110,12 +108,10 @@ class openmeetings_gateway {
 	function getFlvRecordingByExternalRoomTypeAndCreator($insertedBy) {
 		$restService = $this->getRestService();
 		
-		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalRoomTypeAndCreator?" .
+		$result = $restService->call($this->getUrl()."RoomService/getFlvRecordingByExternalRoomTypeAndCreator?" .
 				"SID=".$this->session_id .
 				"&insertedBy=" . urlencode($insertedBy) .
-				"&externalRoomType=" . urlencode($this->params->get('moduleKey'));
-		
-		$result = $restService->call($url,"");
+				"&externalRoomType=" . urlencode($this->params->get('moduleKey')));
 			
 		return $this->checkResult($restService, $result);
 	}
@@ -123,11 +119,9 @@ class openmeetings_gateway {
 	function getFlvRecordingByExternalRoomType() {
 		$restService = $this->getRestService();
 		
-		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalRoomType?" .
+		$result = $restService->call($this->getUrl()."RoomService/getFlvRecordingByExternalRoomType?" .
 				"SID=".$this->session_id .
-				"&externalRoomType=".urlencode($this->params->get('moduleKey'));
-		
-		$result = $restService->call($url,"");
+				"&externalRoomType=".urlencode($this->params->get('moduleKey')));
 			
 		return $this->checkResult($restService, $result);
 	}
@@ -135,11 +129,9 @@ class openmeetings_gateway {
 	function deleteFlvRecording($flvRecordingId) {
 		$restService = $this->getRestService();
 		
-		$url = $this->getUrl()."RoomService/deleteFlvRecording?" .
+		$result = $restService->call($this->getUrl()."RoomService/deleteFlvRecording?" .
 				"SID=" . $this->session_id .
-				"&flvRecordingId=" . $flvRecordingId;
-		
-		$result = $restService->call($url,"");
+				"&flvRecordingId=" . $flvRecordingId);
 			
 		return $this->checkResult($restService, $result);
 	}
@@ -153,8 +145,7 @@ class openmeetings_gateway {
 				'&lastname='.urlencode($openmeetings->lastname) .
 				'&externalUserId='.$openmeetings->externalUserId .
 				'&externalUserType='.urlencode($this->params->get('moduleKey')) .
-				'&recording_id='.$openmeetings->recording_id,
-				'return'
+				'&recording_id='.$openmeetings->recording_id
 		);
 		
 		return $this->checkResult($restService, $result);
@@ -163,25 +154,22 @@ class openmeetings_gateway {
 	function openmeetings_createroomwithmod($openmeetings) {
 		$restService = $this->getRestService();
 		
-		$url = $this->getUrl()."RoomService/addRoomWithModerationAndRecordingFlags?" .
+		$result = $restService->call($this->getUrl()."RoomService/addRoomWithModerationAndRecordingFlags?" .
 			"SID=" . $this->session_id .
-			"&name" . urlencode($openmeetings->name) .
-			"&roomtypes_id" . $openmeetings->roomtypes_id .
-			"&comment" . $openmeetings->comment .
-			"&numberOfPartizipants" . $openmeetings->numberOfPartizipants .
-			"&ispublic" . $openmeetings->ispublic .
-			"&appointment" . $openmeetings->appointment .
-			"&isDemoRoom" . $openmeetings->isDemoRoom .
-			"&demoTime" . $openmeetings->demoTime .
-			"&isModeratedRoom" . $openmeetings->isModeratedRoom .
-			"&externalRoomType" . urlencode($this->params->get('moduleKey')) .
-			"&allowUserQuestions" . "true" .
-			"&isAudioOnly" . "false" .
-			"&waitForRecording" . "true" .
-			"&allowRecording" . "true";
-		
-		
-		$result = $restService->call($url,"");
+			"&name=" . urlencode($openmeetings->name) .
+			"&roomtypes_id=" . $openmeetings->roomtypes_id .
+			"&comment=" . urlencode($openmeetings->comment) .
+			"&numberOfPartizipants=" . urlencode($openmeetings->numberOfPartizipants) .
+			"&ispublic=" . $openmeetings->ispublic .
+			"&appointment=" . $openmeetings->appointment .
+			"&isDemoRoom=" . $openmeetings->isDemoRoom .
+			"&demoTime=" . $openmeetings->demoTime .
+			"&isModeratedRoom=" . $openmeetings->isModeratedRoom .
+			"&externalRoomType=" . urlencode($this->params->get('moduleKey')) .
+			"&allowUserQuestions=" . "true" .
+			"&isAudioOnly=" . "false" .
+			"&waitForRecording=" . "true" .
+			"&allowRecording=" . "true");
 			
 		return $this->checkResult($restService, $result);
 	}
