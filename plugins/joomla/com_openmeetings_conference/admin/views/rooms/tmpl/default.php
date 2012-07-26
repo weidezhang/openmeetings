@@ -70,9 +70,6 @@ function ms2tm($ms)
 				<td align="center"><a href="<?php echo $link; ?>"><?php echo $row->name; ?>
 				</a>
 				</td>
-				<!--     <td align="center"><?
-						echo ms2tm($row->timeused)." / ".($row->credits ? ms2tm($row->credits * 60000).($row->creditsreset?" ".JText::_( 'each' )." ".$row->creditsreset." ".JText::_( 'days' ):"") : JText::_( 'Unlimited' ));
-						?></td>-->
 				<td><a target="_blank" href="<?php echo $participantlink; ?>"><?php echo $participantlink; ?>
 				</a></td>
 			</tr>

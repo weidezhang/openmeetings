@@ -21,15 +21,12 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#5a5152" text="#333333" link="#FF3366" LEFTMARGIN="0"
 	TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
 	<?
 	require_once(JPATH_ADMINISTRATOR."/components/com_openmeetings_conference/om_gateway/openmeetings_gateway.php");
-
-	$this->params = &JComponentHelper::getParams( 'com_openmeetings_conference' );
-	$url_server = $this->params->get( 'url' );
 
 	$user = JFactory::getUser();
 
@@ -42,7 +39,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 		}
 
 		$showAudioVideoTest=1;
-		$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($user->username,$user->name,'', picture, $user->email,$user->id, $this->room_id, $becomemoderator, $showAudioVideoTest);
+		$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($user->username,$user->name,'', '', $user->email,$user->id, $this->room_id, $becomemoderator, $showAudioVideoTest);
 
 		$language= $user->getParam('language', 'en-GB');
 
@@ -113,25 +110,18 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 		// Get a database object
 		$db =& JFactory::getDBO();
 
-		$query = ' SELECT logo FROM #__om_rooms '.
-                '  WHERE room_id = '.$this->room_id;
-
-		$db->setQuery($query);
-		$logo = $db->loadResult();
-
 		if (!empty($roomhash)) {
 			//maindebug.swf8.swf
-			$swfurl = $url_server .
-					"/openmeetings/main.swf8.swf?" .
+			$swfurl = $openmeetings_gateway->getOMUrl() .
+					"/?" .
 					"scopeRoomId=" . $this->room_id .
 					"&secureHash=" . $roomhash . 
 					"&lzproxied=solo" . 
-					"&language=" . $om_laguage_id . 
-					"&logo=" . JURI::root() . "images/logos/" . $logo;
+					"&language=" . $om_laguage_id; 
 			//echo $swfurl;
 			//exit();
 			$mainframe = JFactory::getApplication();
 			$mainframe->redirect($swfurl);
 		}
 	}
-	?>
+?>

@@ -22,8 +22,6 @@ CREATE TABLE `#__om_rooms` (
   `is_public` tinyint(3) NOT NULL default '0',
   `appointment` tinyint(3) NOT NULL default '0',
   `is_moderated_room` tinyint(3) NOT NULL default '1',
-  `allow_private_chat` tinyint(3) NOT NULL default '1',
-  `hide_user_list_for_non_moderators` tinyint(3) NOT NULL default '1',
   
   `room_validity` int(10) NOT NULL default '0',
   `date_type` date NOT NULL default 0,
@@ -31,8 +29,6 @@ CREATE TABLE `#__om_rooms` (
   `duration` int(10) NOT NULL default '0',
   `repeat_type` tinyint(3) NOT NULL default '0',
   `weekday_type` int(10) NOT NULL default '0',
-  `logo` varchar(100) NOT NULL,
-  
   
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Openmeetings: Conference Rooms' AUTO_INCREMENT=5 ;
@@ -44,12 +40,3 @@ CREATE TABLE `#__om_rooms_users` (
     
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Openmeetings: Conference Rooms User' AUTO_INCREMENT=5 ;
-
-
-CREATE TABLE `#__om_rooms_flexigroups` (
-  `id` int(10) unsigned NOT NULL auto_increment,  
-  `om_room_id` int(10) NOT NULL,
-  `flexigroup_id` int(10) NOT NULL,
-    
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Openmeetings: Conference Rooms Flexigroups' AUTO_INCREMENT=5 ;

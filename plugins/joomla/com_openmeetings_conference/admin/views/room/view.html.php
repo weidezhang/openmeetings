@@ -33,7 +33,6 @@ class RoomsViewRoom extends JView
 		//get the hello
 		$croom        =& $this->get('Data');
 		$isNew        = ($croom->id < 1);
-		$preselectLogo = '';
 
 		$text = $isNew ? JText::_( 'New' ) : JText::_( 'Edit' );
 		JToolBarHelper::title(   JText::_( 'Room' ).': <small><small>[ ' . $text.' ]</small></small>' );
@@ -50,24 +49,15 @@ class RoomsViewRoom extends JView
 			$this->croom->room_id = 0;
 			$this->croom->name = '';
 			$this->croom->comment = '';
-			$this->croom->logo = '';
 		}
 
 
 		$db	= JFactory::getDBO();
 		$user = JFactory::getUser();
 
-		// get available  user groups
-		$gids 	= $user->getAuthorisedGroups();
-		$gids 	= implode( ',', $gids );
-
 		// get list of usernames
 		$recipients = array( JHTML::_('select.option',  '0', '- '. JText::_( 'Select User' ) .' -' ) );
-		$query = $query = 'SELECT u.id AS value, u.username AS text FROM #__users u'
-		. ' INNER JOIN #__user_usergroup_map uugm ON (u.id = uugm.user_id)'
-		. ' WHERE uugm.group_id IN ( '.$gids.' )'
-		. ' ORDER BY u.name'
-		;
+		$query = $query = 'SELECT u.id AS value, u.username AS text FROM #__users u ORDER BY u.name';
 		$db->setQuery( $query );
 		$recipients = array_merge( $recipients, $db->loadObjectList() );
 
@@ -85,27 +75,7 @@ class RoomsViewRoom extends JView
 		$ownerlist = JHTML::_('select.genericlist', $recipients, 'owner[]', 'class="inputbox" size="10"  multiple', 'value', 'text', $preselected);
 		$this->assignRef('owner', $ownerlist);
 
-
-		$groupsFlexi = array( JHTML::_('select.option',  '0', '- '. JText::_( 'Select FlexiGroup' ) .' -' ) );
-		$preselectedFlexiGroups = array();
-
-		if ($croom->logo != "") {
-			$query = ' SELECT logo FROM #__om_rooms '.
-                '  WHERE id = '.$croom->id.'';
-			$db->setQuery( $query );
-			$preselectLogo = $db->loadResult();
-		}
-		$path = 'images/logos/';
-		$logolist = JHTML::_( 'list.images', 'logo', $preselectLogo , null, $path );
-
-		$this->assignRef('logo', $logolist);
-
 		//$ownerlist = JHTML::_('select.genericlist', $recipients, 'owner', 'class="inputbox" name="owner" size="10"  multiple', 'value', 'text', $croom->owner);
-		$flexiGroupslist = JHTML::_('select.genericlist', $groupsFlexi, 'flexigroups[]', 'class="inputbox" size="10"  multiple', 'value', 'text', $preselectedFlexiGroups);
-
-		$this->assignRef('flexigroup', $flexiGroupslist);
-
-
 		parent::display($tpl);
 	}
 }

@@ -70,16 +70,6 @@ class TableRoom extends JTable
 	var $is_moderated_room = null;
 
 	/**
-	 * @var int
-	 */
-	var $allow_private_chat = null;
-
-	/**
-	 * @var int
-	 */
-	var $hide_user_list_for_non_moderators = null;
-
-	/**
 	 *
 	 * @var int
 	 */
@@ -125,12 +115,6 @@ class TableRoom extends JTable
 	 * @var int
 	 */
 	var $weekday_type = null;
-
-	/**
-	 * @var string
-	 */
-	var $logo = null;
-
 
 
 	/**

@@ -54,24 +54,14 @@ class RoomsControllerRec extends JController
 	 * constructor (registers additional tasks to methods)
 	 * @return void
 	 */
-	function __construct()
-	{
+	function __construct() {
 		parent::__construct();
-
-		// Register Extra tasks
-		//$this->registerTask('add' ,  'edit'); //'add'  ,     'edit' , 'rec'
-		// $this->registerTask('rec' ,  'rec');
 	}
 
 
 	function rec(){
-			
-
 		JRequest::setVar( 'view', 'rec' );
 		parent::display();
-		//print_r($om_recordings_return->);
-
-
 	}
 
 

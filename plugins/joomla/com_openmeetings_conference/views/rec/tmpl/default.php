@@ -22,7 +22,7 @@ defined('_JEXEC') or die('Restricted access');
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#FFFFFF" text="#333333" link="#FF3366" LEFTMARGIN="0"
 	TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">

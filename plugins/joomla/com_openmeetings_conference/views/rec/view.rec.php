@@ -26,49 +26,19 @@ require_once("administrator/components/com_openmeetings_conference/om_gateway/op
 
 jimport( 'joomla.application.component.view' );
 
-class OmViewRec extends JView
-{
-
-
+class OmViewRec extends JView {
 	/**
 	 * view display method
 	 * @return void
 	 **/
-	function display($tpl = null)
-	{
-
+	function display($tpl = null) {
 		$user =& JFactory::getUser();
-
-		//print_r($user);
-
-		//$auth =& JFactory::getACL();
-
-		//$auth->addACL( 'com_openmeetings_conference', 'add', 'administrator' , 'super administrator' );
-
-		//print_r($auth->get_group_name($user->get('gid')));
-
-
-		/*
-		 JToolBarHelper::title( JText::_( 'Rooms Manager' ), 'generic.png' );
-		 if ($auth->get_group_name($user->get('gid')) != Manager) {
-		 JToolBarHelper::deleteList();
-		 }
-		 JToolBarHelper::editListX();
-		 if ($auth->get_group_name($user->get('gid')) != Manager) {
-			JToolBarHelper::addNewX();
-			}
-			*/
 
 		//Check user rights
 		$acl	=& JFactory::getACL();
 		$user =& JFactory::getUser();
 
 		$userGroup = $acl->get_group_name($user->get('gid'));
-
-		//echo "USER-ID  :: ".$user->id."<br/>";
-		//echo "USERGROUP:: ".$userGroup."<br/>";
-
-		//print_r($user);
 
 		$om_recordings_return = array();
 
@@ -80,15 +50,9 @@ class OmViewRec extends JView
 			$om_recordings_return=$om_recordings->getFlvRecordingByExternalRoomType();
 		}
 
-
-		//print_r($om_recordings_return);
-		// Get data from the model
-		//$items =& $this->get( 'Data');
-
 		$this->assignRef( 'om_recordings_return', $om_recordings_return );
 
 		parent::display($tpl);
 	}
-
 }
 ?>

@@ -91,9 +91,6 @@ class RoomsModelRoom extends JModel
 		$row =& $this->getTable();
 		$data = JRequest::get( 'post' );
 
-		if (array_key_exists("flexigroups", $data)) {
-			$flexigroups = $data["flexigroups"];
-		}
 		$owners = $data["owner"];
 		$data["owner"] = -1;
 
@@ -102,7 +99,7 @@ class RoomsModelRoom extends JModel
 			$data["repeat_type"] = 0;
 		}
 		//Update room
-		if(!empty($data[room_id])){
+		if(!empty($data['room_id'])){
 			$omRoomManagament = 	new openmeetingsRoomManagament();
 			$room_id = $omRoomManagament-> updateRoomWithModeration($data);
 
@@ -116,7 +113,7 @@ class RoomsModelRoom extends JModel
 			//create a Meetingroom in Openmeetings
 			$omRoomManagament = 	new openmeetingsRoomManagament();
 			$room_id = $omRoomManagament-> createRoomWithModeration($data);
-			$data[room_id] = $room_id;
+			$data['room_id'] = $room_id;
 
 			//Make sure the Openmeetings Room was succsefully created
 			if($room_id < 1){
@@ -142,7 +139,7 @@ class RoomsModelRoom extends JModel
 			$this->setError($this->_db->getErrorMsg());
 			return false;
 		}
-		if (!is_int($data["number_of_partizipants"])) {
+		if (!is_numeric($data["number_of_partizipants"])) {
 			//TODO investigate!!
 			//weird behavior number_of_partizipants added as 0 (not NULL)
 			$query = ' UPDATE #__om_rooms SET number_of_partizipants = NULL WHERE room_id = ' . $room_id;
@@ -168,24 +165,6 @@ class RoomsModelRoom extends JModel
 
 		}
 
-		//FlexiGroups
-
-		$query = ' DELETE FROM #__om_rooms_flexigroups ' .
-			' WHERE om_room_id = '. $row->id . '';
-		$this->_db->setQuery( $query );
-		$this->_db->query();
-
-		foreach ($flexigroups as $key => $flexigroup_id) {
-			//print_r("<BR/>".$owner_user_id);
-
-			$query = ' INSERT INTO #__om_rooms_flexigroups '.
-                '  (om_room_id,flexigroup_id) ' .
-                ' VALUES ' .
-                ' ('. $row->id .','. $flexigroup_id .') ';
-			$this->_db->setQuery( $query );
-			$this->_db->query();
-
-		}
 		return true;
 	}
 

@@ -27,11 +27,15 @@ class openmeetings_gateway {
 	var $session_id = "";
 	var $params = "";
 	
-	function getUrl() {
+	function getOMUrl() {
 		if (!$this->params) {
-			$this->params = &JComponentHelper::getParams('com_openmeetings_conference');
+			$this->params = &JComponentHelper::getParams( 'com_openmeetings_conference' );
 		}
-		return $this->params->get('url') . "/" . $this->params->get('context') . "/services/";
+		return $this->params->get('url') . '/' . $this->params->get('context');
+	}
+
+	function getUrl() {
+		return $this->getOMUrl() . "/services/";
 	}
 
 	function var_to_str($in) {

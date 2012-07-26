@@ -36,9 +36,6 @@ class openmeetingsRoomManagament {
 			$openmeetings->isDemoRoom = 0;
 			$openmeetings->demoTime = "";
 			$openmeetings->isModeratedRoom = $data['is_moderated_room'];
-			$openmeetings->allow_private_chat = $data['allow_private_chat'];
-			$openmeetings->hide_user_list_for_non_moderators = $data['hide_user_list_for_non_moderators'];
-			$openmeetings->is_translated = $data['translatedroom'];
 
 			$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($openmeetings);
 
@@ -61,9 +58,6 @@ class openmeetingsRoomManagament {
 			$openmeetings->isDemoRoom = 0;
 			$openmeetings->demoTime = "";
 			$openmeetings->isModeratedRoom = $data['is_moderated_room'];
-			$openmeetings->allow_private_chat = $data['allow_private_chat'];
-			$openmeetings->hide_user_list_for_non_moderators = $data['hide_user_list_for_non_moderators'];
-			$openmeetings->is_translated = $data['translatedroom'];
 
 			$roomid = $openmeetings_gateway->updateRoomWithModeration($openmeetings);
 			return $roomid;

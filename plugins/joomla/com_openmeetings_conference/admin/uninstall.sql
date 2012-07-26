@@ -12,5 +12,3 @@
 DROP TABLE IF EXISTS `#__om_rooms`;
 
 DROP TABLE IF EXISTS `#__om_rooms_users`;
-
-DROP TABLE IF EXISTS `#__om_rooms_flexigroups`;

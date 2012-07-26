@@ -77,15 +77,6 @@ defined('_JEXEC') or die('Restricted access'); ?>
 				</tr>
 
 				<tr>
-					<td align="right" class="key"><?php echo JText::_( 'Select Logo:' ); ?>
-					</td>
-					<td><?php echo $this->logo ?>
-					</td>
-					<td><?php echo JText::_( 'Logo from folder logos which will be appear in this room.'); ?>
-					</td>
-				</tr>
-
-				<tr>
 					<td align="right" class="key"><?php echo JText::_( 'Number of partizipants' ); ?>:</td>
 					<td><input class="text_area" type="text"
 						name="number_of_partizipants" id="number_of_partizipants" size="8"
@@ -141,57 +132,6 @@ defined('_JEXEC') or die('Restricted access'); ?>
 				</tr>
 
 				<tr>
-					<td align="right" class="key"><?php echo JText::_( 'Allow private Chat:' ); ?>
-					</td>
-					<td><select name="allow_private_chat" id="allow_private_chat">
-							<option value="0"
-							<?=(!$this->croom->allow_private_chat?"selected":"")?>>
-								<?php echo JText::_( 'No' ); ?>
-							</option>
-							<option value="1"
-							<?=($this->croom->allow_private_chat?"selected":"")?>>
-								<?php echo JText::_( 'Yes' ); ?>
-							</option>
-					</select></td>
-					<td><?php echo JText::_( 'Users can chat between each other without using the main chat / in private Modus'); ?>
-					</td>
-				</tr>
-
-				<tr>
-					<td align="right" class="key"><?php echo JText::_( 'Hide User List for Non Moderators:' ); ?>
-					</td>
-					<td><select name="hide_user_list_for_non_moderators"
-						id="hide_user_list_for_non_moderators">
-							<option value="0"
-							<?=(!$this->croom->hide_user_list_for_non_moderators?"selected":"")?>>
-								<?php echo JText::_( 'No' ); ?>
-							</option>
-							<option value="1"
-							<?=($this->croom->hide_user_list_for_non_moderators?"selected":"")?>>
-								<?php echo JText::_( 'Yes' ); ?>
-							</option>
-					</select></td>
-					<td><?php echo JText::_( 'Only Moderators can see and use the sidebar'); ?>
-					</td>
-				</tr>
-
-				<tr>
-					<td align="right" class="key"><?php echo JText::_( 'Translated Room:' ); ?>
-					</td>
-					<td><select name="translatedroom" id="translatedroom">
-							<option value="0"
-							<?=(!$this->croom->translatedroom?"selected":"")?>>
-								<?php echo JText::_( 'No' ); ?>
-							</option>
-							<option value="1"
-							<?=($this->croom->translatedroom?"selected":"")?>>
-								<?php echo JText::_( 'Yes' ); ?>
-							</option>
-					</select></td>
-					<td><?php echo JText::_( 'Provide translation in the room'); ?></td>
-				</tr>
-
-				<tr>
 					<td align="right" class="key"><?php echo JText::_( 'Select User:' ); ?>
 					</td>
 					<td><?php echo $this->owner ?>
@@ -201,34 +141,15 @@ defined('_JEXEC') or die('Restricted access'); ?>
 				</tr>
 
 				<tr>
-					<td align="right" class="key"><?php echo JText::_( 'Select FlexiGroup:' ); ?>
-					</td>
-					<td><?php echo $this->flexigroup ?>
-					</td>
-					<td><?php echo JText::_( 'All members of the Flexigroup will be able to use the room.'); ?>
-					</td>
-				</tr>
-
-				<tr>
 					<td align="right" class="key"><?php echo JText::_( 'Room-Validity:' ); ?>
 					</td>
-					<td><select name="room_validity" id="room_validity">
-
-							<!--
-            <option value="0" <?=(!$this->croom->room_validity?"selected":"")?> onclick="javascript:document.adminForm.date_type.disabled=true, document.adminForm.time_type.disabled=true, document.adminForm.duration.disabled=true"><?php echo JText::_( 'Static' ); ?></option>
-            <option value="1" <?=($this->croom->room_validity?"selected":"")?> onclick="javascript:document.adminForm.date_type.disabled=false, document.adminForm.time_type.disabled=false, document.adminForm.duration.disabled=false"><?php echo JText::_( 'Dynamic' ); ?></option>
-           -->
-							<option value="0"
-							<?=(!$this->croom->room_validity?"selected":"")?>
-								onclick="enableTimeRepeatButtons()">
+					<td><select name="room_validity" id="room_validity" onchange="enableTimeRepeatButtons()">
+							<option value="0" <?=(!$this->croom->room_validity?"selected":"")?>>
 								<?php echo JText::_( 'Static' ); ?>
 							</option>
-							<option value="1"
-							<?=($this->croom->room_validity?"selected":"")?>
-								onclick="enableTimeRepeatButtons()">
+							<option value="1" <?=($this->croom->room_validity?"selected":"")?>>
 								<?php echo JText::_( 'Dynamic' ); ?>
 							</option>
-
 					</select></td>
 					<td><?php echo JText::_( 'Static rooms are always visible on the front end. Dynamic rooms are visible only in a time period.'); ?>
 					</td>
@@ -423,20 +344,6 @@ defined('_JEXEC') or die('Restricted access'); ?>
 		 if (document.adminForm.room_validity.value == 1) {
 		 	bool = false;
 		 }
-		 
-		 if (document.adminForm.userGroup.value == "Manager") {
-		 	
-		 	document.adminForm.name.disabled=true;
-		 	document.adminForm.roomtype_id.disabled=true;
-		 	document.adminForm.comment.disabled=true;
-		 	document.adminForm.number_of_partizipants.disabled=true;
-		 	document.adminForm.is_public.disabled=true;
-		 	document.adminForm.appointment.disabled=true;
-		 	document.adminForm.is_moderated_room.disabled=true;
-		 	document.adminForm.room_validity.disabled=true;
-		 	bool = true;
-		 }
-		 
 		 document.adminForm.date_type.disabled=bool;
 		 document.adminForm.time_type.disabled=bool; 
 		 document.adminForm.duration.disabled=bool;
