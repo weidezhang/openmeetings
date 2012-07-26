@@ -58,7 +58,7 @@ class openmeetings_gateway {
 	}
 	
 	function checkResult($restService, $result) {
-		if ($restService->fault) {
+		if ($restService->fault()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
 		} else {
 			$err = $restService->getError();
@@ -77,11 +77,11 @@ class openmeetings_gateway {
 	 * TODO: Get Error Service and show detailed Error Message
 	 */
 	function openmeetings_loginuser() {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 
 		$response = $restService->call($this->getUrl()."UserService/getSession","session_id");
 
-		if (-1 != checkResult($restService, $response)) {
+		if (-1 != $this->checkResult($restService, $response)) {
 			$this->session_id = $response;
 
 			$result = $restService->call($this->getUrl()."UserService/loginUser?"
@@ -90,13 +90,13 @@ class openmeetings_gateway {
 				. "&userpass=" . urlencode($this->params->get('password'))
 				);
 
-			return -1 == checkResult($restService, $result);
+			return -1 == $this->checkResult($restService, $result);
 		}
 		return false;
 	}
 
 	function getFlvRecordingByExternalUserId($user_id) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalUserId?" .
 				"SID=".$this->session_id .
@@ -104,11 +104,11 @@ class openmeetings_gateway {
 		
 		$result = $restService->call($url,"");
 			
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function getFlvRecordingByExternalRoomTypeAndCreator($insertedBy) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalRoomTypeAndCreator?" .
 				"SID=".$this->session_id .
@@ -117,11 +117,11 @@ class openmeetings_gateway {
 		
 		$result = $restService->call($url,"");
 			
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function getFlvRecordingByExternalRoomType() {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$url = $this->getUrl()."RoomService/getFlvRecordingByExternalRoomType?" .
 				"SID=".$this->session_id .
@@ -129,11 +129,11 @@ class openmeetings_gateway {
 		
 		$result = $restService->call($url,"");
 			
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function deleteFlvRecording($flvRecordingId) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$url = $this->getUrl()."RoomService/deleteFlvRecording?" .
 				"SID=" . $this->session_id .
@@ -141,11 +141,11 @@ class openmeetings_gateway {
 		
 		$result = $restService->call($url,"");
 			
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function setUserObjectAndGenerateRecordingHashByURL($openmeetings) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		$result = $restService->call($this->getUrl().'UserService/setUserObjectAndGenerateRecordingHashByURL?'.
 				'SID='.$this->session_id .
 				'&username='.urlencode($openmeetings->username) .
@@ -157,11 +157,11 @@ class openmeetings_gateway {
 				'return'
 		);
 		
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function openmeetings_createroomwithmod($openmeetings) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$url = $this->getUrl()."RoomService/addRoomWithModerationAndRecordingFlags?" .
 			"SID=" . $this->session_id .
@@ -183,13 +183,13 @@ class openmeetings_gateway {
 		
 		$result = $restService->call($url,"");
 			
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function openmeetings_setUserObjectAndGenerateRoomHash($username, $firstname, $lastname,
 		$profilePictureUrl, $email, $externalUserId, $room_id, $becomeModeratorAsInt,
 		$showAudioVideoTestAsInt) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$result = $restService->call($this->getUrl()."UserService/setUserObjectAndGenerateRoomHash?" .
 				"SID=".$this->session_id.
@@ -204,21 +204,21 @@ class openmeetings_gateway {
 				"&becomeModeratorAsInt=".$becomeModeratorAsInt.
 				"&showAudioVideoTestAsInt=".$showAudioVideoTestAsInt);
 		
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function deleteRoom($openmeetings) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 		
 		$result = $restService->call($this->getUrl()."RoomService/deleteRoom?" .
 				"SID=".$this->session_id.
 				"&rooms_id=".$openmeetings->room_id);
 		
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 
 	function updateRoomWithModeration($openmeetings) {
-		$restService = getRestService();
+		$restService = $this->getRestService();
 			
 		$result = $restService->call($this->getUrl()."RoomService/updateRoomWithModeration?" .
 				"SID=".$this->session_id .
@@ -233,7 +233,7 @@ class openmeetings_gateway {
 				"&demoTime=" . $openmeetings->demoTime .
 				"&isModeratedRoom=" . $openmeetings->isModeratedRoom);
 		
-		return checkResult($restService, $result);
+		return $this->checkResult($restService, $result);
 	}
 }
 ?>
