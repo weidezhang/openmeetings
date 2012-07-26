@@ -217,17 +217,17 @@ class openmeetings_gateway {
 		$restService = getRestService();
 			
 		$result = $restService->call($this->getUrl()."RoomService/updateRoomWithModeration?" .
-				"SID=".$this->session_id.
-				"&room_id=".$openmeetings->room_id.
-				"&name=".urlencode($openmeetings->name).
-				"&roomtypes_id=".urlencode($openmeetings->roomtypes_id).
-				"&comment=".urlencode($openmeetings->comment).
-				"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
-				"&ispublic=". $openmeetings->ispublic .
-				"&appointment=". $openmeetings->appointment .
-				"&isDemoRoom=". $openmeetings->isDemoRoom .
-				"&demoTime=". $openmeetings->demoTime .
-				"&isModeratedRoom=".$openmeetings->isModeratedRoom;
+				"SID=".$this->session_id .
+				"&room_id=" . $openmeetings->room_id .
+				"&name=" . urlencode($openmeetings->name) .
+				"&roomtypes_id=" . urlencode($openmeetings->roomtypes_id) .
+				"&comment=" . urlencode($openmeetings->comment) .
+				"&numberOfPartizipants=" . $openmeetings->numberOfPartizipants .
+				"&ispublic=" . $openmeetings->ispublic .
+				"&appointment=" . $openmeetings->appointment .
+				"&isDemoRoom=" . $openmeetings->isDemoRoom .
+				"&demoTime=" . $openmeetings->demoTime .
+				"&isModeratedRoom=" . $openmeetings->isModeratedRoom);
 		
 		return checkResult($restService, $result);
 	}

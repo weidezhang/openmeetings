@@ -14,7 +14,7 @@
  -->
 <!DOCTYPE install SYSTEM "http://www.joomla.org/xml/dtd/1.5/component-install.dtd">
 <install type="component" version="1.5.0">
-	<name>Openmeetings Conference</name>
+	<name>openmeetings_conference</name>
 	<creationDate>2012-07</creationDate>
 	<author>Maxim Solodovnik</author>
 	<authorEmail>solomax@apache.org</authorEmail>
