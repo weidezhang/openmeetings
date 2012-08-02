@@ -20,7 +20,7 @@
 	>
 
 	<property name="dist.dir" value="dist" />
-	<property name="project.version" value="2.5" />
+	<property name="project.version" value="1.0" />
 	<property name="project.distname" value="openmeetings-joomla-plugin" />
 	<property name="plugin.com.name" value="com_openmeetings_conference" />
 	<property name="plugin.mod.name" value="mod_openmeetings_conference" />
