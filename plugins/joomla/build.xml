@@ -38,6 +38,13 @@
 				<exclude name="*${plugin.mod.name}/**"/>
 			</zipfileset>
 		</zip>
+		<tar longfile="gnu" compression="gzip" destfile="${com.archive.file.name}.tar.gz">
+			<tarfileset dir="${basedir}">
+				<include name="**" />
+				<exclude name="*dist/**" />
+				<exclude name="*${plugin.mod.name}/**"/>
+			</tarfileset>
+		</tar>
 		<zip destfile="${mod.archive.file.name}.zip">
 			<zipfileset dir="${basedir}">
 				<include name="**" />
@@ -45,11 +52,23 @@
 				<exclude name="*${plugin.com.name}/**"/>
 			</zipfileset>
 		</zip>
+		<tar longfile="gnu" compression="gzip" destfile="${mod.archive.file.name}.tar.gz">
+			<tarfileset dir="${basedir}">
+				<include name="**" />
+				<exclude name="*dist/**" />
+				<exclude name="*${plugin.com.name}/**"/>
+			</tarfileset>
+		</tar>
 		<zip destfile="${archive.file.name}-src.zip">
 			<zipfileset dir="${basedir}">
 				<exclude name="*dist/**" />
 			</zipfileset>
 		</zip>
+		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
+			<tarfileset dir="${basedir}">
+				<exclude name="*dist/**" />
+			</tarfileset>
+		</tar>
 	</target>
 
 	<target name="clean">
