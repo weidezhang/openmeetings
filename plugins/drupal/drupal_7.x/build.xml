@@ -24,8 +24,8 @@
 	<target name="dist-bin" depends="clean">
 		<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-incubating-${project.version}" />
 
-		<mkdir dir="${dist.dir}/${plugin.name}"/>
-		<copy todir="${dist.dir}/${plugin.name}">
+		<mkdir dir="${dist.dir}"/>
+		<copy todir="${dist.dir}">
 			<fileset dir="${basedir}">
 				<exclude name=".*"/>
 				<exclude name="dist/**"/>
@@ -33,7 +33,7 @@
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip">
-			<zipfileset dir="${dist.dir}/${plugin.name}">
+			<zipfileset dir="${dist.dir}/sites">
 				<include name="**" />
 			</zipfileset>
 		</zip>
@@ -43,7 +43,7 @@
 			</zipfileset>
 		</zip>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
-			<tarfileset dir="${dist.dir}/${plugin.name}">
+			<tarfileset dir="${dist.dir}/sites">
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
