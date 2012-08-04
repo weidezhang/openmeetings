@@ -1,0 +1,247 @@
+<?php
+
+/**
+ * @file
+ * OpenMeetings Integration Module : Installation
+ */
+
+/**
+ * Implementation of hook_install()
+ */
+function openmeetings_install() { 
+  
+  	if (!db_table_exists('openmeetings_rooms')) {
+    	 drupal_install_schema('openmeetings');
+	}
+	  
+	node_types_rebuild();
+  	$types = node_type_get_types();
+  	node_add_body_field($types['openmeetings']);
+  
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function openmeetings_uninstall() {
+  //drupal_uninstall_schema('openmeetings');
+	//db_query("DROP TABLE {openmeetings_rooms};");
+	
+	if (db_table_exists('openmeetings_rooms')) {
+    	db_drop_table('openmeetings_rooms');
+  	}
+}
+
+/**
+ * Implementation of hook_schema()
+ *
+ * @return array of Schema API table definitions.
+ */
+function openmeetings_schema() {
+  $schema['openmeetings_rooms'] = array(
+    'fields' => array(
+      'rid' => array('type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "Room ID",
+      ),
+      'nid' => array('type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "Node ID",
+      ),
+      'room_id' => array('type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "openmeetings room ID",
+      ),
+      'roomtype_id' => array('type' => 'int',        
+        'not null' => TRUE,
+        'description' => "openmeetings room type ID",
+      ),
+      'room_name' => array('type' => 'text', 'not null' => FALSE,
+        // NOTE:  On MySQL, text fields cannot have default values.
+        'description' => "Room name.",
+      ),
+      'room_comment' => array('type' => 'text', 'not null' => FALSE,
+        // NOTE:  On MySQL, text fields cannot have default values.
+        'description' => "Room comment.",
+      ),      
+      'owner_id' => array('type' => 'int',        
+        'not null' => TRUE,
+        'description' => "openmeetings number of partizipants in this room",
+      ),
+      'number_of_partizipants' => array('type' => 'int',        
+        'not null' => TRUE,
+        'description' => "openmeetings number of partizipants in this room",
+      ),    
+      'timecreated' => array('type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => "Created Timestamp (Unix Timestamp, which is limited to values above Jan 1, 1970)",
+      ),
+      'timelastaccess' => array('type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => "Last Access Timestamp (Unix Timestamp, which is limited to values above Jan 1, 1970)",
+      ),
+      'timeexpire' => array('type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => "Expiration Timestamp (Unix Timestamp, which is limited to values above Jan 1, 1970)",
+      ),
+      'credits' => array('type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => "Available time in minutes",
+      ),
+      'timeused' => array('type' => 'int', 'size' => 'big', 'not null' => TRUE, 'default' => 0,
+        'description' => "How long was this used for",
+      ),     
+      'file_delete' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'is_public' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'appointment' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'is_moderated_room' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'demo' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'allowUserQuestions' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'isAudioOnly' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),      
+      'allowRecording' => array(
+        'description' => 'Setting parameters',
+        'type' => 'int',
+        'size' => "tiny",
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'timelastaccess' => array('timelastaccess'),
+      'room_id' => array('room_id'),
+      'rid' => array('rid'),
+    ),
+    'primary key' => array('rid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function openmeetings_requirements($phase) {
+  $requirements = array();
+  
+
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function openmeetings_enable() {
+	
+  // Set default role_permissions.
+  /*
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', access openmeetings room') WHERE rid = '1';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', access openmeetings room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', create openmeetings room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit openmeetings room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', delete openmeetings room') WHERE rid = '2';");
+ 
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit room_comment') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit roomtype_id') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit number_of_partizipants') WHERE rid = '2';");
+  
+  
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit is_public') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit appointment') WHERE rid = '2';");  
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit is_moderated_room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', edit room_id') WHERE rid = '2';");
+ 
+  
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use room') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use room_comment') WHERE rid = '2';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use roomtype_id') WHERE rid = '2';");
+ 
+
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use number_of_partizipants') WHERE rid = '1';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use is_public') WHERE rid = '1';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use appointment') WHERE rid = '1';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use is_moderated_room') WHERE rid = '1';");
+  db_query("UPDATE {role_permission} SET perm = concat(perm, ', use room_id') WHERE rid = '1';");
+  */
+  /*
+  db_update('role_permission')
+  ->fields(array('permission' => 'access openmeetings room'))
+  ->condition('rid', 1)
+  ->execute();
+  
+  db_update('role_permission')
+  ->fields(array('permission' => 'access openmeetings room'))
+  ->condition('rid', 2)
+  ->execute();
+  
+  db_update('role_permission')
+  ->fields(array('permission' => 'create openmeetings room'))
+  ->condition('rid', 2)
+  ->execute();
+  
+  db_update('role_permission')
+  ->fields(array('permission' => 'edit openmeetings room'))
+  ->condition('rid', 2)
+  ->execute();
+  
+  db_update('role_permission')
+  ->fields(array('permission' => 'delete openmeetings room'))
+  ->condition('rid', 2)
+  ->execute();  
+  */
+  
+  //drupal_flush_all_caches();
+   node_types_rebuild();
+  // node_menu() defines menu items based on node types so it needs to come
+  // after node types are rebuilt.
+  menu_rebuild();
+}

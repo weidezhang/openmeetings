@@ -1,0 +1,12 @@
+; $Id$
+name = OpenMeetings
+description = OpenMeetings integration module. OpenMeetings is a video conference system.<BR>More information on <a href="http://incubator.apache.org/openmeetings/" target="_blank">Apache OpenMeetings [Incubating]</a>.
+core = 7.x
+
+configure = admin/config/system/openmeetings
+
+files[] = openmeetings.module
+
+package = "OpenMeetings"
+
+version = "7.x-7.7"

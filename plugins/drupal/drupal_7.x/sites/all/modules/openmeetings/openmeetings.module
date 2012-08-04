@@ -1,0 +1,998 @@
+<?php
+
+/**
+ * @file
+ * OpenMeetins Integration Module
+ */
+
+/*******************************************************************************
+ * Hook Functions (Drupal)
+ ******************************************************************************/
+
+/**
+ * Display help and module information
+ *
+ * @param path which path of the site we're displaying help
+ * @param arg array that holds the current path as would be returned from arg() function
+ *
+ * @return help text for the path
+ */
+function openmeetings_help($path, $arg) {
+
+	switch ($path) {
+		case 'admin/settings/admin_menu' :
+			return t('The administration menu module provides a dropdown menu arranged for one- or two-click access to most administrative tasks and other common destinations (to users with the proper permissions). Use the settings below to customize the appearance of the menu.');
+
+		case 'admin/help#openmeetings' :
+			$output = '<p>' . t("Video Conference Script integration module details, installation instructions, updates") . ': <a href="http://incubator.apache.org/openmeetings/">http://incubator.apache.org/openmeetings/</a></p>';
+
+		return $output;
+	}
+
+	//return $output;
+}
+
+/**
+ * Valid permissions for this module
+ *
+ * @return array An array of valid permissions for the openmeetings_module module
+ */
+function openmeetings_permission() {
+
+	return array (
+		'administer openmeetings' => array (
+			'title' => t('administer openmeetings'),
+			'description' => t('administer openmeetings.'),
+			
+		),
+		'create openmeetings room' => array (
+			'title' => t('create openmeetings room'),
+			'description' => t('create openmeetings room.'),
+			
+		),
+		'edit openmeetings room' => array (
+			'title' => t('edit openmeetings room'),
+			'description' => t('edit openmeetings room.'),
+			
+		),
+		'edit any openmeetings room' => array (
+			'title' => t('edit any openmeetings room'),
+			'description' => t('edit any openmeetings room.'),
+			
+		),
+		'edit any openmeetings room' => array (
+			'title' => t('Flush caches'),
+			'description' => t('Access links to flush caches in the administration menu.'),
+			
+		),
+		'delete any openmeetings room' => array (
+			'title' => t('delete any openmeetings room'),
+			'description' => t('delete any openmeetings room.'),
+			
+		),
+		'access openmeetings room' => array (
+			'title' => t('access openmeetings room'),
+			'description' => t('access openmeetings room.'),
+			
+		),
+		'edit openmeetings_url' => array (
+			'title' => t('edit openmeetings_url'),
+			'description' => t('edit openmeetings_url.'),
+			
+		),
+		'edit openmeetings_port' => array (
+			'title' => t('edit openmeetings_port'),
+			'description' => t('edit openmeetings_port.'),
+			
+		),
+		'access openmeetings room' => array (
+			'title' => t('access openmeetings room'),
+			'description' => t('access openmeetings room.'),
+			
+		),
+
+		'edit openmeetings_username' => array (
+			'title' => t('edit openmeetings_username'),
+			'description' => t('edit openmeetings_username.'),
+			
+		),
+		'edit openmeetings_password' => array (
+			'title' => t('edit openmeetings_port'),
+			'description' => t('edit openmeetings_password.'),
+			
+		),
+
+		'edit room' => array (
+			'title' => t('edit room'),
+			'description' => t('edit room.'),
+			
+		),
+		'edit room_comment' => array (
+			'title' => t('edit room_comment'),
+			'description' => t('edit room_comment.'),
+			
+		),
+		'edit roomtype_id' => array (
+			'title' => t('edit roomtype_id'),
+			'description' => t('edit roomtype_id.'),
+			
+		),
+		'edit number_of_partizipants' => array (
+			'title' => t('edit number_of_partizipants'),
+			'description' => t('edit number_of_partizipants.'),
+			
+		),
+		'edit allowUserQuestions' => array (
+			'title' => t('edit allowUserQuestions'),
+			'description' => t('edit allowUserQuestions.'),
+			
+		),
+
+		
+	);
+}
+
+/**
+ * Menu for this module
+ *
+ * @return array An array with this module's menus.
+ */
+function openmeetings_menu() {
+
+	$items = array ();
+
+	$items['admin/config/system/openmeetings'] = array (
+		'title' => 'OpenMeetings',
+		'description' => 'OpenMeetings admin interface.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array (
+			'openmeetings_admin'
+		),
+		'access arguments' => array (
+			'administer openmeetings'
+		),
+		'type' => MENU_NORMAL_ITEM,
+		
+	);
+
+	$items['myopenmeetings'] = array (
+		'title' => 'OpenMeetings Rooms',
+		'description' => 'My openmeetings rooms.',
+		'page callback' => 'openmeetings_roomlist',
+		'access arguments' => array (
+			'edit openmeetings room'
+		),
+		'type' => MENU_NORMAL_ITEM,
+		
+	);
+
+	return $items;
+
+}
+
+/**
+ * Room list page
+ *
+ * @return page contents.
+ */
+function openmeetings_roomlist() {
+	global $user;
+
+	$page_content = "";
+
+	$options = array (
+		"attributes" => array (
+			"title" => "",
+			'target' => '_blank'
+		)
+	);
+
+	$myrooms = db_query("SELECT room.room_id, node.title, node.nid FROM {openmeetings_rooms} as room, " .
+	"{node} as node WHERE node.uid=:uid AND room.nid = node.nid ORDER BY room.timelastaccess DESC", array (
+		':uid' => $user->uid
+	));
+
+	if ($myrooms !== FALSE) {
+		$page_content .= "<UL>";
+		foreach ($myrooms as $row) {
+			//print_r($row);
+			// $link = l("$row[title] ($row[room])", "node/$row[nid]", $options);
+			$link = l("$row->title", "node/$row->nid", $options);
+			$page_content .= "<LI>$link</LI>";
+		}
+		$page_content .= "</UL>";
+	}
+
+	$link = l(t('Add New Room'), "node/add/openmeetings", $options);
+	$page_content .= "<BR><h3>$link</h3>";
+	return $page_content;
+}
+
+/**
+ * Room login form
+ *
+ * @return form an array of form data.
+ */
+function openmeetings_start_form($form_state, $node) {
+	global $base_url, $user, $language;
+	require_once 'openmeetings_gateway.php';
+
+	$path = drupal_get_path('module', 'openmeetings');
+
+	$url = $base_url . "/" . $path . "/openmeetings_conference.php";
+
+	$url_server = variable_get('openmeetings_url', 'localhost');
+	$url_port = variable_get('openmeetings_port', '5080');
+	$webapp_name = variable_get('openmeetings_webapp_name', 'openmeetings');
+	$room_id = $node['build_info']['args'][0]->room->room_id;
+
+	$openmeetings_gateway = new openmeetings_gateway();
+	if ($openmeetings_gateway->openmeetings_loginuser()) {
+
+		//room creator is moderator
+		if ($node['build_info']['args'][0]->uid == $user->uid) {
+			$becomemoderator = 1;
+		} else {
+			$becomemoderator = 0;
+		}
+
+		$showAudioVideoTest = 1;
+
+		//test if user is logined	
+		if (!in_array("anonymous user", $user->roles)) {
+			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($user->name, $user->name, '', $user->picture, $user->mail, $user->uid, $user->roles[2], $room_id, $becomemoderator, $showAudioVideoTest);
+		} else {
+			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash('anonymous user', 'anonymous user', '', 'anonymous user', 'anonymous user', $user->uid, $user->roles[1], $room_id, $becomemoderator, $showAudioVideoTest);
+		}
+
+		if ($language->language == 'en') {
+			$om_laguage_id = 1;
+		} else if ($language->language == 'de') {
+			$om_laguage_id = 2;
+		} else if ($language->language == 'fr') {
+			$om_laguage_id = 4;
+		} else if ($language->language == 'it') {
+			$om_laguage_id = 5;
+		} else if ($language->language == 'pt') {
+			$om_laguage_id = 6;
+		} else if ($language->language == 'es') {
+			$om_laguage_id = 8;
+		} else if ($language->language == 'ru') {
+			$om_laguage_id = 9;
+		} else if ($language->language == 'swedish') {
+			$om_laguage_id = 10;
+		} else if ($language->language == 'default') {
+			$om_laguage_id = 1;
+		} else if ($language->language == 'ko-KR') {
+			$om_laguage_id = 13;
+		} else if ($language->language == 'ar-AA') {
+			$om_laguage_id = 13;
+		} else if ($language->language == 'ua-UA') {
+			$om_laguage_id = 18;
+		} else if ($language->language == 'persian') {
+			$om_laguage_id = 20;
+		} else if ($language->language == 'nl-NL') {
+			$om_laguage_id = 26;
+		} else if ($language->language == 'ca-ES') {
+			$om_laguage_id = 28;
+		} else if ($language->language == 'da-DK') {
+			$om_laguage_id = 30;
+		} else {
+			$om_laguage_id = 1;
+		}
+
+		
+
+		if (!empty ($roomhash)) {
+
+			$swfurl = "http://" . $url_server . ":" . $url_port . "/" . $webapp_name . "/?" .
+			"scopeRoomId=" . $room_id .
+			"&secureHash=" . $roomhash .
+			"&language=" . $om_laguage_id;
+			
+		}
+	}
+
+	$form['swfurl'] = array (
+		'#type' => 'hidden',
+		'#value' => check_plain($swfurl)
+	);
+	$form['#action'] = $url;
+	$form['#attributes'] = array (
+		'enctype' => "multipart/form-data"
+	);
+	$form['submit'] = array (
+		'#type' => 'submit',
+		'#value' => t('Enter Conference Room'),
+		
+	);
+	return $form;
+}
+
+/**
+ * Rooms cleanup
+ */
+function openmeetings_cleanup() {
+	//cleanup
+	$ztime = time();
+	db_query("DELETE FROM {openmeetings_rooms} WHERE ((timeexpire>0) AND (timeexpire<$ztime))");
+}
+
+/**
+ * Admin page
+ *
+ * @return page contents.
+ */
+function openmeetings_admin() {
+	$form = array ();
+
+	$form['openmeetings_url'] = array (
+		'#type' => 'textfield',
+		'#title' => t('OpenMeetings URL'),
+		'#default_value' => variable_get('openmeetings_url', "localhost"),
+		'#size' => 48,
+		'#maxlength' => 255,
+		'#description' => t('OpenMeetings URL'),
+		'#required' => TRUE,
+		
+	);
+
+	$form['openmeetings_port'] = array (
+		'#type' => 'textfield',
+		'#title' => t('OpenMeetings Port'),
+		'#default_value' => variable_get('openmeetings_port', "5080"),
+		'#size' => 48,
+		'#maxlength' => 10,
+		'#description' => t("OpenMeetigs Port"),
+		'#required' => TRUE,
+		
+	);
+
+	$form['openmeetings_username'] = array (
+		'#type' => 'textfield',
+		'#title' => t('Username'),
+		'#default_value' => variable_get('openmeetings_username', "admin"),
+		'#size' => 24,
+		'#maxlength' => 48,
+		'#description' => t("OpenMeetings admin username."),
+		'#required' => TRUE,
+		
+	);
+
+	$form['openmeetings_password'] = array (
+		'#type' => 'password',
+		'#title' => t('Password'),
+		'#default_value' => variable_get('openmeetings_password', "admin"),
+		'#size' => 48,
+		'#maxlength' => 48,
+		'#description' => t("Admin Password."),
+		'#required' => TRUE,
+		
+	);
+
+	return system_settings_form($form);
+}
+
+function openmeetings_node_info() {
+	return array (
+		'openmeetings' => array (
+			'name' => t('OpenMeetings Room'),
+			'base' => 'openmeetings',
+			'description' => t("A <i>room</i> that can be used for customized video conference."),
+			'has_title' => TRUE,
+			'title_label' => t('Video Conference'),
+			'has_body' => TRUE,
+			'body_label' => t('Room Description'),
+			
+		),
+		
+	);
+}
+
+function openmeetings_node_access($op, $node, $account) {
+
+	if ($op == 'access') {
+		return user_access('access openmeetings room', $account);
+	}
+
+	if ($op == 'create') {
+		return user_access('create openmeetings room', $account);
+	}
+
+	if ($op == 'update') {
+		if (user_access('edit any openmeetings room', $account) || (user_access('edit openmeetings room', $account) && ($account->uid == $node->uid))) {
+			return TRUE;
+		}
+	}
+
+	if ($op == 'delete') {
+		if (user_access('delete any openmeetings room', $account) || (user_access('delete openmeetings room', $account) && ($account->uid == $node->uid))) {
+			return TRUE;
+		}
+	}
+}
+
+/**
+ * Implementation of hook_form().
+ */
+function openmeetings_form(& $node) {
+	// The site admin can decide if this node type has a title and body, and how
+	// the fields should be labeled. We need to load these settings so we can
+	// build the node form correctly.
+	global $user;
+	// $type = node_get_types('type', $node);
+
+	$type = _node_types_build()->types;
+	
+	$form['title'] = array (
+		'#type' => 'textfield',
+		'#title' => check_plain($type['openmeetings']->title_label),
+		'#required' => TRUE,
+		'#default_value' => $node->title,
+		'#weight' => -5,
+		
+	);
+	//}
+
+	//if ($type->has_body) {
+	// In Drupal 6, we can use node_body_field() to get the body and filter
+	// elements. This replaces the old textarea + filter_form() method of
+	// setting this up. It will also ensure the teaser splitter gets set up
+	// properly.
+	//$form['body_field'] = node_body_field($node, $type->body_label, $type->min_word_count);
+
+	// add the body field to the content type
+	//node_add_body_field($type, 'body');
+
+	//}
+
+	$form['room_name'] = array (
+		'#type' => 'textfield',
+		'#title' => t('New room name'),
+		'#default_value' => isset ($node->room->room_name) ? $node->room->room_name : variable_get('openmeetings_room_prefix2', 'NewRoom'),
+		'#size' => 32,
+		'#maxlength' => 64,
+		'#description' => t("Label that will be used to access the room. Leave as it is to generate one."),
+		
+	);
+
+	if (user_access('edit room_comment', $user)) {
+		$form['room_comment'] = array (
+			'#type' => 'textarea',
+			'#title' => t('Room comments'),
+			'#default_value' => isset ($node->room->room_comment) ? $node->room->room_comment : '',
+			'#cols' => 32,
+			'#rows' => 2,
+			'#description' => t("Room comments."),
+			
+		);
+	} else {
+		$form['room_comment'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->room->room_comment) ? $node->room->room_comment : '',
+			
+		);
+	}
+
+	if (user_access('edit roomtype_id', $user)) {
+		$options = array (
+			"1" => "Conference (max 20 Users recommended, Democratic)",
+			"3" => "Webinar (max 150 Users recommended, Moderated)",
+			"4" => "Interview (Only 2 Users, no Whiteboard, Record Audio/Video, Moderated)"
+		);
+		$form['roomtype_id'] = array (
+			'#type' => 'select',
+			'#title' => t('Roomtype'),
+			'#default_value' => isset ($node->roomtype_id) ? $node->roomtype_id : 1,
+			'#options' => $options,
+			'#description' => t('Roomtype'),
+			
+		);
+	} else {
+		$form['roomtype_id'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->roomtype_id) ? $node->roomtype_id : 1,
+			
+		);
+	}
+
+	if (user_access('edit number_of_partizipants', $user)) {
+		$form['number_of_partizipants'] = array (
+			'#type' => 'textfield',
+			'#title' => t('Number of partizipants'),
+			'#default_value' => isset ($node->room->number_of_partizipants) ? $node->room->number_of_partizipants : 12,
+			'#size' => 2,
+			'#maxlength' => 3,
+			'#description' => t("The maximum users allowed in this room."),
+			
+		);
+	} else {
+		$form['number_of_partizipants'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->room->number_of_partizipants) ? $node->room->number_of_partizipants : 12,
+			
+		);
+	}
+
+	if (user_access('edit is_public', $user)) {
+		$options = array (
+			"1" => t('Yes'),
+			"0" => t('No')
+		);
+		$form['is_public'] = array (
+			'#type' => 'select',
+			'#title' => t('Public Room'),
+			'#default_value' => isset ($node->is_public) ? $node->is_public : "1",
+			'#options' => $options,
+			'#description' => t('If this room is public, it will appear in the frontend for everybody.'),
+			
+		);
+	} else {
+		$form['is_public'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->is_public) ? $node->is_public : "1",
+			
+		);
+	}
+
+	if (user_access('edit appointment', $user)) {
+		$form['appointment'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->appointment) ? $node->appointment : "0",
+			
+		);
+	} else {
+		$form['appointment'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->appointment) ? $node->appointment : "0",
+			
+		);
+	}
+
+	if (user_access('edit is_moderated_room', $user)) {
+		$options = array (
+			"1" => t('Yes'),
+			"0" => t('No')
+		);
+		$form['is_moderated_room'] = array (
+			'#type' => 'select',
+			'#title' => t('Moderated Room'),
+			'#default_value' => isset ($node->is_moderated_room) ? $node->is_moderated_room : "1",
+			'#options' => $options,
+			'#description' => t('Users have to wait untill a Moderator arrives. Use the becomeModerator param in setUserObjectAndGenerateRoomHash to set a user as default Moderator.'),
+			
+		);
+	} else {
+		$form['is_moderated_room'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->is_moderated_room) ? $node->is_moderated_room : "1",
+			
+		);
+	}
+
+	if (user_access('edit isAudioOnly', $user)) {
+		$options = array (
+			"1" => t('Yes'),
+			"0" => t('No')
+		);
+		$form['isAudioOnly'] = array (
+			'#type' => 'select',
+			'#title' => t('Is Audio Only'),
+			'#default_value' => isset ($node->isAudioOnly) ? $node->isAudioOnly : "0",
+			'#options' => $options,
+			'#description' => t('Is Audio Only.'),
+			
+		);
+	} else {
+		$form['isAudioOnly'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->isAudioOnly) ? $node->isAudioOnly : "1",
+			
+		);
+	}
+
+	if (user_access('edit allowUserQuestions', $user)) {
+		$options = array (
+			"1" => t('Yes'),
+			"0" => t('No')
+		);
+		$form['allowUserQuestions'] = array (
+			'#type' => 'select',
+			'#title' => t('Allow User Questions'),
+			'#default_value' => isset ($node->allowUserQuestions) ? $node->allowUserQuestions : "1",
+			'#options' => $options,
+			'#description' => t('Allow users to ask questions.'),
+			
+		);
+	} else {
+		$form['allowUserQuestions'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->allowUserQuestions) ? $node->allowUserQuestions : "1",
+			
+		);
+	}
+
+	if (user_access('edit allowRecording', $user)) {
+		$options = array (
+			"1" => t('Yes'),
+			"0" => t('No')
+		);
+		$form['allowRecording'] = array (
+			'#type' => 'select',
+			'#title' => t('Allow Recording'),
+			'#default_value' => isset ($node->allowRecording) ? $node->allowRecording : "1",
+			'#options' => $options,
+			'#description' => t('Allow Recording.'),
+			
+		);
+	} else {
+		$form['allowRecording'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->allowRecording) ? $node->allowRecording : "1",
+			
+		);
+	}
+
+	if (user_access('edit room_id', $user)) {
+		$form['room_id'] = array (
+			'#type' => 'hidden',
+			'#title' => t('room_id'),
+			'#default_value' => isset ($node->room_id) ? $node->room_id : "0",
+			'#size' => 6,
+			'#maxlength' => 6,
+			'#description' => t("Room id."),
+			
+		);
+	} else {
+		$form['room_id'] = array (
+			'#type' => 'hidden',
+			'#default_value' => isset ($node->room_id) ? $node->room_id : "0",
+			
+		);
+	}
+
+	return $form;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ * 
+ */
+function openmeetings_form_openmeetings_node_form_alter(& $form, $form_state) {
+
+	//$form['options']['promote']['#disabled'] = FALSE;
+	//$form['options']['promote']['#default_value'] = 0;
+	//$form['options']['promote']['#value'] = 1;
+}
+
+/**
+ * Implementation of hook_delete().
+ */
+function openmeetings_delete($node) {
+	global $user;
+	$path = drupal_get_path('module', 'openmeetings');
+	require_once ("./$path/openmeetingsRoomManagament.php");
+	// Notice that we're matching all revision, by using the node's nid.
+	if (user_access('delete openmeetings room', $user)) {
+
+		//$data['room_id'] = $node->room->room_id;
+
+		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+			':nid' => $node->nid
+		));
+		
+		$data['room_id'] = -1;
+
+		foreach ($additions as $record) {
+			$data['room_id'] = $record->room_id;
+		}
+
+		$omRoomManagament = new openmeetingsRoomManagament();
+		$room_id = $omRoomManagament->deleteRoom($data);
+		
+
+		//Currently the openmeetings API does not return a positive value 
+		//if the SOAP/REST user that invokes the call "deleteRecording"
+		//if ($room_id > 0) {
+		if (true) {
+			//db_query('DELETE FROM {openmeetings_rooms} WHERE nid = %d', $node->nid);
+
+			db_delete('openmeetings_rooms')->condition('nid', $node->nid)->execute();
+		} else {
+
+			drupal_set_message(t('Could not login User to OpenMeetings, check your OpenMeetings Module Configuration [1] '), 'error');
+		}
+	}
+}
+
+/**
+ * Implementation of hook_insert().
+ */
+function openmeetings_insert($node) {
+	
+	global $user;
+	$path = drupal_get_path('module', 'openmeetings');
+	require_once ("./$path/openmeetingsRoomManagament.php");
+
+	$room_name = check_plain($node->room_name);
+	if ($room_name == variable_get('openmeetings_room_prefix2', 'NewRoom')) {
+		$room_name = variable_get('openmeetings_room_prefix2', 'NewRoom') . "_" . base_convert((time() - 1225500000) . rand(0, 10), 10, 36);
+	}
+
+	$ztime = time();
+	
+	$data['name'] = $node->room_name;
+	$data['roomtype_id'] = $node->roomtype_id;
+	$data['comment'] = $node->room_comment;
+	$data['number_of_partizipants'] = $node->number_of_partizipants;
+	$data['is_public'] = $node->is_public;
+	$data['isDemoRoom'] = 0;
+	$data['isAudioOnly'] = $node->isAudioOnly;
+	$data['allowUserQuestions'] = $node->allowUserQuestions;
+	$data['demoTime'] = "";
+	$data['is_moderated_room'] = $node->is_moderated_room;
+
+	$omRoomManagament = new openmeetingsRoomManagament();
+	$room_id = $omRoomManagament->createMyRoomWithMod($data);
+	
+	//Make sure the Openmeetings Room was succsefully created
+
+	if ($room_id > 0) {
+		$expiration = 0;
+
+		db_insert('openmeetings_rooms')->fields(array (
+			'nid' => $node->nid,
+			'room_id' => $room_id,
+			'roomtype_id' => $node->roomtype_id,
+			'room_name' => $node->room_name,
+			'room_comment' => $node->room_comment,
+			'owner_id' => $user->uid,
+			'number_of_partizipants' => $node->number_of_partizipants,
+			'timecreated' => $ztime,
+			'timelastaccess' => $ztime,
+			'timeexpire' => $expiration,
+			'credits' => 0,
+			'timeused' => 0,
+			'file_delete' => 0,
+			'is_public' => $node->is_public,
+			'appointment' => 0,
+			'is_moderated_room' => $node->is_moderated_room,
+			'demo' => 0,
+			
+		))->execute();
+
+		$options = array (
+			"attributes" => array (
+				"title" => $node->room_name,
+				'target' => '_blank'
+			)
+		);
+		$link = l($room_name, "node/" . $node->nid, $options);
+		//drupal_set_message(t('Use this link to access this Video Conference room and invite the other participant: ') . "<BR>" . $link);
+	} else {
+
+		drupal_set_message(t('Could not login User to OpenMeetings, check your OpenMeetings Module Configuration [2] '), 'error');
+	}
+
+}
+
+/**
+ * Implementation of hook_update().
+ */
+function openmeetings_update($node) {
+	global $user;
+	$path = drupal_get_path('module', 'openmeetings');
+	require_once ("./$path/openmeetingsRoomManagament.php");
+	// if this is a new node or we're adding a new revision,
+	if ($node->revision) {
+		openmeetings_insert($node);
+	} else {
+
+		$room_name = check_plain($node->room_name);
+		if ($room_name == variable_get('openmeetings_room_prefix2', 'NewRoom')) {
+			$room_name = variable_get('openmeetings_room_prefix2', 'NewRoom') . "_" . base_convert((time() - 1225500000) . rand(0, 10), 10, 36);
+		}
+		$data = '';
+
+		$data['room_id'] = $node->original->room->room_id;
+		$data['name'] = $node->room_name;
+		$data['roomtype_id'] = $node->roomtype_id;
+		$data['comment'] = $node->room_comment;
+		$data['number_of_partizipants'] = $node->number_of_partizipants;
+		$data['is_public'] = $node->is_public;
+		$data['appointment'] = $node->appointment;
+		$data['isDemoRoom'] = 0;
+		$data['demoTime'] = "";
+		$data['is_moderated_room'] = $node->is_moderated_room;
+		$data['allowUserQuestions'] = $node->allowUserQuestions;
+
+		$omRoomManagament = new openmeetingsRoomManagament();
+		$room_id = $omRoomManagament->updateRoomWithModerationAndQuestions($data);
+
+		if ($room_id > 0) {
+
+			db_update('openmeetings_rooms')->fields(array (
+				'nid' => $node->nid,
+				'room_id' => $room_id,
+				'roomtype_id' => $node->roomtype_id,
+				'room_name' => $node->room_name,
+				'room_comment' => $node->room_comment,
+				'owner_id' => $user->uid,
+				'number_of_partizipants' => $node->number_of_partizipants,
+				//'timecreated' => $ztime,
+				//'timelastaccess' => $ztime, 
+				//'timeexpire' => $expiration,
+				'credits' => 0,
+				'timeused' => 0,
+				'file_delete' => 0,
+				'is_public' => 0,
+				'appointment' => 0,
+				'is_moderated_room' => 0,
+				'demo' => 0,
+				
+			))->condition('nid', $node->nid)->execute();
+		} else {
+
+			drupal_set_message(t('Could not login User to OpenMeetings, check your OpenMeetings Module Configuration [3] '), 'error');
+		}
+
+	}
+}
+
+/**
+ * Implementation of hook_load().
+ */
+function openmeetings_load($node) {
+
+	foreach ($node as $nod) {
+		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+			':nid' => $nod->nid
+		));
+	}
+
+//	foreach ($node as $record) {
+//
+//		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+//			':nid' => $record->nid
+//		));
+//		
+//		print_r($record->nid);
+//		echo "<br/>";
+//		print_r($record);
+//		echo "<br/>";
+//		print_r($additions);
+//		echo "<br/>";
+//	
+//		foreach($additions as $room){
+//			print_r($room);	
+//		}
+//		
+//		
+//		foreach($additions as $room){
+//			$node[$room->nid]->room = $room;
+//		}		
+//
+//	}
+//	
+//	//die ("<h2> Room ? </h2>");
+
+	return $additions;
+}
+
+/**
+ * Implementation of hook_view().
+ */
+function openmeetings_view($node, $view_mode) {
+	global $user;
+
+	if ($view_mode != "teaser") {
+		
+		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+			':nid' => $node->vid
+		));
+		
+		$node->room = null;
+
+		foreach($additions as $room) {
+			$node->room = $room;
+		}
+		
+		$disabled_content = "";
+		$room_access = 1;
+		$myrooms = false;
+		if ($node->room != null) {
+			
+			$myrooms = db_query("SELECT * FROM {openmeetings_rooms} WHERE room_id=:room_id", array (
+				':room_id' => $node->room->room_id
+			));
+		
+			if ($myrooms !== FALSE) {
+	
+				if (USER_REGISTER_VISITORS && empty ($user->name)) {
+					$room_access = 0;
+	
+				}
+			} else {
+				$disabled_content = t('Room not found ');
+			}
+			
+			if (!$room_access && !$disabled_content) {
+				$disabled_content .= t('Instant access to visitors is disabled. You need to be registered and logged into this website to access conference rooms.');
+			}
+	
+			//$options        = array("attributes" => array("title" => $node->room_id, 'target' => '_blank'));
+			//$link           = l($node->room_name, "node/". $node->nid, $options);  
+			// $access_content = "<BR>". t('Use this link to access this Video Conference room and invite the other participant: ') ."<BR>". $link;
+	
+			if ($node->room->roomtype_id == 1) {
+				$room_type_name = t('Conference');
+			} else if ($node->room->roomtype_id == 2) {
+				$room_type_name = t('Audience');
+			} else if ($node->room->roomtype_id == 3) {
+				$room_type_name = t('Restricted');
+			} else if ($node->room->roomtype_id == 4) {
+				$room_type_name = t('Interview');
+			} else if ($node->room->roomtype_id == 5) {
+				$room_type_name = t('Custom');
+			}		
+	
+			$stats_content = "";
+	
+			$stats_content .= t('Room name') . ": " . $node->room->room_name . "<BR>" . t('Room comments') . ": " . $node->room->room_comment . "<BR>" . t('Room type') . ": " . $room_type_name . "<BR>" . t('Number of partizipants') . ": " . $node->room->number_of_partizipants;
+
+		}
+		//$body_text = "<BR>" . $stats_content."<BR><BR>".drupal_render($my_temp_variable = drupal_get_form('openmeetings_start_form', $node));
+
+		$my_temp_variable = drupal_get_form('openmeetings_start_form', $node);
+		$body_text = "<BR>" . $stats_content . "<BR><BR>" . drupal_render($my_temp_variable);
+
+		if (isset ($node->body[$node->language][0]['value']) || isset ($node->body[$node->language][0]['safe_value'])) {
+
+			$body_text = $node->body[$node->language][0]['value'] . "<BR>" . $body_text;
+
+		}
+
+		$node->body[$node->language][0]['value'] = $body_text;
+		$node->body[$node->language][0]['safe_value'] = $body_text;
+		$node->body[$node->language][0]['summary'] = "test summary"; //text_summary($body_text);
+		$node->body[$node->language][0]['safe_summary'] = "test summary"; //text_summary($body_text);
+		$node->body[$node->language][0]['format'] = 'filtered_html';
+
+		if ($disabled_content) {
+			$node->body[$node->language][0]['value'] = $disabled_content;
+			$node->body[$node->language][0]['safe_value'] = $disabled_content;
+			$node->body[$node->language][0]['safe_summary'] = text_summary($disabled_content);
+		}
+
+	} else {
+		
+		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+			':nid' => $node->vid
+		));
+		
+		$node->room = null;
+
+		foreach($additions as $room) {
+			$node->room = $room;
+		}
+		
+		if ($node->room != null) {
+
+			$stats_content = "";
+			$stats_content .= t('Room name') . ": " . $node->room->room_name . "<BR>" . t('Room comments') .
+			": " . $node->room->room_comment . "<BR>" . t('Room type') . ": " . "<BR>" .
+			t('Number of partizipants') . ": " . $node->room->number_of_partizipants;
+	
+			$body_text = "<BR>" . $stats_content . "<BR><BR>";
+	
+			$node->body[$node->language][0]['value'] = $body_text;
+			$node->body[$node->language][0]['safe_value'] = $body_text;
+			$node->body[$node->language][0]['summary'] = text_summary($body_text);
+			$node->body[$node->language][0]['format'] = 'filtered_html';
+			$node->body[$node->language][0]['safe_summary'] = text_summary($body_text);
+	
+		}
+	}
+
+	return $node;
+}
