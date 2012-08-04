@@ -1,47 +1,37 @@
-#Openmeetings module for ATutor  readme
+Apache OpenMeetings ATutor Plugin Change Log
 
-Be sure Openmeetings is installed and functioning properly before attempting to install this module. 
+Todo:
+- Determine between student and instructor in room creation (moderation flag 1 vs. 0)
 
-Requires Openmeetings to be installed on this server, installation guide can be found at:
-http://code.google.com/p/openmeetings/
+Aug 2, 2012 (Josh Dolitsky)
+------------
+- Refactored plugin to use REST instead of SOAP/NuSOAP Library
+- Updated deprecated OpenMeetings API calls
+- Removed sizing options from room adding (no longer part of API)
+- Modified ATutor module XML file to reflect current info
+- Changed image for module icon
+- Removed extra files from SOAP implementation
+- Added Apache headers and files
 
-Installation
-1. Unzip the module into the ATutor mods/ directory.
-2. Login to ATutor as the administrator and run the ATutor administrator's Install Module tool. Select Openmeetings to install.
-3. Once installed, on the administrator modules screen, enabled to module.
-4. Open the administrator's Openmeetings screen and enter the URL, username and password to the Openmeetings installion you will be using.  The user account must have Admin-rights.
-
-This module has been tested on the following specifications:
-Openmeetings	0.7    (RC1)
-Red5		0.7+   [http://osflash.org/red5]
-
-
-License: 	
-GNU Lesser General Public License
-
- 
- 
-Changelog: 
-============
-Feb 5, 09
+Feb 5, 2009 (Harris W.)
 ------------
 - Added the ability to delete conference rooms.
 - Now compatible with Openmeetings 0.7RC1 (Red5 7.0+)
 
-June 26, 08
+June 26, 2008 (Harris W.)
 ------------
 - Added the ability to create diff type of rooms: conference/audience
 
-June 25, 08
+June 25, 2008 (Harris W.)
 ------------
 - Admin can now delete or create group meetings
 
-June 19, 08
+June 19, 2008 (Harris W.)
 ------------
 - Allow users to retrieve the recordings.  [June 25, 08 - milestone for version 5.3]
 - Make the index page a bit more pretty.
 
-June 11, 08
+June 11, 2008 (Harris W.)
 ------------
 - Allow each group to have their own meeting, anyone in the group can start off the meeting, and when all exit, room should be deleted.
 - Course meeting should be triggered by instructor only.  Otherwise page should display the meeting time (There is no meeting at the moment.  THe next available meeting is at xxxx)
@@ -49,7 +39,7 @@ June 11, 08
 - Research on how recorded video works, see if we can remove meetings as well.
 - admin/openmeetings, check if there is a slash at the end.
 
-June 05, 08
+June 05, 2008 (Harris W.)
 ------------
 - allow admin to change the room size.
 - clean room after course is deleted.
@@ -57,5 +47,4 @@ June 05, 08
 - upgrade nusoup script
 - update readme, and write up something that teaches the user to setup red5
 - allow 2 modes
-
 

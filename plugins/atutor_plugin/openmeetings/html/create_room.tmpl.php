@@ -1,16 +1,24 @@
 <?php
-/************************************************************************/
-/* ATutor																*/
-/************************************************************************/
-/* Copyright (c) 2002-2008 by Greg Gay, Cindy Qi Li, Harris Wong		*/
-/* Adaptive Technology Resource Centre / University of Toronto			*/
-/* http://atutor.ca														*/
-/*																		*/
-/* This program is free software. You can redistribute it and/or		*/
-/* modify it under the terms of the GNU General Public License			*/
-/* as published by the Free Software Foundation.						*/
-/************************************************************************/
-// $Id: create_room.tmpl.php 7208 2008-01-09 16:07:24Z harrisw $
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License") +  you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
+
 ?>
 <div class="row">
 	<p><label for="openmeetings_roomtype"><?php echo _AT('openmeetings_roomtype'); ?></label></p>
@@ -34,28 +42,17 @@
 </div>
 
 <!-- Video settings -->
-<<<<<<< HEAD
 <!--<div class="row">
-=======
-<div class="row">
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<p><label for="openmeetings_vid_w"><?php echo _AT('openmeetings_vid_w'); ?></label></p>	
 	<input type="text" name="openmeetings_vid_w" value="<?php echo $_POST['openmeetings_vid_w']; ?>" id="openmeetings_vid_w" size="20" />
 </div>
 <div class="row">
 	<p><label for="openmeetings_vid_h"><?php echo _AT('openmeetings_vid_h'); ?></label></p>	
 	<input type="text" name="openmeetings_vid_h" value="<?php echo $_POST['openmeetings_vid_h']; ?>" id="openmeetings_vid_h" size="20" />
-<<<<<<< HEAD
 </div>-->
 
 <!-- Whiteboard settings -->
 <!--<div class="row">
-=======
-</div>
-
-<!-- Whiteboard settings -->
-<div class="row">
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<?php
 		($_POST['openmeetings_show_wb']== 1)? $om_show_wb_y = 'checked="checked"' : $om_show_wb_n = 'checked="checked"';
 	?>
@@ -71,17 +68,10 @@
 <div class="row">
 	<p><label for="openmeetings_wb_h"><?php echo _AT('openmeetings_wb_h'); ?></label></p>	
 	<input type="text" name="openmeetings_wb_h" value="<?php echo $_POST['openmeetings_wb_h']; ?>" id="openmeetings_wb_h" size="20" />
-<<<<<<< HEAD
 </div>-->
 
 <!-- File Panel settings -->
 <!--<div class="row">
-=======
-</div>
-
-<!-- File Panel settings -->
-<div class="row">
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 	<?php
 		($_POST['openmeetings_show_fp']== 1)? $om_show_fp_y = 'checked="checked"' : $om_show_fp_n = 'checked="checked"';
 	?>
@@ -96,8 +86,4 @@
 <div class="row">
 	<p><label for="openmeetings_fp_h"><?php echo _AT('openmeetings_fp_h'); ?></label></p>	
 	<input type="text" name="openmeetings_fp_h" value="<?php echo $_POST['openmeetings_fp_h']; ?>" id="openmeetings_fp_h" size="20" />
-<<<<<<< HEAD
 </div>-->
-=======
-</div>
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82

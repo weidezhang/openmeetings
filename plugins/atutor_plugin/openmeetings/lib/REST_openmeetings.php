@@ -1,7 +1,24 @@
 <?php
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License") +  you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
 
-
-//if (!defined('AT_INCLUDE_PATH')) { exit; }
+if (!defined('AT_INCLUDE_PATH')) { exit; }
 
 class REST_openmeetings {
 	var $_rest = '';
@@ -27,6 +44,7 @@ class REST_openmeetings {
 		// This will allow you to view errors in the browser       
 		// Note: set 'display_errors' to 0 in production  
 		//ini_set('display_errors',1);  
+		ini_set('display_errors',0);
 
 		// Report all PHP errors (notices, errors, warnings, etc.)  
 		//error_reporting(E_ALL);
@@ -61,7 +79,8 @@ class REST_openmeetings {
 		
 		// Confirm that the request was transmitted to the OpenMeetings! Image Search Service  
 		if(!$response) {  
-		   die('Request OpenMeetings! OpenMeetings Service failed and no response was returned.');  
+		   //die('Request OpenMeetings! OpenMeetings Service failed and no response was returned.'); 
+		   die('Please make sure an OpenMeetings instance is running. Unable to connect to OpenMeetings.'); 
 		}  
 		
 		// Create an array to store the HTTP response codes  
@@ -160,35 +179,6 @@ class REST_openmeetings {
 		
 	}
 
-	/*function addRoom($parameters = array()){
-		return $this->_performAPICall(
-			'addRoom',
-			'RoomService',
-			array(
-			        'SID'				=> $parameters['SID'],
-				'name'				=> $parameters['name'],
-				'roomtypes_id'			=> $parameters['roomtypes_id'],
-				'comment'			=> 'Room created by ATutor',
-				'numberOfPartizipants'		=> $parameters['numberOfPartizipants'],
-				'ispublic'			=> $parameters['ispublic'],
-				'videoPodWidth'			=> $parameters['videoPodWidth'],
-				'videoPodHeight'		=> $parameters['videoPodHeight'],
-				'videoPodXPosition'		=> 2, 
-				'videoPodYPosition'		=> 2, 
-				'moderationPanelXPosition'	=> 400, 
-				'showWhiteBoard'		=> $parameters['showWhiteBoard'],
-				'whiteBoardPanelXPosition'	=> 276, 
-				'whiteBoardPanelYPosition'	=> 2, 
-				'whiteBoardPanelHeight'		=> $parameters['whiteBoardPanelHeight'],
-				'whiteBoardPanelWidth'		=> $parameters['whiteBoardPanelWidth'],
-				'showFilesPanel'		=> $parameters['showFilesPanel'], 
-				'filesPanelXPosition'		=> 2, 
-				'filesPanelYPosition'		=> 284, 
-				'filesPanelHeight'		=> $parameters['filesPanelHeight'], 
-				'filesPanelWidth'		=> $parameters['filesPanelWidth']
-			)
-		);
-	}*/
 
 	function addRoom($parameters = array()){
 		return $this->_performAPICall(
@@ -237,37 +227,6 @@ class REST_openmeetings {
 			)
 		);	
 	}
-
-	/*function updateRoom($parameters = array()) {
-		return $this->_performAPICall(
-			'updateRoom',
-			'RoomService',
-			array(
-		    		'SID'				=> $parameters['SID'],
-				'rooms_id'			=> $parameters['rooms_id'],
-				'name'				=> $parameters['name'],
-				'roomtypes_id'			=> $parameters['roomtypes_id'],
-				'comment'			=> 'Room created by ATutor',
-				'numberOfPartizipants'		=> $parameters['numberOfPartizipants'],
-				'ispublic'			=> $parameters['ispublic'],
-				'videoPodWidth'			=> $parameters['videoPodWidth'],
-				'videoPodHeight'		=> $parameters['videoPodHeight'],
-				'videoPodXPosition'		=> 2, 
-				'videoPodYPosition'		=> 2, 
-				'moderationPanelXPosition'	=> 400, 
-				'showWhiteBoard'		=> $parameters['showWhiteBoard'],
-				'whiteBoardPanelXPosition'	=> 276, 
-				'whiteBoardPanelYPosition'	=> 2, 
-				'whiteBoardPanelHeight'		=> $parameters['whiteBoardPanelHeight'],
-				'whiteBoardPanelWidth'		=> $parameters['whiteBoardPanelWidth'],
-				'showFilesPanel'		=> $parameters['showFilesPanel'], 
-				'filesPanelXPosition'		=> 2, 
-				'filesPanelYPosition'		=> 284, 
-				'filesPanelHeight'		=> $parameters['filesPanelHeight'], 
-				'filesPanelWidth'		=> $parameters['filesPanelWidth']
-			  )
-		);
-	}*/
 
 	function updateRoom($parameters = array()) {
 		return $this->_performAPICall(

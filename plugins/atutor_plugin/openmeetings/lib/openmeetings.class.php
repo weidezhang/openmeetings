@@ -1,23 +1,26 @@
 <?php
-/************************************************************************/
-/* ATutor																*/
-/************************************************************************/
-/* Copyright (c) 2002-2008 by Greg Gay, Cindy Qi Li, Harris Wong		*/
-/* Adaptive Technology Resource Centre / University of Toronto			*/
-/* http://atutor.ca														*/
-/*																		*/
-/* This program is free software. You can redistribute it and/or		*/
-/* modify it under the terms of the GNU General Public License			*/
-/* as published by the Free Software Foundation.						*/
-/************************************************************************/
-// $Id: openmeetings.class.php 7575 2008-06-04 18:17:14Z hwong $
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License") +  you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 if (!defined('AT_INCLUDE_PATH')) { exit; }
-<<<<<<< HEAD
 //require('SOAP_openmeetings.php');
 require('REST_openmeetings.php');
-=======
-require('SOAP_openmeetings.php');
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 
 class Openmeetings {
 	var $_sid = '';		//Openmeetings session id
@@ -37,7 +40,6 @@ class Openmeetings {
 	 * Login to openmeetings
 	 * Login process is, login, saveuserinstance
 	 */
-<<<<<<< HEAD
 	/*function om_login() {
 		global $_config;
 		//$om = new REST_openmeetings($_config['openmeetings_location'].'/services/UserService/');
@@ -48,18 +50,6 @@ class Openmeetings {
 		 * Login to the openmeetings
 		 * ref: http://code.google.com/p/openmeetings/wiki/DirectLoginSoapGeneralFlow
 		 
-=======
-	function om_login() {
-		global $_config;
-		$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/UserService?wsdl');
-		$param = array (	'username' => $_config['openmeetings_username'], 
-							'userpass' => $_config['openmeetings_userpass']);
-
-		/**
-		 * Login to the openmeetings
-		 * ref: http://code.google.com/p/openmeetings/wiki/DirectLoginSoapGeneralFlow
-		 */
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		$result = $om->login($param);
 		if ($result < 0){
 			debug($om->getError($result), 'error');
@@ -69,11 +59,8 @@ class Openmeetings {
 		//If no error, then get the generated OM session id
 		$this->_sid = $om->getSid();
 
-<<<<<<< HEAD
 		//exit($this->_sid);
 
-=======
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		//Retrieve members information
 		$sql = 'SELECT login, first_name, last_name, email FROM '.TABLE_PREFIX.'members WHERE member_id='.$this->_member_id;
 		$result = mysql_query($sql);
@@ -88,7 +75,6 @@ class Openmeetings {
 					"email"					=> $row['email']
 				  );
 		$om->saveUserInstance($params);
-<<<<<<< HEAD
 	}*/
 
 	//new function
@@ -143,11 +129,6 @@ class Openmeetings {
 		
 		$om->saveUserInstance($params);
 	}
-=======
-	}
-
-
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 
 	/**
 	 * Add a room to the db iff it has not been created.  Each course should only have one room to it.
@@ -156,10 +137,7 @@ class Openmeetings {
 	 * @return room # of the created room, or the room # of the existed room
 	 */
 	function om_addRoom($room_name, $om_param=array()){
-<<<<<<< HEAD
 		//exit('adding room failed');
-=======
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		global $_config;
 
 		if ($this->_course_id < 0){
@@ -171,19 +149,12 @@ class Openmeetings {
 			//instead of returning room id, we might have to delete it and carry on.
 			return $room_id;
 		}
-<<<<<<< HEAD
 		
 		//Add this room
 		//$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
 		$om = new REST_openmeetings($_config['openmeetings_location'].'/services/');
 
 		/*$param = array (	
-=======
-
-		//Add this room
-		$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
-		$param = array (	
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 					'SID'					=> $this->_sid,
 					'name'					=> $room_name,
 					'roomtypes_id'			=> $om_param['openmeetings_roomtype'],
@@ -197,7 +168,6 @@ class Openmeetings {
 					'showFilesPanel'		=> $om_param['openmeetings_show_fp'],
 					'filesPanelHeight'		=> $om_param['openmeetings_fp_h'],
 					'filesPanelWidth'		=> $om_param['openmeetings_fp_w']
-<<<<<<< HEAD
 					);*/
 
 		$param = array (	
@@ -211,8 +181,6 @@ class Openmeetings {
 					'demoTime'                      => 1000,
 					// TODO Check if it is
 					'isModeratedRoom'		=>0
-=======
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 					);
 		$result = $om->addRoom($param);
 		//TODO: Check for error, and handles success/failure
@@ -243,14 +211,9 @@ class Openmeetings {
 		global $_config;
 
 		//update this room
-<<<<<<< HEAD
 		//$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
 		$om = new REST_openmeetings($_config['openmeetings_location'].'/services/');
 		/*$param = array (	
-=======
-		$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
-		$param = array (	
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 					'SID'					=> $this->_sid,
 					'rooms_id'				=> $room_id,
 					'name'					=> $om_param['openmeetings_room_name'],
@@ -265,7 +228,6 @@ class Openmeetings {
 					'showFilesPanel'		=> $om_param['openmeetings_show_fp'],
 					'filesPanelHeight'		=> $om_param['openmeetings_fp_h'],
 					'filesPanelWidth'		=> $om_param['openmeetings_fp_w']
-<<<<<<< HEAD
 					);*/	
 		$param = array (	
 					'SID'					=> $this->_sid,
@@ -281,9 +243,6 @@ class Openmeetings {
 					'isModeratedRoom'		=> 0
 					);
 
-=======
-					);
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		$result = $om->updateRoom($param);
 		return $result;
 	}
@@ -324,12 +283,8 @@ class Openmeetings {
 		if ($room_id == ''){
 			return false;
 		}
-<<<<<<< HEAD
 		//$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
 		$om = new REST_openmeetings($_config['openmeetings_location'].'/services/');
-=======
-		$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		$param = array (	
 					'SID'			=> $this->_sid,
 					'rooms_id'		=> $room_id
@@ -351,12 +306,8 @@ class Openmeetings {
 	 */
 	function om_deleteRoom($room_id){
 		global $_config;
-<<<<<<< HEAD
 		//$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
 		$om = new REST_openmeetings($_config['openmeetings_location'].'/services/');
-=======
-		$om = new SOAP_openmeetings($_config['openmeetings_location'].'/services/RoomService?wsdl');
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
 		$param = array (	
 					'SID'			=> $this->_sid,
 					'rooms_id'		=> $room_id
@@ -383,8 +334,4 @@ class Openmeetings {
 		return false;
 	}
 }
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> 5339730c2d7ab1dabf5f48cd6f7c06deae1ade82
