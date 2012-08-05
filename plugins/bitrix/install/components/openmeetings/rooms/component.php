@@ -24,7 +24,18 @@ if (!CModule::IncludeModule("openmeetings")) {
     return;
 }
 
-$arResult["ROOMS"] = COpenmeetings::GetRoomList();
+if (!$USER->IsAuthorized()) {
+	return;
+}
+
+if (isset($_REQUEST["ID"]) && is_numeric($_REQUEST["ID"]) && $_REQUEST["ID"] > 0) {
+	$arResult["ROOM"] = $_REQUEST["ID"];
+	$arResult["URL"] = COpenmeetings::GetOMUrl();
+	$arResult["HASH"] = COpenmeetings::GetRoomHash($_REQUEST["ID"]);
+	$arResult["LANGUAGE"] = 8;
+	$this->__templateName = "show_room";
+} else {
+	$arResult["ROOMS"] = COpenmeetings::GetRoomList();
+}
 
 $this->IncludeComponentTemplate();
-

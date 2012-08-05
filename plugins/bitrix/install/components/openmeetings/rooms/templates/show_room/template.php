@@ -17,7 +17,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$arModuleVersion = array(
-	"VERSION" => "11.0.0",
-	"VERSION_DATE" => "2012-08-04 00:00:00"
-);
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
+if (empty($arResult["HASH"])) {
+	return true;
+}
+$swfurl = $arResult["URL"]
+	. "/?"
+	. "scopeRoomId=" . $arResult["ROOM"]
+	. "&secureHash=" . $arResult["HASH"]
+	. "&lzproxied=solo"
+	. "&language=" . $arResult["LANGUAGE"];
+
+?>
+<iframe src="<?=$swfurl?>" style="width: 800px; height: 600px;">
+	<p align="center">
+		<strong><?=GetMessage("NEED_FLASH")?><a
+			href="http://www.macromedia.com/go/getflash/"><?=GetMessage("GET_FLASH")?></a>
+		</strong>!
+	</p>
+</iframe>

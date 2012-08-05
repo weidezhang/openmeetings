@@ -77,7 +77,7 @@ class openmeetings_gateway {
 	/**
 	 * TODO: Get Error Service and show detailed Error Message
 	 */
-	function openmeetings_loginuser() {
+	function loginuser() {
 		$restService = $this->getRestService();
 
 		$response = $restService->call($this->getUrl()."UserService/getSession","session_id");
@@ -152,7 +152,7 @@ class openmeetings_gateway {
 		return $this->checkResult($restService, $result);
 	}
 
-	function openmeetings_createroomwithmod($openmeetings) {
+	function createroomwithmod($openmeetings) {
 		$restService = $this->getRestService();
 		
 		$result = $restService->call($this->getUrl()."RoomService/addRoomWithModerationAndRecordingFlags?" .
@@ -175,7 +175,7 @@ class openmeetings_gateway {
 		return $this->checkResult($restService, $result);
 	}
 
-	function openmeetings_setUserObjectAndGenerateRoomHash($username, $firstname, $lastname,
+	function setUserObjectAndGenerateRoomHash($username, $firstname, $lastname,
 		$profilePictureUrl, $email, $externalUserId, $room_id, $becomeModeratorAsInt,
 		$showAudioVideoTestAsInt) {
 		$restService = $this->getRestService();

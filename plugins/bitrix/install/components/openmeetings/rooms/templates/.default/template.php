@@ -17,7 +17,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$arModuleVersion = array(
-	"VERSION" => "11.0.0",
-	"VERSION_DATE" => "2012-08-04 00:00:00"
-);
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
+if (empty($arResult["ROOMS"])) {
+	return true;
+}
+?>
+<div><?=GetMessage("ROOMS_DESCRIPTION")?></div>
+<div>
+<?php
+	foreach($arResult["ROOMS"] as $room) { 
+?>
+	<div><?=GetMessage("ENTER_ROOM")?> <a href="<?php echo($APPLICATION->GetCurPage()); ?>?ID=<?php echo($room["id"]); ?>"><?php echo($room["name"]); ?></a></div>
+<?php
+	} 
+?>
+</div>

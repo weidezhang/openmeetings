@@ -17,7 +17,5 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$arModuleVersion = array(
-	"VERSION" => "11.0.0",
-	"VERSION_DATE" => "2012-08-04 00:00:00"
-);
+$MESS["NEED_FLASH"] = "This content requires the Adobe Flash Player: ";
+$MESS["GET_FLASH"] = "Get Flash";

@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,7 +17,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$arModuleVersion = array(
-	"VERSION" => "11.0.0",
-	"VERSION_DATE" => "2012-08-04 00:00:00"
-);
+$MESS["ROOMS_DESCRIPTION"] = "Please select Room below to attend webinar";
+$MESS["ENTER_ROOM"] = "Enter room";
+
