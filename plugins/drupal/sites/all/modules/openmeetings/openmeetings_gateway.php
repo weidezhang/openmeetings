@@ -105,8 +105,6 @@ class openmeetings_gateway {
 
 	function openmeetings_updateRoomWithModeration($openmeetings) {
 
-		global $CFG;
-
 		$restService = new openmeetings_rest_service();
 		//echo $restService."<br/>";
 		$err = $restService->getError();
@@ -118,7 +116,7 @@ class openmeetings_gateway {
 		$course_name = 'MOODLE_COURSE_ID_'.$openmeetings->course.'_NAME_'.$openmeetings->name;
 			
 		$isModeratedRoom = false;
-		if ($openmeetings->is_moderated_room == 1) {
+		if ($openmeetings->isModeratedRoom == 1) {
 			$isModeratedRoom = true;
 		}
 
@@ -134,6 +132,48 @@ class openmeetings_gateway {
 							"&isDemoRoom=false".
 							"&demoTime=0".
 							"&isModeratedRoom=".$this->var_to_str($isModeratedRoom));
+
+		if ($restService->getError()) {
+			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($restService->getErrorMessage()); echo '</pre>';
+		} else {
+			return $result;
+		}
+		return -1;
+	}
+	
+	function openmeetings_updateRoomWithModerationAndQuestions($openmeetings) {
+
+		$restService = new openmeetings_rest_service();
+		//echo $restService."<br/>";
+		$err = $restService->getError();
+		if ($err) {
+			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			exit();
+		}
+		$room_name = 'DRUPAL_ModeleKey:_'.$this->moduleKey.'_NAME_'.$openmeetings->name;
+			
+		$isModeratedRoom = ($openmeetings->isModeratedRoom == 1) ? 'true' : 'false';
+    	$allowUserQuestions = ($openmeetings->allowUserQuestions == 1) ? 'true' : 'false';
+    	$isAudioOnly = ($openmeetings->isAudioOnly == 1) ? 'true' : 'false';
+
+		$url = $this->getUrl()."/services/RoomService/updateRoomWithModerationAndQuestions?" .
+							"SID=".$this->session_id.
+							"&room_id=".$openmeetings->room_id.
+							"&name=".urlencode($room_name).
+							"&roomtypes_id=".urlencode($openmeetings->roomtypes_id).
+							"&comment=".urlencode("Created by SOAP-Gateway for Moodle Platform").
+							"&numberOfPartizipants=".$openmeetings->numberOfPartizipants.
+							"&ispublic=false".
+							"&appointment=false".
+							"&isDemoRoom=false".
+							"&demoTime=0".
+							"&isModeratedRoom=".$isModeratedRoom . 
+							"&allowUserQuestions=".$allowUserQuestions;
+
+		die($url);
+
+		$result = $restService->call($url);
 
 		if ($restService->getError()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($restService->getErrorMessage()); echo '</pre>';
@@ -337,6 +377,48 @@ class openmeetings_gateway {
 						'&isAudioOnly='. $isAudioOnly
 						;
 						
+	 	$result = $restService->call($url, "return");
+		
+		if ($restService->getError()) {
+			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($restService->getErrorMessage()); echo '</pre>';
+		} else {
+			return $result;
+		}   
+		return -1;
+	}
+	
+	function openmeetings_updateRoomWithModerationQuestionsAudioTypeAndHideOptions($openmeetings) {
+	
+		$restService = new openmeetings_rest_service();
+    	$room_name = 'DRUPAL_ModeleKey:_'.$this->moduleKey.'_NAME_'.$openmeetings->name;
+		
+    	$isModeratedRoom = ($openmeetings->isModeratedRoom == 1) ? 'true' : 'false';
+    	$allowUserQuestions = ($openmeetings->allowUserQuestions == 1) ? 'true' : 'false';
+    	$isAudioOnly = ($openmeetings->isAudioOnly == 1) ? 'true' : 'false';
+		
+		$url = $this->getUrl().'/services/RoomService/updateRoomWithModerationQuestionsAudioTypeAndHideOptions?' .
+						'SID='.$this->session_id .
+						'&room_id='.$openmeetings->room_id .
+						'&name='.urlencode($room_name).
+						'&roomtypes_id='.$openmeetings->roomtypes_id .
+						'&comment='.urlencode('Created by SOAP/REST-Gateway for Drupal Platform') .
+						'&numberOfPartizipants='.$openmeetings->numberOfPartizipants .
+						'&ispublic='.$openmeetings->ispublic .
+						'&appointment=false'.
+						'&isDemoRoom=false'.
+						'&demoTime=0' .
+						'&isModeratedRoom='. $isModeratedRoom .
+						'&allowUserQuestions='. $allowUserQuestions .
+						'&isAudioOnly='. $isAudioOnly .
+						'&hideTopBar=false' .
+						'&hideChat=false' .
+						'&hideActivitiesAndActions=false' .
+						'&hideFilesExplorer=false' .
+						'&hideActionsMenu=false' .
+						'&hideScreenSharing=false' .
+						'&hideWhiteboard=false' 
+						;
+		
 	 	$result = $restService->call($url, "return");
 		
 		if ($restService->getError()) {

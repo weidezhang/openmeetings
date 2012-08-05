@@ -52,14 +52,11 @@ class openmeetingsRoomManagament {
 			$openmeetings->isDemoRoom = 0;
 			$openmeetings->demoTime = "";
 			$openmeetings->isModeratedRoom = $data['is_moderated_room'];
+			$openmeetings->isAudioOnly = $data['isAudioOnly'];
 			$openmeetings->allowUserQuestions = $data['allowUserQuestions'];
 			
-			$roomid = $openmeetings_gateway->updateRoomWithModerationAndQuestions($openmeetings);	
+			$roomid = $openmeetings_gateway->openmeetings_updateRoomWithModerationAndQuestions($openmeetings);	
 			
-			//echo "roomid". $roomid;
-			//exit();
-			
-				
 			return $roomid;
 						
 		} else {

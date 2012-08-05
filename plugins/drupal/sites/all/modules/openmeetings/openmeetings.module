@@ -236,15 +236,15 @@ function openmeetings_start_form($form_state, $node) {
 			$becomemoderator = 0;
 		}
 
-		$showAudioVideoTest = 1;
+		$allowRecording = $node['build_info']['args'][0]->room->allowRecording;
 
 		//test if user is logined	
 		if (!in_array("anonymous user", $user->roles)) {
-			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($user->name, $user->name, '', $user->picture, $user->mail, $user->uid, $user->roles[2], $room_id, $becomemoderator, $showAudioVideoTest);
+			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag($user->name, $user->name, '', $user->picture, $user->mail, $user->uid, $user->roles[2], $room_id, $becomemoderator, $allowRecording);
 		} else {
-			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash('anonymous user', 'anonymous user', '', 'anonymous user', 'anonymous user', $user->uid, $user->roles[1], $room_id, $becomemoderator, $showAudioVideoTest);
+			$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHashByURLAndRecFlag('anonymous user', 'anonymous user', '', 'anonymous user', 'anonymous user', $user->uid, $user->roles[1], $room_id, $becomemoderator, $allowRecording);
 		}
-
+		
 		if ($language->language == 'en') {
 			$om_laguage_id = 1;
 		} else if ($language->language == 'de') {
@@ -421,6 +421,19 @@ function openmeetings_form(& $node) {
 	// build the node form correctly.
 	global $user;
 	// $type = node_get_types('type', $node);
+	
+	$node->room = null;
+	
+	if (isset($node->vid)) {
+		$additions = db_query('SELECT * FROM {openmeetings_rooms} WHERE nid = :nid', array (
+			':nid' => $node->vid
+		));
+
+		foreach($additions as $room) {
+			$node->room = $room;
+		}
+	}
+	
 
 	$type = _node_types_build()->types;
 	
@@ -483,7 +496,7 @@ function openmeetings_form(& $node) {
 		$form['roomtype_id'] = array (
 			'#type' => 'select',
 			'#title' => t('Roomtype'),
-			'#default_value' => isset ($node->roomtype_id) ? $node->roomtype_id : 1,
+			'#default_value' => isset ($node->room->roomtype_id) ? $node->room->roomtype_id : 1,
 			'#options' => $options,
 			'#description' => t('Roomtype'),
 			
@@ -491,7 +504,7 @@ function openmeetings_form(& $node) {
 	} else {
 		$form['roomtype_id'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->roomtype_id) ? $node->roomtype_id : 1,
+			'#default_value' => isset ($node->room->roomtype_id) ? $node->room->roomtype_id : 1,
 			
 		);
 	}
@@ -515,22 +528,33 @@ function openmeetings_form(& $node) {
 	}
 
 	if (user_access('edit is_public', $user)) {
-		$options = array (
-			"1" => t('Yes'),
-			"0" => t('No')
-		);
+		
+		//the "ispublic" flag has no effect to the drupal integration,
+		//integrated rooms should always have the flag set to false/0
+		
+//		$options = array (
+//			"1" => t('Yes'),
+//			"0" => t('No')
+//		);
+//		$form['is_public'] = array (
+//			'#type' => 'select',
+//			'#title' => t('Public Room'),
+//			'#default_value' => isset ($node->room->is_public) ? $node->room->is_public : "1",
+//			'#options' => $options,
+//			'#description' => t('If this room is public, it will appear in the frontend for everybody.'),
+//			
+//		);
+		
 		$form['is_public'] = array (
-			'#type' => 'select',
-			'#title' => t('Public Room'),
-			'#default_value' => isset ($node->is_public) ? $node->is_public : "1",
-			'#options' => $options,
-			'#description' => t('If this room is public, it will appear in the frontend for everybody.'),
+			'#type' => 'hidden',
+			'#default_value' => 0,
 			
 		);
+		
 	} else {
 		$form['is_public'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->is_public) ? $node->is_public : "1",
+			'#default_value' => 0,
 			
 		);
 	}
@@ -538,13 +562,13 @@ function openmeetings_form(& $node) {
 	if (user_access('edit appointment', $user)) {
 		$form['appointment'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->appointment) ? $node->appointment : "0",
+			'#default_value' => isset ($node->room->appointment) ? $node->room->appointment : "0",
 			
 		);
 	} else {
 		$form['appointment'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->appointment) ? $node->appointment : "0",
+			'#default_value' => isset ($node->room->appointment) ? $node->room->appointment : "0",
 			
 		);
 	}
@@ -557,15 +581,15 @@ function openmeetings_form(& $node) {
 		$form['is_moderated_room'] = array (
 			'#type' => 'select',
 			'#title' => t('Moderated Room'),
-			'#default_value' => isset ($node->is_moderated_room) ? $node->is_moderated_room : "1",
+			'#default_value' => isset ($node->room->is_moderated_room) ? $node->room->is_moderated_room : "1",
 			'#options' => $options,
-			'#description' => t('Users have to wait untill a Moderator arrives. Use the becomeModerator param in setUserObjectAndGenerateRoomHash to set a user as default Moderator.'),
+			'#description' => t('Users have to wait untill a Moderator arrives.'),
 			
 		);
 	} else {
 		$form['is_moderated_room'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->is_moderated_room) ? $node->is_moderated_room : "1",
+			'#default_value' => isset ($node->room->is_moderated_room) ? $node->room->is_moderated_room : "1",
 			
 		);
 	}
@@ -578,7 +602,7 @@ function openmeetings_form(& $node) {
 		$form['isAudioOnly'] = array (
 			'#type' => 'select',
 			'#title' => t('Is Audio Only'),
-			'#default_value' => isset ($node->isAudioOnly) ? $node->isAudioOnly : "0",
+			'#default_value' => isset ($node->room->isAudioOnly) ? $node->room->isAudioOnly : "0",
 			'#options' => $options,
 			'#description' => t('Is Audio Only.'),
 			
@@ -586,7 +610,7 @@ function openmeetings_form(& $node) {
 	} else {
 		$form['isAudioOnly'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->isAudioOnly) ? $node->isAudioOnly : "1",
+			'#default_value' => isset ($node->room->isAudioOnly) ? $node->room->isAudioOnly : "1",
 			
 		);
 	}
@@ -599,7 +623,7 @@ function openmeetings_form(& $node) {
 		$form['allowUserQuestions'] = array (
 			'#type' => 'select',
 			'#title' => t('Allow User Questions'),
-			'#default_value' => isset ($node->allowUserQuestions) ? $node->allowUserQuestions : "1",
+			'#default_value' => isset ($node->room->allowUserQuestions) ? $node->room->allowUserQuestions : "1",
 			'#options' => $options,
 			'#description' => t('Allow users to ask questions.'),
 			
@@ -607,7 +631,7 @@ function openmeetings_form(& $node) {
 	} else {
 		$form['allowUserQuestions'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->allowUserQuestions) ? $node->allowUserQuestions : "1",
+			'#default_value' => isset ($node->room->allowUserQuestions) ? $node->room->allowUserQuestions : "1",
 			
 		);
 	}
@@ -620,7 +644,7 @@ function openmeetings_form(& $node) {
 		$form['allowRecording'] = array (
 			'#type' => 'select',
 			'#title' => t('Allow Recording'),
-			'#default_value' => isset ($node->allowRecording) ? $node->allowRecording : "1",
+			'#default_value' => isset ($node->room->allowRecording) ? $node->room->allowRecording : "1",
 			'#options' => $options,
 			'#description' => t('Allow Recording.'),
 			
@@ -628,7 +652,7 @@ function openmeetings_form(& $node) {
 	} else {
 		$form['allowRecording'] = array (
 			'#type' => 'hidden',
-			'#default_value' => isset ($node->allowRecording) ? $node->allowRecording : "1",
+			'#default_value' => isset ($node->room->allowRecording) ? $node->room->allowRecording : "1",
 			
 		);
 	}
@@ -757,6 +781,9 @@ function openmeetings_insert($node) {
 			'is_public' => $node->is_public,
 			'appointment' => 0,
 			'is_moderated_room' => $node->is_moderated_room,
+			'allowRecording' => $node->allowRecording,
+			'isAudioOnly' => $node->isAudioOnly,
+			'allowUserQuestions' => $node->allowUserQuestions,
 			'demo' => 0,
 			
 		))->execute();
@@ -788,13 +815,17 @@ function openmeetings_update($node) {
 		openmeetings_insert($node);
 	} else {
 
+		//print_r($node);
+		//die("UDPATE");
+
 		$room_name = check_plain($node->room_name);
 		if ($room_name == variable_get('openmeetings_room_prefix2', 'NewRoom')) {
 			$room_name = variable_get('openmeetings_room_prefix2', 'NewRoom') . "_" . base_convert((time() - 1225500000) . rand(0, 10), 10, 36);
 		}
-		$data = '';
+		
+		$data = array();
 
-		$data['room_id'] = $node->original->room->room_id;
+		$data['room_id'] = $node->room->room_id;
 		$data['name'] = $node->room_name;
 		$data['roomtype_id'] = $node->roomtype_id;
 		$data['comment'] = $node->room_comment;
@@ -803,9 +834,10 @@ function openmeetings_update($node) {
 		$data['appointment'] = $node->appointment;
 		$data['isDemoRoom'] = 0;
 		$data['demoTime'] = "";
+		$data['isAudioOnly'] = $node->isAudioOnly;
 		$data['is_moderated_room'] = $node->is_moderated_room;
 		$data['allowUserQuestions'] = $node->allowUserQuestions;
-
+		
 		$omRoomManagament = new openmeetingsRoomManagament();
 		$room_id = $omRoomManagament->updateRoomWithModerationAndQuestions($data);
 
@@ -827,7 +859,10 @@ function openmeetings_update($node) {
 				'file_delete' => 0,
 				'is_public' => 0,
 				'appointment' => 0,
-				'is_moderated_room' => 0,
+				'is_moderated_room' => $node->is_moderated_room,
+				'allowRecording' => $node->allowRecording,
+				'isAudioOnly' => $node->isAudioOnly,
+				'allowUserQuestions' => $node->allowUserQuestions,
 				'demo' => 0,
 				
 			))->condition('nid', $node->nid)->execute();
