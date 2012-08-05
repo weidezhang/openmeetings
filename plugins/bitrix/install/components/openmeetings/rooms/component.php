@@ -32,7 +32,7 @@ if (isset($_REQUEST["ID"]) && is_numeric($_REQUEST["ID"]) && $_REQUEST["ID"] > 0
 	$arResult["ROOM"] = $_REQUEST["ID"];
 	$arResult["URL"] = COpenmeetings::GetOMUrl();
 	$arResult["HASH"] = COpenmeetings::GetRoomHash($_REQUEST["ID"]);
-	$arResult["LANGUAGE"] = 8;
+	$arResult["LANGUAGE"] = 9;
 	$this->__templateName = "show_room";
 } else {
 	$arResult["ROOMS"] = COpenmeetings::GetRoomList();
