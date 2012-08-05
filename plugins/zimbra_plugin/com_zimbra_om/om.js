@@ -1,59 +1,39 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+
+
 //constructors
 function com_zimbra_om(){
 }
 com_zimbra_om.prototype = new ZmZimletBase();
 com_zimbra_om.prototype.constructor =com_zimbra_om;
-com_zimbra_om._url = "http://demo.dataved.ru/openmeetings/services/UserService/getSession";
 
-//----------------------------------------------------------------------------------variables---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//variables
 
-var validTOTime;
-var validFromTime;
-var validFromDate;
-var validfromdate;
-var valid;
-var invitationpass;
-var isPasswordProtected;
-var conferencedomain;
-var email;
-var baseurl;
-var username;
-var sid;
-var profile;
-var room_id;
-var language_id;
-var invitation_password;
-var start_date;
-var start_time;
-var end_date;
-var end_time;
-var endless;
-var fromtotime;
-var onetime;
-var email_id;
-var subject;
-var message;
-var date;
-var server1_baseurl;
-var server1_username;
-var server1_password;
-var server2_baseurl;
-var server2_username;
-var server2_password;
-var server3_baseurl;
-var server3_username;
-var server3_password;
-var server4_baseurl;
-var server4_username;
-var server4_password;
-var server5_baseurl;
-var server5_username;
-var server5_password;
-
-//------------------------------------------------------------------------variables end---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+var validFromDate,validFromTime,validToDate,validToTime;
+var selected_server,selected_username,selected_password;
+var new_sid;
 
 
-//------------------------------------------------------------------------handling clicks------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//handling clicks
+
 // function to convert double clicks into single clicks
 com_zimbra_om.prototype.doubleClicked=
 	function(){
@@ -66,156 +46,185 @@ com_zimbra_om.prototype.singleClicked =
 				this._selectserverdisplay();
 			};
 
-//-----------------------------------------------------------------------handling clicks end---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------preferences dialog box--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//preferences dialog box
 com_zimbra_om.prototype.menuItemSelected = function(){
-    //this.pView = new DwtComposite(this.getShell());
-    //this.pView.getHtmlElement().innerHTML = "<div>username <input type = 'text'/> <br/> password <input type = 'text'/> <br/> baseurl <input type = 'text'/> </div>";
-    //this.pView.getHtmlElement().innerHTML = this._createPreferenceView();
     this.pView = new DwtListView({parent:this.getShell(), noMaximize:false});
+    this.pView.setSize("520","350");
 
     this.server1 = new DwtText ({parent:this.pView, name:"server1", id:"server1"});
     this.server1.setText("Server1");
+    this.server1.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1.setLocation(20,35);
+    
 
     this.server1_baseurl_text = new DwtText({parent:this.pView, name:"server1_baseurl_text", id:"server1_baseurl_text"});
     this.server1_baseurl_text.setText("URL");
+    this.server1_baseurl_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_baseurl_text.setLocation(20,50);
     this.server1_baseurl = new DwtInputField ({parent:this.pView, name: "server1_baseurl", id: "server1_baseurl"});
+    this.server1_baseurl.setValue(this.getUserProperty("server1_baseurl"));
+    this.server1_baseurl.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_baseurl.setLocation(20,65);
 
     this.server1_username_text = new DwtText({parent:this.pView, name:"server1_username_text",id: "server1_username_text"});
     this.server1_username_text.setText("Username");
+    this.server1_username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_username_text.setLocation(200,50);
     this.server1_username = new DwtInputField ({parent:this.pView, name: "server1_username", id: "server1_username"});
+    this.server1_username.setValue(this.getUserProperty("server1_username"));
+    this.server1_username.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_username.setLocation(200,65);
 
     this.server1_password_text = new DwtText ({parent:this.pView, name: "server1_passwor_text", id:"server1_password_text"});
     this.server1_password_text.setText("password");
+    this.server1_password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_password_text.setLocation(380,50);
     this.server1_password = new DwtInputField ({parent:this.pView, name: "server1_password", id: "server1_password"});
+    this.server1_password.setValue(this.getUserProperty("server1_password"));
+    this.server1_password.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server1_password.setLocation(380,65);
 
     this.server2 = new DwtText({parent:this.pView, name:"server2",id:"server2"});
     this.server2.setText("Server2");
+    this.server2.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2.setLocation(20,100);
 
     this.server2_baseurl_text = new DwtText({parent:this.pView, name:"server2_baseurl_text",id:"server2_baseurl_text"});
     this.server2_baseurl_text.setText("URL");
-    this.server2_baseurl =  new DwtInputField ({parent:this.pView, name: "server2_baseurl", id: "server2_baseurl"});
+    this.server2_baseurl_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_baseurl_text.setLocation(20,120);
+    this.server2_baseurl = new DwtInputField ({parent:this.pView, name: "server2_baseurl", id: "server2_baseurl"});
+    this.server2_baseurl.setValue(this.getUserProperty("server2_baseurl"));
+    this.server2_baseurl.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_baseurl.setLocation(20,135);
 
     this.server2_username_text = new DwtText({parent:this.pView, name:"server2_username_text", id:"server2_username_text"});
     this.server2_username_text.setText("Username");
+    this.server2_username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_username_text.setLocation(200,120);
     this.server2_username = new DwtInputField ({parent:this.pView, name: "server2_username", id: "server2_username"});
-
+    this.server2_username.setValue(this.getUserProperty("server2_username"));
+    this.server2_username.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_username.setLocation(200,135);
+    
     this.server2_password_text = new DwtText({parent:this.pView, name:"server2_password_text", id:"server2_password_text"});
     this.server2_password_text.setText("Password");
+    this.server2_password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_password_text.setLocation(380,120);
     this.server2_password = new DwtInputField ({parent:this.pView, name: "server2_password" ,id: "server2_password"});
-
-    //server3
+    this.server2_password.setValue(this.getUserProperty("server2_password"));
+    this.server2_password.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server2_password.setLocation(380,135);
+    
     this.server3 = new DwtText ({parent:this.pView, name:"server3", id:"server3"});
     this.server3.setText ("Server 3");
+    this.server3.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3.setLocation(20,165);
 
     this.server3_baseurl_text = new DwtText ({parent:this.pView, name: "server3_baseurl_text", id:"server3_baseurl_text"});
     this.server3_baseurl_text.setText("URL");
+    this.server3_baseurl_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_baseurl_text.setLocation(20,185);
     this.server3_baseurl  = new DwtInputField ({parent:this.pView, name:  "server3_baseurl" , id: "server3_baseurl"});
+    this.server3_baseurl.setValue(this.getUserProperty("server3_baseurl"));
+    this.server3_baseurl.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_baseurl.setLocation(20,200);
 
-   //server3 username
     this.server3_username_text = new DwtText ({parent:this.pView, name:"server3_username_text", id:"server3_username_text"});
     this.server3_username_text.setText("Username");
+    this.server3_username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_username_text.setLocation(200,185)
     this.server3_username = new DwtInputField({parent:this.pView, name:"server3_username", id:"server_username"});
+    this.server3_username.setValue(this.getUserProperty("server3_username"));
+    this.server3_username.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_username.setLocation(200,200);
 
     this.server3_password_text = new DwtText ({parent:this.pView, name:"server3_password_text", id:"server3_password_text"});
     this.server3_password_text.setText("Password");
+    this.server3_password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_password_text.setLocation(380,185);
     this.server3_password = new DwtInputField ({parent:this.pView, name: "server3_password", id:"server3_password"});
+    this.server3_password.setValue(this.getUserProperty("server3_password"));
+    this.server3_password.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server3_password.setLocation(380,200);
 
     this.server4 = new DwtText({parent:this.pView, name:"server4", id:"server4"});
     this.server4.setText("Server 4");
+    this.server4.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4.setLocation(20,230);
 
     this.server4_baseurl_text = new DwtText ({parent:this.pView, name:"server4_baseurl_text", id :"server4_baseurl_text"});
     this.server4_baseurl_text.setText("URL");
+    this.server4_baseurl_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_baseurl_text.setLocation(20,250);
     this.server4_baseurl = new DwtInputField ({parent:this.pView, name:"server4_baseurl", id:"server4_baseurl"});
+    this.server4_baseurl.setValue(this.getUserProperty("server4_baseurl"));
+    this.server4_baseurl.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_baseurl.setLocation(20,265);
 
     this.server4_username_text = new DwtText({parent:this.pView, name:"server4_username_text", id:"server4_username_text"});
-    this.server4_username_text.setText("Username")
+    this.server4_username_text.setText("Username");
+    this.server4_username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_username_text.setLocation(200,250);
     this.server4_username = new DwtInputField ({parent:this.pView, name: "server4_username", id: "server4_username"});
+    this.server4_username.setValue(this.getUserProperty("server4_username"));
+    this.server4_username.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_username.setLocation(200,265);
 
     this.server4_password_text = new DwtText({parent:this.pView, name:"server4_password_text", id:"server4_password_text"});
     this.server4_password_text.setText("Password");
+    this.server4_password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_password_text.setLocation(380,250);
     this.server4_password = new DwtInputField ({parent:this.pView, name:"server4_password", id: "server4_password"});
-
+    this.server4_password.setValue(this.getUserProperty("server4_password"));
+    this.server4_password.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server4_password.setLocation(380,265);
+    
     this.server5 = new DwtText ({parent:this.pView, name:"server5", id:"server5"});
     this.server5.setText ("Server5");
+    this.server5.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5.setLocation(20,295);
 
     this.server5_baseurl_text =  new DwtText ({parent:this.pView, name:"server5_baseurl_text", id:"server5_baseurl_text"});
     this.server5_baseurl_text.setText("URL");
+    this.server5_baseurl_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_baseurl_text.setLocation(20,315);
     this.server5_baseurl = new DwtInputField ({parent:this.pView , name:"server5_baseurl" ,id:"server5_baseurl"});
-
+    this.server5_baseurl.setValue(this.getUserProperty("server5_baseurl"));
+    this.server5_baseurl.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_baseurl.setLocation(20,330);
+    
     this.server5_username_text = new DwtText ({parent:this.pView, name:"server5_username_text",id:"server5_username_text"});
     this.server5_username_text.setText("Username");
+    this.server5_username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_username_text.setLocation(200,315);
     this.server5_username = new DwtInputField ({parent:this.pView , name: "server5_username", id:"server5_username"});
+    this.server5_username.setValue(this.getUserProperty("server5_username"));
+    this.server5_username.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_username.setLocation(200,330);
 
     this.server5_password_text = new DwtText ({parent:this.pView, name:"server5_password_text", id:"server5_password_text"});
     this.server5_password_text.setText("Password");
+    this.server5_password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_password_text.setLocation(380,315);
     this.server5_password = new DwtInputField ({parent:this.pView, name :"server5_password", id:"server5_password"});
+    this.server5_password.setValue(this.getUserProperty("server5_password"));
+    this.server5_password.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.server5_password.setLocation(380,330);
 
-    this.pbDialog = this._createDialog({title:"Zimlet Preference", view:this.pView, standardButtons: [DwtDialog.OK_BUTTON]});
+    this.pbDialog = this._createDialog({title:"Zimlet Preference", view:this.pView, standardButtons: [DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]});
     this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this,this._okBtnListenerpref));
     this.pbDialog.popup();
 };
 
 
-/**
-com_zimbra_om.prototype._createPreferenceView =
-    function() {
-        var html = new Array();
-        var i = 0;
-        html[i++] = "<div>";
-        html[i++] = "Server 1"
-        html[i++] = "baseurl";
-        html[i++] = "<input type = 'text' id = 'server1_baseurl'/>";
-        html[i++] = "username";
-        html[i++] = "<input type = 'text' id = 'server1_username'/>";
-        html[i++] = "password";
-        html[i++] = "<input type = 'text' id = 'server1_password'/>";
-        html[i++] = "</div>"
-        html[i++] = "<div>";
-        html[i++] = "Server 2"
-        html[i++] = "baseurl";
-        html[i++] = "<input type = 'text' id = 'server2_baseurl'/>";
-        html[i++] = "username";
-        html[i++] = "<input type = 'text' id = 'server2_username'/>";
-        html[i++] = "password";
-        html[i++] = "<input type = 'text' id = 'server2_password'/>";
-        html[i++] = "</div>"
-        html[i++] = "<div>";
-        html[i++] = "Server 3"
-        html[i++] = "baseurl";
-        html[i++] = "<input type = 'text' id = 'server3_baseurl'/>";
-        html[i++] = "username";
-        html[i++] = "<input type = 'text' id = 'server3_username'/>";
-        html[i++] = "password";
-        html[i++] = "<input type = 'text' id = 'server3_password'/>";
-        html[i++] = "</div>"
-        html[i++] = "<div>";
-        html[i++] = "Server 4"
-        html[i++] = "baseurl";
-        html[i++] = "<input type = 'text' id = 'server4_baseurl'/>";
-        html[i++] = "username";
-        html[i++] = "<input type = 'text' id = 'server4_username'/>";
-        html[i++] = "password";
-        html[i++] = "<input type = 'text' id = 'server4_password'/>";
-        html[i++] = "</div>"
-        html[i++] = "<div>";
-        html[i++] = "Server 5"
-        html[i++] = "baseurl";
-        html[i++] = "<input type = 'text' id = 'server5_baseurl'/>";
-        html[i++] = "username";
-        html[i++] = "<input type = 'text' id = 'server5_username'/>";
-        html[i++] = "password";
-        html[i++] = "<input type = 'text' id = 'server5_password'/>";
-        html[i++] = "</div>"
-        return html.join("");
-    };
 
- **/
-
+//preferences dialog box OK Button Listener
 com_zimbra_om.prototype._okBtnListenerpref =
     function(){
+
         server1_baseurl = this.server1_baseurl.getValue();
         server1_username = this.server1_username.getValue();
         server1_password = this.server1_password.getValue();
@@ -231,46 +240,31 @@ com_zimbra_om.prototype._okBtnListenerpref =
         server5_baseurl = this.server5_baseurl.getValue();
         server5_username = this.server5_username.getValue();
         server5_password = this.server5_password.getValue();
-        this.setUserProperty("server1_baseurl", server1_baseurl);
-        this.setUserProperty("server1_username", server1_username);
-        this.setUserProperty("server1_password", server1_password);
-        this.setUserProperty("server2_baseurl",  server2_baseurl );
-        this.setUserProperty("server2_username", server2_username);
-        this.setUserProperty("server2_password", server2_password);
-        this.setUserProperty("server3_baseurl", server3_baseurl);
-        this.getUserProperty("server3_username", server3_username);
-        this.getUserProperty("server3_password", server3_password);
-        this.setUserProperty("server4_baseurl",  server4_baseurl);
-        this.setUserProperty("server4_username", server4_username);
-        this.setUserProperty("server4_password", server4_password);
-        this.setUserProperty("server5_baseurl", server5_baseurl);
-        this.setUserProperty("server5_username", server5_username);
-        this.setUserProperty("server5_password", server5_password);
+
+
+        this.setUserProperty("server1_baseurl", server1_baseurl,1);
+        this.setUserProperty("server1_username", server1_username,1);
+        this.setUserProperty("server1_password", server1_password,1);
+        this.setUserProperty("server2_baseurl",  server2_baseurl,1);
+        this.setUserProperty("server2_username", server2_username,1);
+        this.setUserProperty("server2_password", server2_password,1);
+        this.setUserProperty("server3_baseurl", server3_baseurl,1);
+        this.getUserProperty("server3_username", server3_username,1);
+        this.getUserProperty("server3_password", server3_password,1);
+        this.setUserProperty("server4_baseurl",  server4_baseurl,1);
+        this.setUserProperty("server4_username", server4_username,1);
+        this.setUserProperty("server4_password", server4_password,1);
+        this.setUserProperty("server5_baseurl", server5_baseurl,1);
+        this.setUserProperty("server5_username", server5_username,1);
+        this.setUserProperty("server5_password", server5_password,1);
         this.pbDialog.popdown();
+
+
     };
 
-        //test
-
-    /**
-
-        this.testView = new DwtComposite({parent:this.getShell()});
-        this.testView.setSize("400","400");
-        this.testView.getHtmlElement().style.overflow = "auto";
-        this.testView.setPosition(DwtControl.RELATIVE_STYLE);
-        this.testView.getHtmlElement().innerHTML = "<div>" + server1_baseurl+ server1_username + server1_password+ "</div>" + "<div>" + this.getUserProperty("server2_baseurl") + this.getUserProperty("server2_username") + this.getUserProperty("server2_password") + "</div>";
-        this.testViewDlg = this._createDialog({title:"test", view :this.testView ,standardButtons: [DwtDialog.OK_BUTTON]});
-        this.testViewDlg.popup();
-    };
-
-    **/
 
 
-
-//------------------------------------------------------------------------preferences dialog box end-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------ start date selector calendar -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+//Calendar start date selector
 com_zimbra_om.prototype.calendar_popup_startdate = function(){
 	
 			this._parentView = new DwtListView({parent:this.getShell(),noMaximize:false});
@@ -279,40 +273,26 @@ com_zimbra_om.prototype.calendar_popup_startdate = function(){
             this._parentView.setPosition(DwtControl.RELATIVE_STYLE);
 
 			this.calendar = new DwtCalendar({parent:this._parentView, name:"calendar", id: "calendar"});
-           // this.calendar.addSelectionListener(new AjxListener(this,this.startdate_calendar_okbtnlistener));
-
- 			this.omDlg = this._createDialog({title:"Start date Selector", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON]});
+ 			this.omDlg = this._createDialog({title:"Start date Selector", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]});
             this.omDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.startdate_calendar_okbtnlistener));
 			this.omDlg.popup();
 };
 
+//Calendar start date dialog OK Button Listener
 com_zimbra_om.prototype.startdate_calendar_okbtnlistener = function(){
             start_date = this.calendar.getDate();
-            //var start_date_split = start_date.split(" ");
-           // var final_start_split = start_date_split[0]+start_date_split[1]+start_date_split[2]+start_date_split[3];
-
-			//this._startdate_calendar_okbtnlistener_parentView = new DwtComposite({parent:this.getShell(),noMaximize:false});
-            //this._startdate_calendar_okbtnlistener_parentView.setSize("250","250");
-            //this._parentView.getHtmlElement().style.overflow = "auto";
-           // this._parentView.setPosition(DwtControl.RELATIVE_STYLE);
-           // this._startdate_calendar_okbtnlistener_parentView.getHtmlElement().innerHTML = date;
-
             var start_date_string = start_date + " ";
             var start_date_string_array = start_date_string.split(" ");
             var start_date_final = start_date_string_array [0] + " " + start_date_string_array[1] + " " + start_date_string_array[2] + " " + start_date_string_array[3];
             this.meeting_start_date_box.setValue(start_date_final,true);
             this.omDlg.popdown();
 
-            //this._startdate_calendar_okbtnlistener_dialog =this._createDialog({title:"just fun",view:this._startdate_calendar_okbtnlistener_parentView,standardButtons:[DwtDialog.OK_BUTTON]});
-            //this._startdate_calendar_okbtnlistener_dialog.popup();
 };
 
-//------------------------------------------------------------------------start date selector calendar end ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------end date selector calendar-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+//Calendar end date selector
 com_zimbra_om.prototype.calendar_popup_enddate = function(){
 			
 			this._parentView = new DwtListView({parent:this.getShell(),noMaximize:false});
@@ -321,14 +301,14 @@ com_zimbra_om.prototype.calendar_popup_enddate = function(){
             this._parentView.setPosition(DwtControl.RELATIVE_STYLE);
 
 			this.calendar = new DwtCalendar({parent:this._parentView, name:"calendar", id: "calendar"});
-           // this.calendar.addSelectionListener(new AjxListener(this,this.enddate_calendar_okbtnlistener));
-
  			this.omDlg = this._createDialog({title:"End Date Selector", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON]});
             this.omDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.enddate_calendar_okbtnlistener));
 			this.omDlg.popup();
 
 };
 
+
+//Calendar end date selector OK Button Listener
 com_zimbra_om.prototype.enddate_calendar_okbtnlistener = function(){
 			//code for getting end date from the calendar and inserting it into the end date box
             end_date = this.calendar.getDate();
@@ -340,452 +320,527 @@ com_zimbra_om.prototype.enddate_calendar_okbtnlistener = function(){
 };
 
 
-//-----------------------------------------------------------------------end date selector calendar end-------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-//-------------------------------------------------------------------get rooms--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-com_zimbra_om.prototype.get_rooms = function(){
-    var url = 'http://demo.openmeetings.de/openmeetings/services/UserService/getRooms?SID=' +
-                    sid ;
-                        //HANDLE THE RETURNED VALUES
-    //AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getSession"], new AjxCallback(this, this._reponseHandler, postCallback) , true);
-    var request_url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-    AjxRpc.invoke(null, request_url, null , new AjxCallback(this, this._reponseHandler) , true);
-    //set room variables
-
-
-    //this._get_rooms_parentView = new DwtListView({parent:this.getShell(),noMaximize:false});
-    //this._get_rooms_parentView.setSize("200","200");
-    //write the selection box for returned values
-    //this.get_rooms_dialog = this._createDialog({title:"Rooms", view:this._get_rooms_parentView, standardButtons : [DwtDialog.OK_BUTTON]});
-    //this.get_rooms_dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.get_rooms_okBtnListener));
-    //this.get_rooms_dialog.popup();
-};
-
-com_zimbra_om.prototype.get_rooms_okBtnListener = function(){
-    //get the value to the rooms box and popdown
-}
-
-//-----------------------------------------------------------------------get rooms end -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------add room ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+//Add room dialog box
 com_zimbra_om.prototype.add_room_button_listener = function(){
     this.add_room_parentView = new DwtListView({parent:this.getShell(),noMaximize:false});
-    this.add_room_parentView.setSize("500","300");
+    this.add_room_parentView.setSize("450","250");
     this.add_room_parentView.getHtmlElement().style.overflow = "auto";
     this.add_room_parentView.setPosition(DwtControl.RELATIVE_STYLE);
 
     this.add_room_roomname_text = new DwtText ({parent:this.add_room_parentView, name: "add_room_roomname_text", id: "add_room_roomname_text"});
     this.add_room_roomname_text.setText("Room Name");
+    this.add_room_roomname_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.add_room_roomname_text.setLocation("20","20");
 
     this.add_room_roomname_box = new DwtInputField({parent:this.add_room_parentView, name: "add_room_roomname_box", id: "add_room_roomname_box"});
+    this.add_room_roomname_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.add_room_roomname_box.setLocation("150","20")
 
 
     this.roomtype_text = new DwtText ({parent:this.add_room_parentView, name: "roomtype_text", id: "roomtype_text"});
-    this.roomtype_text.setText("Room Type");
+    this.roomtype_text.setText("Room Type:");
+    this.roomtype_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.roomtype_text.setLocation("20","50")
 
 
-    this.roomtype_conference = new DwtCheckbox({parent:this.add_room_parentView, name: "roomtype_conference", id:"roomtype_conference"});
-    this.roomtype_conference.setText("Conference");
+    this.roomtypes_conference = new DwtCheckbox({parent:this.add_room_parentView, name: "roomtype_conference", id:"roomtype_conference"});
+    this.roomtypes_conference.setText("Conference");
+    this.roomtypes_conference.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.roomtypes_conference.setLocation("20","80");
 
-    this.roomtype_audience = new DwtCheckbox({parent:this.add_room_parentView, name: "roomtype_audience" , id: "roomtype_audience"});
-    this.roomtype_audience.setText("Audience");
-
+    this.roomtypes_audience = new DwtCheckbox({parent:this.add_room_parentView, name: "roomtype_audience" , id: "roomtype_audience"});
+    this.roomtypes_audience.setText("Audience");
+    this.roomtypes_audience.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.roomtypes_audience.setLocation("100","80");
+    
+    this.roomtypes_restricted = new DwtCheckbox({parent:this.add_room_parentView, name:"roomtype_restricted", id:"roomtype_restricted"});
+    this.roomtypes_restricted.setText("Restricted");
+    this.roomtypes_restricted.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.roomtypes_restricted.setLocation("180","80");
+    
+    this.roomtypes_interview = new DwtCheckbox({parent:this.add_room_parentView, name:"roomtype_interview", id:"roomtype_interview"});
+    this.roomtypes_interview.setText("Interview");
+    this.roomtypes_interview.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.roomtypes_interview.setLocation("260","80");
+    
+    
+    this.comment_text = new DwtText({parent:this.add_room_parentView, name:"comment_text", id:"comment_text"});
+    this.comment_text.setText("Comment");
+    this.comment_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.comment_text.setLocation("20","110");
+    
+    this.comment = new DwtInputField ({parent:this.add_room_parentView, name:"comment", id:"comment"});
+    this.comment.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.comment.setLocation("150","110");
 
     this.noOfPartizipants_text = new DwtText ({parent:this.add_room_parentView, name: "noOfPartizipants_text", id:"noOfPartizipants_text"});
     this.noOfPartizipants_text.setText("No of Participants");
+    this.noOfPartizipants_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.noOfPartizipants_text.setLocation("20","140");
 
     this.noOfPartizipants_box = new DwtInputField ({parent:this.add_room_parentView, name: "noOfPartizipants_box", id:"noOfPartizipants_box"});
+    this.noOfPartizipants_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.noOfPartizipants_box.setLocation("150","140");
 
     this.ispublic_checkbox = new DwtCheckbox ({parent:this.add_room_parentView, name:"ispublic_checkbox", id: "ispublic_checkbox"});
     this.ispublic_checkbox.setText("Public");
-
-
-
+    this.ispublic_checkbox.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.ispublic_checkbox.setLocation("20","170");
+    
+    this.isModerated_checkbox = new DwtCheckbox({parent:this.add_room_parentView, name:"isModerated", id:"isModerated"});
+    this.isModerated_checkbox.setText("Is Moderated");
+    this.isModerated_checkbox.setPosition(DwtControl.ABSOLUTE_STYLE);
+    this.isModerated_checkbox.setLocation("150","170");
+    
     this.add_room_dialog = this._createDialog({title:"add Room", view:this.add_room_parentView, standartButtons:[DwtDialog.OK_BUTTON]});
     this.add_room_dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._add_room_okButtonListener));
     this.add_room_dialog.popup();
 };
 
+
+//Add room dialog box OK Button Listener
 com_zimbra_om.prototype._add_room_okButtonListener = function(){
-    var room_name = document.getElementById('room_name');
-    var roomtypes_id = document.getElementById('roomtypes_id');
-    var numberOfPartizipants = document.getElementById('numberOfPartizipants');
-    var ispublic = document.getElementById('ispublic');
+	this.add_room_dialog.popdown();
+    var room_name = this.add_room_roomname_box.getValue();
+    var roomtypes_id, isPublic, isModerated;
+   
+    if (this.roomtypes_conference.isSelected() == 1){
+    	roomtypes_id = 1;
+    }
+    else if (this.roomtypes_audience.isSelected() == 1){
+    	roomtypes_id = 2;
+    }
+    else if (this.roomtypes_restricted.isSelected() == 1){
+    	roomtypes_id = 3;
+    }
+    else if (this.roomtypes_interview.isSelected() == 1){
+    	roomtypes_id = 4;
+    }
+    
+    var numberOfPartizipants = this.noOfPartizipants_box.getValue();    
+    if (this.ispublic_checkbox.isSelected() == 1){
+    	isPublic = 1;
+    }
+    else {
+    	isPublic = 0;
+    }
+    
+    if (this.isModerated_checkbox.isSelected() == 1){
+    	isModerated = 1;
+    }
+    else {
+    	isModerated = 0;
+    }
+    
 
-    var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(com_zimbra_om._url);
-    var request_url = 'http://demo.openmeetings.de/openmeetings/services/UserService/getRooms?SID=' +
-        sid  + '&name'+
-        room_name + '&roomtypes_id'+
-        roomtypes_id + '&numberOfPartizipants'+
-        numberOfPartizipants + '&ispublic'+
-        ispublic;
-    //AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getSession"], new AjxCallback(this, this._reponseHandler, postCallback) , true);
-    AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getSession"], new AjxCallback(this, this._reponseHandler) , true);
+    var request_url = selected_server + "services/RoomService/addRoomWithModeration?SID=" +
+                     new_sid + "&name=" + room_name +
+                     "&roomtypes_id=" + roomtypes_id +
+                     "&comment="+
+                     "&numberOfPartizipants=" + numberOfPartizipants +
+                    "&ispublic=" + isPublic +
+                    "&appointment=0&isDemoRoom=0&demoTime=0&isModeratedRoom=" + isModerated;
 
-    // SET THIS ROOM IN THE MAIN FORM
-    this.add_room_dialog.popdown();
+    var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(request_url);
+    AjxRpc.invoke(null, url, null , new AjxCallback(this, this.add_room_responseHandler), true);
+
 };
-//------------------------------------------------------------------add room end ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-//-----------------------------------------------------------------------profile select box ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Add rooms response handler
+com_zimbra_om.prototype.add_room_responseHandler=
+	function(response){
+			try{
+				var room_id = response.xml.getElementsByTagName("return"), new_room_id = [].map.call( sid, function(node){
+                    return node.textContent || node.innerText || "";
+				}).join("");
+				}catch(e){
+						this._showErrorMsg(e);
+						}
+				this.add_room_pView = new DwtListView({parent:this.getShell(),noMaximize:false});
+			    this.add_room_pView.getHtmlElement().style.overflow = "auto";
+			    this.add_room_pView.getHtmlElement().innerHTML = "<div> Room Id: " + new_room_id + "</div>";  
+			    this.add_room_response_Dlg = this._createDialog({title:"Select Profile", view:this.add_room_pView, standardButtons : [DwtDialog.OK_BUTTON]});
+			    this.add_room_response_Dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.add_room_response_Dlg_listener));
+			    this.add_room_response_Dlg.popup();
+			    this.add_room_dialog.popdown();
+}
+				
+com_zimbra_om.prototype.add_room_response_Dlg_listener = 
+		function(){
+			this.add_room_response_Dlg.popdown();
+				}
+
+
+//Server Select dialog box
 com_zimbra_om.prototype._selectserverdisplay =
     function(){
             this._profile_parentView = new DwtComposite ({parent:this.getShell()});
             this._profile_parentView.getHtmlElement().style.overflow = "auto";
             this._profile_parentView.setPosition(DwtControl.RELATIVE_STYLE);
 
-            this._profile_parentView.getHtmlElement().innerHTML = "<div><select><option value = 'server1'>"+ server1_baseurl + "</option>" + "<option value = 'server2'>" + server2_baseurl + "</option>" + "<option value = 'server3'>" + server3_baseurl + "</option>" + "<option value = 'server4'>" + server4_baseurl + "<option value = 'server5'>" + server5_baseurl + "</option>" + "</select></div>";
+    //        this._profile_parentView.getHtmlElement().innerHTML = "<div><select id = 'selected_server'><option value = 'server1'>"+ server1_baseurl + "</option>" + "<option value = 'server2'>" + server2_baseurl + "</option>" + "<option value = 'server3'>" + server3_baseurl + "</option>" + "<option value = 'server4'>" + server4_baseurl + "<option value = 'server5'>" + server5_baseurl + "</option>" + "</select></div>";
+            this._profile_parentView.getHtmlElement().innerHTML = "<div><a href='#' id= 'link1'>"+ this.getUserProperty("server1_baseurl") +"</a></div>" +
+                                                                  "<div><a href='#' id= 'link2'>"+ this.getUserProperty("server2_baseurl") +"</a></div>" +
+                                                                  "<div><a href='#' id= 'link3'>"+ this.getUserProperty("server3_baseurl") +"</a></div>" +
+                                                                  "<div><a href='#' id= 'link4'>"+ this.getUserProperty("server4_baseurl") +"</a></div>" +
+                                                                  "<div><a href='#' id= 'link5'>"+ this.getUserProperty("server5_baseurl") +"</a></div>";
+
+            var link_server1 = document.getElementById('link1');
+            var link_server2 = document.getElementById('link2');
+            var link_server3 = document.getElementById('link3');
+            var link_server4 = document.getElementById('link4');
+            var link_server5 = document.getElementById('link5');
+       
+            
+            link_server1_arg = this.getUserProperty("server1_baseurl");
+            link_server1.onclick = AjxCallback.simpleClosure(this.get_session,this,this.getUserProperty("server1_baseurl"));
+
+            link_server2_arg = this.getUserProperty("server2_baseurl");
+            link_server2.onclick = AjxCallback.simpleClosure(this.get_session,this,this.getUserProperty("server2_baseurl"));
+
+            link_server3_arg = this.getUserProperty("server3_baseurl");
+            link_server3.onclick = AjxCallback.simpleClosure(this.get_session,this,this.getUserProperty("server3_baseurl"));
+
+            link_server4_arg = this.getUserProperty("server4_baseurl");
+            link_server4.onclick = AjxCallback.simpleClosure(this.get_session,this,this.getUserProperty("server4_baseurl"));
+
+            link_server5_arg = this.getUserProperty("server5_baseurl");
+            link_server5.onclick = AjxCallback.simpleClosure(this.get_session,this,this.getUserProperty("server5_baseurl"));
+
+
 
             this.profile_select_Dlg = this._createDialog({title:"Select Profile", view:this._profile_parentView, standardButtons : [DwtDialog.OK_BUTTON]});
-            this.profile_select_Dlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._profile_okBtnListener));
             this.profile_select_Dlg.popup();
     }
 
-com_zimbra_om.prototype._profile_okBtnListener =
-    function(){
-        this._invoke();
-        this.login_user();
-        this.get_rooms();
-        // get the rooms
-        //get the selected option
-        this.profile_select_Dlg.popdown();
-        this._displayDialog();
-    }
-//------------------------------------------------------------------------profile select box end --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------main dialog box ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//opening a dialog box
+//Openmeetings dialog box
 com_zimbra_om.prototype._displayDialog =
 	function(){
 			
 			this._parentView = new DwtListView({parent:this.getShell(), noMaximize:false});
-            this._parentView.setSize("550","500");
+            this._parentView.setSize("500","400");
             this._parentView.getHtmlElement().style.overflow = "auto";
             this._parentView.setPosition(DwtControl.RELATIVE_STYLE);
 
+            this.username_text = new DwtText({parent:this._parentView, name: "username_text", id:"username_text"});
+            this.username_text.setText("Username:");
+            this.username_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.username_text.setLocation(20,20);
 
-            //button
-            //this.get_rooms_button = new DwtButton ({parent:this._parentView, name:"get_rooms_button", id:"get_rooms_button"});
-            //this.get_rooms_button.addSelectionListener(new AjxListener(this,this.get_rooms_button_listener));
-            //this.get_rooms_button.setText("get rooms");
+            this.username_box = new DwtInputField ({parent:this._parentView, name:"username_box", id:"username_box"});
+            this.username_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.username_box.setLocation(150,20);
 
+            this.room_id_text = new DwtText ({parent:this._parentView, name:"room_id_text", id:"room_id_text"});
+            this.room_id_text.setText("Room Id:");
+            this.room_id_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.room_id_text.setLocation(20,50);
 
-            //this.add_room_button = new DwtButton({parent:this._parentView, name: "add_room_button", id: "add_room_button", listeners: new AjxListener(this, this.add_room_button_listener)});
+            this.room_id = new DwtInputField({parent:this._parentView, name:"room_id" , id:"room_id"});
+            this.room_id.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.room_id.setLocation(150,50);
+
             this.add_room_button = new DwtButton({parent:this._parentView, name: "add_room_button", id: "add_room_button"});
             this.add_room_button.addSelectionListener(new AjxListener(this,this.add_room_button_listener));
-            this.add_room_button.setText("add room");
+            this.add_room_button.setText("Create Room");
+            this.add_room_button.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.add_room_button.setLocation(300,50);
 
-            this._language_text = new DwtText ({parent:this._parentView, name: "language_text" , id: " language_text"});
-            this._language = new DwtInputField({parent:this._parentView, name: "language" , id:"language" });
+            this.password_check_box = new DwtCheckbox({parent:this._parentView, name: "password_checkbox", id:"password_checkbox"});
+            this.password_check_box.setText("isPasswordProtected");
+            this.password_check_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.password_check_box.setLocation(20,80);
+            
+            this.password_text = new DwtText({parent:this._parentView, name:"text_password", id:"text_password"});
+            this.password_text.setText("Invitation password:");
+            this.password_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.password_text.setLocation(20,110);
 
+            this.password_box = new DwtInputField({parent:this._parentView, name: "password_box", id:"password_box"});
+            this.password_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.password_box.setLocation(150,110);
 
-    //    var view1 = new DwtComposite(this._parentView);
-    //    view1.getHtmlElement().style.overflow = "hidden";
-    //    view1.getHtmlElement().innerHTML = this._constructDialogView();
-    //    this._parentView.addItem(view1, 1 , true, 1);
+            this.hash_value_text = new DwtText({parent:this._parentView, name: "hash_value_text", id:"hash_value_text"});
+            this.hash_value_text.setText("Validity:");
+            this.hash_value_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.hash_value_text.setLocation(20,140);
 
+            this.checkbox1 = new DwtCheckbox({parent:this._parentView, name: "endless", id: "endless"});
+            this.checkbox1.setText("endless");
+            this.checkbox1.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.checkbox1.setLocation(20,170);
 
-        //this.calendar = new DwtCalendar({parent:this._parentView, name: "calendar", id: "calendar"});
+            this.checkbox2 = new DwtCheckbox({parent:this._parentView, name: "from_to_time", id: "from_to_time"});
+            this.checkbox2.setText("from to time");
+            this.checkbox2.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.checkbox2.setLocation(120,170);
 
+            this.checkbox3 = new DwtCheckbox({parent:this._parentView, name: "one_time", id: "one_time"})
+            this.checkbox3.setText("one time");
+            this.checkbox3.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.checkbox3.setLocation(220,170);
 
-    //getRooms
-    //        this.get_room = new DwtButton({parent:this._parentView});
-    //        this.get_room.setText("get Rooms");
-
-        //text language
-        this.text_language = new DwtText({parent:this._parentView, name:"text_language", id:"text_language"});
-        this.text_language.setText("language");
-        //this.text_language.setTextPosition(this.text_language.TEXT_LEFT);
-
-        this.language_box = new DwtInputField({parent:this._parentView, name: "language_box", id:"language_box"});
-
-
-
-        // invitation password
-        this.text_password = new DwtText({parent:this._parentView, name:"text_password", id:"text_password"});
-        this.text_password.setText("invitation password");
-        //this.text_password.setTextPosition(this.text_password.TEXT_LEFT);
-
-        this.password_box = new DwtInputField({parent:this._parentView, name: "password_box", id:"password_box"});
-
-        // Meeting time
-        this.meeting_time = new DwtText({parent:this._parentView, name:"meeting_time_text", id:"meeting_time_text"});
-        this.meeting_time.setText("Meeting Time");
-
-
-        this.meeting_start_date_time = new DwtText ({parent:this._parentView, name:"meeting_start_date_text", id:"meeting_start_date_text"});
-        this.meeting_start_date_time.setText("Start Date");
-
-        this.meeting_start_date_box = new DwtInputField({parent:this._parentView, name:"meeting_start_date_box", id:"meeting_start_date_box"});
-        this.meeting_start_date_calendar_button = new DwtButton({parent:this._parentView, name: "meeting_start_date_calendar_button", id: "meeting_start_date_calendar_button"});
-        this.meeting_start_date_calendar_button.addSelectionListener(new AjxListener(this, this.calendar_popup_startdate));
-        this.meeting_start_date_calendar_button.setText("select date");
-
-        this.meeting_start_time_text = new DwtText ({parent:this._parentView, name:"meeting_start_time_text", id:"meeting_start_time_text"});
-        this.meeting_start_time_text.setText("Start Time");
-
-        this.meeting_start_time_box = new DwtInputField ({parent:this._parentView, name:"meeting_start_time_box", id:"meeting_start_time_box"});
+            this.meeting_time = new DwtText({parent:this._parentView, name:"meeting_time_text", id:"meeting_time_text"});
+            this.meeting_time.setText("Start Timing");
+            this.meeting_time.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_time.setLocation(20,200);
 
 
+            this.meeting_start_date_time = new DwtText ({parent:this._parentView, name:"meeting_start_date_text", id:"meeting_start_date_text"});
+            this.meeting_start_date_time.setText("Date:");
+            this.meeting_start_date_time.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_start_date_time.setLocation(20,230);
 
-        this.meeting_end_date_text = new DwtText ({parent:this._parentView, name:"meeting_end_date_text", id:"meeting_end_date_text"});
-        this.meeting_end_date_text.setText("Meeting End Date");
+            this.meeting_start_date_box = new DwtInputField({parent:this._parentView, name:"meeting_start_date_box", id:"meeting_start_date_box"});
+            this.meeting_start_date_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_start_date_box.setLocation(150,230);
 
-        this.meeting_end_date_box = new DwtInputField ({parent:this._parentView, name: "meeting_end_date_box", id:"meeting_end_date_box"});
-        this.meeting_end_date_calendar_button = new DwtButton({parent:this._parentView, name: "meeting_end_date_calendar_button", id: "meeting_end_date_calendar_button"});
-        this.meeting_end_date_calendar_button.addSelectionListener(new AjxListener(this, this.calendar_popup_enddate));
-        this.meeting_end_date_calendar_button.setText("Select Date");
+            this.meeting_start_date_calendar_button = new DwtButton({parent:this._parentView, name: "meeting_start_date_calendar_button", id: "meeting_start_date_calendar_button"});
+            this.meeting_start_date_calendar_button.addSelectionListener(new AjxListener(this, this.calendar_popup_startdate));
+            this.meeting_start_date_calendar_button.setText("select date");
+            this.meeting_start_date_calendar_button.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_start_date_calendar_button.setLocation(300,230);
+        
+            this.meeting_start_time_text = new DwtText ({parent:this._parentView, name:"meeting_start_time_text", id:"meeting_start_time_text"});
+            this.meeting_start_time_text.setText("Time (hh:mm):");
+            this.meeting_start_time_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_start_time_text.setLocation(20,260);
+        
+            this.meeting_start_time_box = new DwtInputField ({parent:this._parentView, name:"meeting_start_time_box", id:"meeting_start_time_box"});
+            this.meeting_start_time_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_start_time_box.setLocation(150,260);
 
-        this.meeting_end_time_text = new DwtText ({parent:this._parentView, name:"meeting_end_time_text", id: "meeting_end_time_text"});
-        this.meeting_end_time_text.setText("Meeting End Time");
+            this.meeting_end_date_text = new DwtText ({parent:this._parentView, name:"meeting_end_date_text", id:"meeting_end_date_text"});
+            this.meeting_end_date_text.setText("End Timing:");
+            this.meeting_end_date_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_date_text.setLocation(20,290);
 
-        this.meeting_end_time_box = new DwtInputField ({parent:this._parentView, name:"meeting_end_time_box", id:"meeting_end_time_box"});
+            this.meeting_end_date = new DwtText ({parent:this._parentView, name:"meeting_end_date", id:"meeting_end_date"});
+            this.meeting_end_date.setText("Date:");
+            this.meeting_end_date.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_date.setLocation(20,310);
 
+            this.meeting_end_date_box = new DwtInputField ({parent:this._parentView, name: "meeting_end_date_box", id:"meeting_end_date_box"});
+            this.meeting_end_date_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_date_box.setLocation(150,310);
 
-        //meeting code
+            this.meeting_end_date_calendar_button = new DwtButton({parent:this._parentView, name: "meeting_end_date_calendar_button", id: "meeting_end_date_calendar_button"});
+            this.meeting_end_date_calendar_button.addSelectionListener(new AjxListener(this, this.calendar_popup_enddate));
+            this.meeting_end_date_calendar_button.setText("Select Date");
+            this.meeting_end_date_calendar_button.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_date_calendar_button.setLocation(300,310);
 
+            this.meeting_end_time_text = new DwtText ({parent:this._parentView, name:"meeting_end_time_text", id: "meeting_end_time_text"});
+            this.meeting_end_time_text.setText("Time(hh:mm):");
+            this.meeting_end_time_text.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_time_text.setLocation(20,340);
 
+            this.meeting_end_time_box = new DwtInputField ({parent:this._parentView, name:"meeting_end_time_box", id:"meeting_end_time_box"});
+            this.meeting_end_time_box.setPosition(DwtControl.ABSOLUTE_STYLE);
+            this.meeting_end_time_box.setLocation(150,340);
 
-        //    this.check = new DwtCheckbox({parent:this._parentView, name: "checkbox" , checked: true, posSytle: Dwt.RELATIVE_STYLE, id:"checkbox", index:1});
-        //    this.check.setText("i am ankur ankan");
-        //    this.check.setEnabled(false);
-        //    this._parentView.addItem(this.check, 2 ,true , 2);
-
-        //    this._textbox = new DwtInputField({parent:this._parentView, name: "text", id: "textbox", index:2});
-        //    this._textbox.setEnabled(true);
-        //    this._textbox.setHint("this is the hint");
-
-
-
-        //hash value radiobutton
-        this.hash_value_text = new DwtText({parent:this._parentView, name: "hash_value_text", id:"hash_value_text"});
-        this.hash_value_text.setText("hash value");
-
-     //   this.menu = new DwtMenuItem({parent:this._parentView, name:"menu"});
-
-        this.checkbox1 = new DwtCheckbox({parent:this._parentView, name: "endless", id: "endless"});
-        this.checkbox1.setText("endless");
-        //this.radio1.setTextPosition(this.radio1.TEXT_LEFT);
-
-        this.checkbox2 = new DwtCheckbox({parent:this._parentView, name: "from_to_time", id: "from_to_time"});
-        this.checkbox2.setText("from to time");
-        //this.radio2.setTextPosition(this.radio2.TEXT_LEFT);
-
-        this.checkbox3 = new DwtCheckbox({parent:this._parentView, name: "one_time", id: "one_time"})
-        this.checkbox3.setText("one time");
-        //this.radio3.setTextPosition(this.radio3.TEXT_LEFT);
-
-      /**      this.radio1 = new DwtCheckbox({parent:this._parentView, name: "endless", id: "endless"});
-            this.radio1.setText("endless");
-            //this.radio1.setTextPosition(this.radio1.TEXT_LEFT);
-
-            this.radio2 = new DwtCheckbox({parent:this._parentView, name: "from_to_time", id: "from_to_time"});
-            this.radio2.setText("from to time");
-            //this.radio2.setTextPosition(this.radio2.TEXT_LEFT);
-
-            this.radio3 = new DwtCheckbox({parent:this._parentView, name: "one_time", id: "one_time"})
-            this.radio3.setText("one time");
-            //this.radio3.setTextPosition(this.radio3.TEXT_LEFT);
-       **/
-
-
-
-    //	this._parentView.setSize("550", "600");
-    //	this._parentView.getHtmlElement().style.overflow = "auto";
-	//	this._parentView.getHtmlElement().innerHTML = this._constructDialogView();
  			this.omDlg = this._createDialog({title:"Openmeetings", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON]});
-			this.omDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
+			this.omDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.generateHash));
 			this.omDlg.popup();
 				};
 
 
-//-----------------------------------------------------------------------main dialog box end --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+com_zimbra_om.prototype.getURL =
+    function (service, func, o) {
+        var result = this.getUserProperty("server1_baseurl") + "services/" + service + "/" + func + "/?";
+        if (o) {
+            for (var key in o)
+            {
+                result += "&" + key + "=" + (o[key]);
+            }
+        }
+        return (result);
+    };
 
-/*** com_zimbra_om.prototype._constructDialogView =
-		function(){
-			var html = new Array();
-			var i = 0;
-html[i++] = "<form id = 'meetingform' class = 'rounded'>";
-	html[i++] = "<h3> Openmeetings </h3>";
-	
-	html[i++] = "<div class = 'option'>";
-			html[i++] = "<label for = 'profile'>profile:</label>";
-			html[i++] = "<select id = 'profile'>";
-            html[i++] = "<option> 1 </option>";
-            html[i++] = "<option> 2 </option>";
-            html[i++] = "<option> 3 </option>";
-            html[i++] = "<option> 4 </option>";
-            html[i++] = "<option> 5 </option>";
-            html[i++] = "</select>";
-			html[i++] = "<p class = 'hint'> Select Profile </p>";
-	html[i++] = "</div>";
-	
-	html[i++] = "<div class = 'option'>";
-			html[i++] = "<label for = 'room_id'>room_id</label>";
-			html[i++] = "<select>";
-			html[i++] = "<!-- fetch the list of rooms-->";
-			html[i++] = "</select>";
-			html[i++] = "<!-- option to create a new room-->";
-			html[i++] = "<p class = 'hint'> Room </p>";
-	html[i++] = "</div>";
-	
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'language_id'> language </label>";
-			html[i++] = "<input type = 'text' class = 'input' name='language_id' id = 'language_id'/>";
-		html[i++] = "<!--	isPasswordProtected<input  type='checkbox' onClick = 'addInput('invitation_password','password_protected');' id='password_protected'><br/> -->";
-			html[i++] = "<p class = 'hint'> select language </label>";
-	html[i++] = "</div>";
-	
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'invitation password'>invitation password</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'invitation_password' id= 'invitation_password'/>";
-			html[i++] = "<p class = 'hint'> Invitation password </p>";
-	html[i++] = "</div>";
-	
-	html[i++] = "<h3> Meeting time</h3></br>";
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'start_date'>Start date</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'start_date' id = 'start_date'/>";
-            html[i++] = "<p class = 'hint'> Start date of the meeting </p>";
-			
-			html[i++] = "<label for ='start_time'>Time</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'start_time' id = 'start_time'/>";
-			html[i++] = "<p class = 'hint'> Enter start time of meeting </p>";
-	html[i++] = "</div>";
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'end_date'>End date</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'end_date' id = 'end_date'/>";
-			html[i++] = "<p class = 'hint'> End date of the meeting </p>";
-			
-			html[i++] = "<label for = 'end_time'>Time</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'end_time' id = 'end_time'/><br/><!--calender should be available here showing the time of other meetings-->";
-			html[i++] = "<p class = 'hint'>End time of the meeting </p>";
-	html[i++] = "<div>";
-	html[i++] = "<h3>hash validity:</h3>";
-	
-	html[i++] = "<div class = 'checkbox'>";
-			html[i++] = "<label for = 'endless'>endless</label>";
-			html[i++] = "<input type = 'checkbox' class = 'check' id = 'hash_endless'/>";
-			html[i++] = "<p class = 'hint'> an endless hash</p>";
-			
-			html[i++] = "<label for = 'from to time'>from to time </label>";
-			html[i++] = "<input type = 'checkbox' class = 'check' id = 'hash_fromtotime'/>";
-			html[i++] = "<p class = 'hint'> limited time hash</p>";
-			
-			html[i++] = "<label for = 'onetime'>onetime</label>";
-			html[i++] = "<input type = 'checkbox' class = 'check' id = 'hash_onetime'/><br/>";
-			html[i++] = "<p class = 'hint'> onetime hash </p>";
-	html[i++] = "</div>";
-			
-	html[i++] = "<h3>send email<h3>";
-		html[i++] = "<!--	<input type = 'checkbox' onClick = 'addInput('email','send_email');' id = 'send_email'/><br/> -->";
-	html[i++] = "<div class = 'field'>";
-            html[i++] = "<label for = 'email_id'>email id</label>";
-            html[i++] = "<input type = 'text' class = 'input' name = 'email_id' id = 'email_id'/><br/>";
-			html[i++] = "<p class = 'hint'>Email id to send invitation.</p>";
-	html[i++] = "</div>";
-	
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'subject'>subject</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'subject' id = 'subject'/><br/>";
-			html[i++] = "<p class = 'hint'>subject of the email</p>";
-	html[i++] = "</div>";
-			
-	html[i++] = "<div class = 'field'>";
-			html[i++] = "<label for = 'message'>message</label>";
-			html[i++] = "<input type = 'text' class = 'input' name = 'message' id = 'message'/><br/>";
-			html[i++] = "<p class = 'hint'> message to send</p>";
-	html[i++] = "</div>";
-	html[i++] = "</form>";
-			return html.join("");
-			};
-
-**/
-
-com_zimbra_om.prototype._okBtnListner=
+//get invitation hash request
+com_zimbra_om.prototype.generateHash=
 			function(){
-				profile = document.getElementById('profile');
-				room_id = document.getElementById('room_id');
-				language_id = document.getElementById('language_id');
-				invitation_password = this.password_box.getValue();
-				start_date = this.meeting_start_date_box.getValue();
-                start_time = this.meeting_start_time_box.getValue();
-                end_date = this.meeting_end_date_box.getValue();
-                end_time = this.meeting_end_time_box.getValue();
-                endless = document.getElementById('hash_endless');
-                fromtotime = document.getElementById('hash_fromtotime');
-                onetime = document.getElementById('hash_onetime');
-                email_id = document.getElementById('email_id');
-                subject = document.getElementById('subject');
-                message = document.getElementById('message');
-                this._parentView = new DwtComposite({parent:this.getShell(), noMaximize:false});
-                this._parentView.setSize("550","500");
-                this._parentView.getHtmlElement().style.overflow = "auto";
-                this._parentView.setPosition(DwtControl.RELATIVE_STYLE);
-                this._parentView.getHtmlElement().innerHTML = "  " + invitation_password + "<br/>" + start_date + "<br/>" + end_date + "<br/>";
-                this.omDlg1 = this._createDialog({title:"Test", view:this._parentView, standardButtons : [DwtDialog.OK_BUTTON]});
-                this.omDlg1.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
-                this.omDlg1.popup();
 
-                this.omDlg.popdown();
-					};
+                var username = this.username_box.getValue();
+                var room_id = this.room_id.getValue();
 
-//-----------------------------------------------------------------get Session-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                if (this.password_check_box.isSelected()==1){
+                    isPasswordProtected =1;
+                }
+                else {
+                    isPasswordProtected =0;
+                }
+
+                var invitationpass = this.password_box.getValue();
+
+                if (this.checkbox1.isSelected() == 1){
+                    valid = 1;
+                    validFromDate = "";
+                    validFromTime = "";
+                    validToDate = "";
+                    validToTime = "";
+                }
+                else if (this.checkbox2.isSelected() == 1){
+                    valid = 2;
+                    validFromDate = this.meeting_start_date_box.getValue();
+                    validFromTime = this.meeting_start_time_box.getValue();
+                    validToDate = this.meeting_end_date_box.getValue();
+                    validToTime = this.meeting_end_time_box.getValue();
+                }
+                else if (this.checkbox3.isSelected() == 1){
+                    valid =3;
+                    validFromDate = "";
+                    validFromTime = "";
+                    validToDate = "";
+                    validToTime = "";
+                }
 
 
-//Ajax getSession request
-com_zimbra_om.prototype._invoke=
-			function(){
-					var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(com_zimbra_om._url);
-			//		var request_url =   'http://demo.openmeetings.de/openmeetings/services/UserService/getSession';
-					//AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getSession"], new AjxCallback(this, this._reponseHandler, postCallback) , true);
+com_zimbra_om.prototype.date_format=
+            function(str){
+                var month;
+                str_arr = str.split(" ");
+                date = str_arr[2];
+                year = str_arr[3];
+                switch (str_arr[1]){
+                    case "Jan":
+                        month = 1;
+                        break;
+                    case "Feb":
+                        month = 2;
+                        break;
+                    case "Mar":
+                        month = 3;
+                        break;
+                    case "Apr":
+                        month = 4;
+                        break;
+                    case "May":
+                        month = 5;
+                        break;
+                    case "Jun":
+                        month = 6;
+                        break;
+                    case "Jul":
+                        month = 7;
+                        break;
+                    case "Aug":
+                        month = 8;
+                        break;
+                    case "Sep":
+                        month = 9;
+                        break;
+                    case "Oct":
+                        month = 10;
+                        break;
+                    case "Nov":
+                        month = 11;
+                        break;
+                    case "Dec":
+                        month = 12;
+                        break;
+                }
+                return (date+"."+ month +"."+year);
+            }
 
-                    //AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getSession"], new AjxCallback(this, this._reponseHandler) , true);
-                AjxRpc.invoke(null, url, null , new AjxCallback(this, this._reponseHandler) , true);
+                var request_url = this.getURL("RoomService", "getInvitationHash",{SID:new_sid, username:username, room_id: room_id, isPasswordProtected:isPasswordProtected, invitationpass:invitationpass,valid:valid, validFromDate:this.date_format(validFromDate), validFromTime:validFromTime,validToDate:this.date_format(validToDate),validToTime:validToTime});
+				var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(request_url);
+				AjxRpc.invoke(null , url, null , new AjxCallback(this, this.generateHash_responseHandler), true);
+		}
+
+
+//getinvitationHash response handler
+com_zimbra_om.prototype.generateHash_responseHandler =
+			function(response){
+				try{
+					 invitationHash =response.xml.getElementsByTagName("ns:return"), new_invitationHash = [].map.call( sid, function(node){
+                        return node.textContent || node.innerText || "";
+                    }).join("");
+					} catch(e){
+							this._showErrorMsg(e);
+						}
+				var invitation_url = selected_server + '?invitationHash=' + new_invitationHash ;
+                msg = "Timing: \n" + "Start Timing:" +  validFromDate + "  " + validFromTime + "\n" + "End Timing:" + validToDate + " " + validToTime + "\n" + invitation_url;
+				this.new_message(msg);
+			}
+             
+//getSession Request
+com_zimbra_om.prototype.get_session=
+			function(str){
+                    if (str == this.getUserProperty("server1_baseurl")){
+                        selected_server = this.getUserProperty("server1_baseurl");
+                        selected_username = this.getUserProperty("server1_username");
+                        selected_password = this.getUserProperty("server1_password");
+                    }
+                    else if (str == this.getUserProperty("server2_baseurl")){
+                        selected_server = this.getUserProperty("server2_baseurl");
+                        selected_username = this.getUserProperty("server2_username");
+                        selected_password = this.getUserProperty("server2_password");
+                    }
+                    else if (str == this.getUserProperty("server3_baseurl")){
+                        selected_server = this.getUserProperty("server3_baseurl");
+                        selected_username = this.getUserProperty("server3_username");
+                        selected_password = this.getUserProperty("server3_password");
+                    }
+                    else if (str == this.getUserProperty("server4_baseurl")){
+                        selected_server = this.getUserProperty("server4_baseurl");
+                        selected_username = this.getUserProperty("server4_username");
+                        selected_password = this.getUserProperty("server4_password");
+                    }
+                    else if (str == this.getUserProperty("server5_baseurl")){
+                        selected_server = this.getUserProperty("server5_baseurl");
+                        selected_username = this.getUserProperty("server5_username");
+                        selected_password = this.getUserProperty("server5_password");
+                    }
+
+
+                get_session_url = this.getURL ("UserService", "getSession");
+                  //  get_session_url = str + 'services/UserService/getSession';
+
+					var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(get_session_url);
+                AjxRpc.invoke(null, url, null , new AjxCallback(this, this._responseHandler) , true);
 				};
 
 				
-//Ajax getSession request response
+//getSession request response Handler
 com_zimbra_om.prototype._responseHandler=
 		function(response){
 				try{
-					sid = response.xml.getElementsByTagName("session_id");
+					sid =response.xml.getElementsByTagName("ax24:session_id"),new_sid = [].map.call( sid, function(node){
+                        return node.textContent || node.innerText || "";
+                    }).join("");
+
+
+                    this.login_user();
 					}catch(e){
-							this._showErrorMessage(e);
+							this._showErrorMsg(e);
 							}
         };
-//----------------------------------------------------------------------get session end -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-//--------------------------------------------------------------------------- login user -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//Ajax loginUser request
+//loginUser request
 com_zimbra_om.prototype.login_user = function(){
-				var url =  'http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=' +
-									sid + '&username='+
-									username + 
-									'&userpass=' + 
-									password;
+                var url = this.getURL ("UserService", "loginUser" , {SID:new_sid, username: selected_username, userpass:selected_password});
                 var request_url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 				
-				//AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/loginUser"], new AjxCallback(this, this._reponseHandler1, postCallback), true);
-                  AjxRpc.invoke(null, request_url, null , new AjxCallback(this, this._reponseHandler1), true);
+                AjxRpc.invoke(null, request_url, null , new AjxCallback(this, this._reponseHandler1), true);
+                this._displayDialog();
         };
 
 
-//Ajax loginUser request response
+//loginUser request response Handler
 com_zimbra_om.prototype._responseHandler1= 
-				function(postCallback, response){
+				function(response){
 								//will have to check if the returned value is positive or negative. if negative show the  error message.
 								try{
 									var errorid= response.getElementsByTagName("return");
+                                    this.get_rooms();
 									}catch(e){
-										this._showErrorMessage(e);
+										this._showErrorMsg(e);
 											}
 								if (errorid < 0){
 										this._notlogged(errorid);
@@ -793,23 +848,18 @@ com_zimbra_om.prototype._responseHandler1=
 						};
 						
 
-//Ajax getErrorByCode request
+//getErrorByCode request
 com_zimbra_om.prototype._notlogged = function (errorid){
 
 				var language_id = 1;
-				var url =   'http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=' +
-									sid +
-									'&errorid='+
-									errorid +
-									'&language_id='+
-									1;
-                var request_url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-				//AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/getErrorByCode"], new AjxCallback(this, this._reponseHandler2, postCallback), true);
-                  AjxRpc.invoke(null, request_url, null , new AjxCallback(this, this._reponseHandler2), true);
-								};
-							
 
-// Ajax getErrorByCode request response							
+                var url = this.getURL ("UserService","getErrorByCode",{SID:new_sid, errorid:errorid,language_id:1});
+                var request_url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+                AjxRpc.invoke(null, request_url, null , new AjxCallback(this, this._reponseHandler2), true);
+								};
+
+
+//getErrorByCode request response Handler							
 com_zimbra_om.prototype._responseHandler2= 
 				function(postCallback, response){
 							// show the error message
@@ -831,36 +881,26 @@ com_zimbra_om.prototype._showErrorMsg =
 				msgDialog.popup();
 		};
 
-//----------------------------------------------------------------------login user end----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Error message
+com_zimbra_om.prototype._showErrorMsg =
+    function(msg) {
+        var msgDialog = appCtxt.getMsgDialog();//get a message dialog
+        msgDialog.reset(); // clean up earlier message
+        msgDialog.setMessage(msg, DwtMessageDialog.CRITICAL_STYLE); //set new message
+        msgDialog.popup();//display the dialog
+    };
 
-
-
-//-----------------------------------------------------------------------generating invitation hash-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Ajax request for generating invitation hash
-
-var url = 'http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=' +
-					sid + '&username=' + username + '&message=' + message +
-					'&baseurl=' + baseurl + '&email=' + email + '&subject=' +
-					subject + '&room_id=' + room_id + '&conferencedomain=' +
-					conferencedomain + '&isPasswordProtected=' + isPasswordProtected + 
-					'&invitationpass=' + invitationpass + '&valid=' + valid + '&validFromDate=' +
-					validfromdate + '&validFromTime=' + validFromTime + '&validToDate=' + validFromDate +
-					'&validToTime=' + validToTime + '&language_id=' + language_id + '&sendMail=' + sendMail;
-var request_url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(com_zimbra_om._url);
-//AjxRpc.invoke(request_url, ["Content-Type", "application/soap+xml;charset=utf-8", "SOAPAction", "http://url/openmeetings/services/UserService/loginUser"], new AjxCallback(this, this._reponseHandler3, postCallback), true);
-AjxRpc.invoke(null , request_url, null , new AjxCallback(this, this._reponseHandler3), true);
-
-
-//Ajax request for generating invitation hash response
-com_zimbra_om.prototype._responseHandler3 =
-					function(postCallback,response){
-						try{
-							var invitationHash = response.xml.getElementById("sendInvitationHash");
-							} catch(e){
-									this._showErrorMsg(e);
-								}
-						var invitation_url = 'http://demo.openmeetings.de/openmeetings/?invitationHash=' + invitationHash ;
-					}
-
-
-//-------------------------------------------------------------------------------generate invitation hash end --------------------------------------------------------------------------------------------------------------------------------------------------------
+// Open new mail message
+com_zimbra_om.prototype.new_message =
+    function (msg) {
+        var composeController = AjxDispatcher.run("GetComposeController");
+        if (composeController) {
+            var appCtxt = window.top.appCtxt;
+            var zmApp = appCtxt.getApp();
+            var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+            var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:newWindow,
+                toOverride:null, subjOverride:null, extraBodyText:msg, callback:null}
+            composeController.doAction(params); // opens asynchronously the window.
+            this.displayStatusMessage("Trying to open a new message dialog. Please wait ...");
+        }
+    }
