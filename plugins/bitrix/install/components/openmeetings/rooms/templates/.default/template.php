@@ -23,12 +23,12 @@ if (empty($arResult["ROOMS"])) {
 	return true;
 }
 ?>
-<div><?=GetMessage("ROOMS_DESCRIPTION")?></div>
+<div><?=COpenmeetings::GetString(GetMessage("ROOMS_DESCRIPTION"))?></div>
 <div>
 <?php
 	foreach($arResult["ROOMS"] as $room) { 
 ?>
-	<div><?=GetMessage("ENTER_ROOM")?> <a href="<?php echo($APPLICATION->GetCurPage()); ?>?ID=<?php echo($room["id"]); ?>"><?php echo($room["name"]); ?></a></div>
+	<div><?=COpenmeetings::GetString(GetMessage("ENTER_ROOM"))?> <a href="<?php echo($APPLICATION->GetCurPage()); ?>?ID=<?php echo($room["id"]); ?>"><?php echo($room["name"]); ?></a></div>
 <?php
 	} 
 ?>

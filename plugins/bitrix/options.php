@@ -41,11 +41,11 @@ if ($OPENMEETINGS_RIGHT>="R") {
 	}
 	
 	$arAllOptions = array(
-			array("URL", GetMessage("OPENMEETINGS_URL"), array("text", 64)),
-			array("CONTEXT", GetMessage("OPENMEETINGS_CONTEXT"), array("text", 64)),
-			array("MODULE_KEY", GetMessage("OPENMEETINGS_MODULE_KEY"), array("text", 64)),
-			array("OM_USER", GetMessage("OPENMEETINGS_USER"), array("text", 64)),
-			array("OM_PASSWORD", GetMessage("OPENMEETINGS_PASSWORD"), array("password", 64))
+			array("URL", COpenmeetings::GetString(GetMessage("OPENMEETINGS_URL")), array("text", 64)),
+			array("CONTEXT", COpenmeetings::GetString(GetMessage("OPENMEETINGS_CONTEXT")), array("text", 64)),
+			array("MODULE_KEY", COpenmeetings::GetString(GetMessage("OPENMEETINGS_MODULE_KEY")), array("text", 64)),
+			array("OM_USER", COpenmeetings::GetString(GetMessage("OPENMEETINGS_USER")), array("text", 64)),
+			array("OM_PASSWORD", COpenmeetings::GetString(GetMessage("OPENMEETINGS_PASSWORD")), array("password", 64))
 	);
 	
 	if($REQUEST_METHOD=="POST" && strlen($Update)>0 && COpenmeetings::IsAdmin() && check_bitrix_sessid()) {
@@ -105,10 +105,10 @@ if ($OPENMEETINGS_RIGHT>="R") {
 			window.location = "<?echo $APPLICATION->GetCurPage()?>?RestoreDefaults=Y&lang=<?=LANGUAGE_ID?>&mid=<?echo urlencode($mid)?>&<?=bitrix_sessid_get()?>";
 	}
 	</script>
-	<input <?if ($OPENMEETINGS_RIGHT<"W") echo "disabled" ?> type="submit" name="Update" value="<?=GetMessage("OPENMEETINGS_SAVE")?>">
+	<input <?if ($OPENMEETINGS_RIGHT<"W") echo "disabled" ?> type="submit" name="Update" value="<?=COpenmeetings::GetString(GetMessage("OPENMEETINGS_SAVE"))?>">
 	<input type="hidden" name="Update" value="Y">
-	<input type="reset" name="reset" value="<?=GetMessage("OPENMEETINGS_RESET")?>">
-	<input <?if ($OPENMEETINGS_RIGHT<"W") echo "disabled" ?> type="button" title="<?echo GetMessage("MAIN_HINT_RESTORE_DEFAULTS")?>" OnClick="RestoreDefaults();" value="<?echo GetMessage("MAIN_RESTORE_DEFAULTS")?>">
+	<input type="reset" name="reset" value="<?=COpenmeetings::GetString(GetMessage("OPENMEETINGS_RESET"))?>">
+	<input <?if ($OPENMEETINGS_RIGHT<"W") echo "disabled" ?> type="button" title="<?echo GetMessage("MAIN_HINT_RESTORE_DEFAULTS")?>" OnClick="RestoreDefaults();" value="<?echo COpenmeetings::GetString(GetMessage("MAIN_RESTORE_DEFAULTS"))?>">
 	<?$tabControl->End();?>
 	</form>
 <?php

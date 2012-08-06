@@ -16,7 +16,7 @@
 <project name="openmeetings bitrix plugin" basedir="./" default="dist-bin" xmlns="antlib:org.apache.tools.ant" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property name="dist.dir" value="dist" />
-	<property name="project.version" value="0.2" />
+	<property name="project.version" value="0.3" />
 	<property name="project.distname" value="openmeetings-bitrix-plugin" />
 	<property name="plugin.name" value="openmeetings" />
 

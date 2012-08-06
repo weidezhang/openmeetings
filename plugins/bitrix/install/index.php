@@ -22,6 +22,8 @@ $PathInstall = str_replace("\\", "/", __FILE__);
 $PathInstall = substr($PathInstall, 0, strlen($PathInstall)-strlen("/index.php"));
 IncludeModuleLangFile($PathInstall."/install.php");
 
+require_once($PathInstall . "/../classes/general/openmeetings.php"); //Need to get COpenmeetings::GetString method
+
 if(class_exists("openmeetings")) return;
 
 Class openmeetings extends CModule {
@@ -47,8 +49,8 @@ Class openmeetings extends CModule {
 			$this->MODULE_VERSION_DATE = OPENMEETINGS_VERSION_DATE;
 		}
 
-		$this->MODULE_NAME = GetMessage("OPENMEETINGS_MODULE_NAME");
-		$this->MODULE_DESCRIPTION = GetMessage("OPENMEETINGS_MODULE_DESCRIPTION");
+		$this->MODULE_NAME = COpenmeetings::GetString(GetMessage("OPENMEETINGS_MODULE_NAME"));
+		$this->MODULE_DESCRIPTION = COpenmeetings::GetString(GetMessage("OPENMEETINGS_MODULE_DESCRIPTION"));
 	}
 
 	function DoInstall() {

@@ -32,8 +32,8 @@ $swfurl = $arResult["URL"]
 ?>
 <iframe src="<?=$swfurl?>" style="width: 800px; height: 600px;">
 	<p align="center">
-		<strong><?=GetMessage("NEED_FLASH")?><a
-			href="http://www.macromedia.com/go/getflash/"><?=GetMessage("GET_FLASH")?></a>
+		<strong><?=COpenmeetings::GetString(GetMessage("NEED_FLASH"))?><a
+			href="http://www.macromedia.com/go/getflash/"><?=COpenmeetings::GetString(GetMessage("GET_FLASH"))?></a>
 		</strong>!
 	</p>
 </iframe>

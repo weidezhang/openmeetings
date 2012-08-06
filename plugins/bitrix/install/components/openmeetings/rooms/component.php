@@ -20,7 +20,7 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 if (!CModule::IncludeModule("openmeetings")) {
-    ShowError(GetMessage("OPENMEETINGS_MODULE_IS_NOT_INSTALLED"));
+    ShowError(COpenmeetings::GetString(GetMessage("OPENMEETINGS_MODULE_IS_NOT_INSTALLED")));
     return;
 }
 
@@ -32,7 +32,7 @@ if (isset($_REQUEST["ID"]) && is_numeric($_REQUEST["ID"]) && $_REQUEST["ID"] > 0
 	$arResult["ROOM"] = $_REQUEST["ID"];
 	$arResult["URL"] = COpenmeetings::GetOMUrl();
 	$arResult["HASH"] = COpenmeetings::GetRoomHash($_REQUEST["ID"]);
-	$arResult["LANGUAGE"] = GetMessage("OPENMEETINGS_LANGUAGE");
+	$arResult["LANGUAGE"] = COpenmeetings::GetString(GetMessage("OPENMEETINGS_LANGUAGE"));
 	$this->__templateName = "show_room";
 } else {
 	$arResult["ROOMS"] = COpenmeetings::GetRoomList();

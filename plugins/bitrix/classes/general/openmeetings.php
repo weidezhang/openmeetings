@@ -45,7 +45,7 @@ class COpenmeetings {
 		$result = array();
 		$gate = new openmeetings_gateway();
 		if (!$gate->loginuser()) {
-			CMain::ThrowException(GetMessage("OPENMEETINGS_FAILED_TO_LOGIN"));
+			CMain::ThrowException(COpenmeetings::GetString(GetMessage("OPENMEETINGS_FAILED_TO_LOGIN")));
 		}
 		if ($gate->setUserObjectWithExternalUser($USER->GetLogin()
 				, $USER->GetFirstName()
@@ -60,7 +60,7 @@ class COpenmeetings {
 				$rooms[0] = $tmp;
 			}
 			foreach ($rooms as $room) {
-				$result[] = array("name" => $room["name"], "id" => $room["rooms_id"]);
+				$result[] = array("name" => COpenmeetings::GetString($room["name"]), "id" => $room["rooms_id"]);
 			}
 		}
 		return $result;
@@ -76,11 +76,11 @@ class COpenmeetings {
 		global $USER;
 		$gate = new openmeetings_gateway();
 		if (!$gate->loginuser()) {
-			CMain::ThrowException(GetMessage("OPENMEETINGS_FAILED_TO_LOGIN"));
+			CMain::ThrowException(COpenmeetings::GetString(GetMessage("OPENMEETINGS_FAILED_TO_LOGIN")));
 		}
 		$roomhash = $gate->setUserObjectAndGenerateRoomHash($USER->GetLogin()
-			, $USER->GetFirstName()
-			, $USER->GetLastName()
+			, COpenmeetings::GetUtfString($USER->GetFirstName())
+			, COpenmeetings::GetUtfString($USER->GetLastName())
 			, COpenmeetings::GetUserPhotoUrl()
 			, $USER->GetEmail()
 			, $USER->GetID()
@@ -90,5 +90,13 @@ class COpenmeetings {
 			);
 		
 		return $roomhash;
+	}
+
+	function GetUtfString($str) {
+		return (LANG_CHARSET == "UTF-8") ? $str : mb_convert_encoding($str, "UTF-8", LANG_CHARSET);
+	}
+	
+	function GetString($str) {
+		return (LANG_CHARSET == "UTF-8") ? $str : mb_convert_encoding($str, LANG_CHARSET, "UTF-8");
 	}
 }
