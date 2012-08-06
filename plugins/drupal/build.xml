@@ -32,18 +32,19 @@
 				<exclude name="build.xml"/>
 			</fileset>
 		</copy>
-		<zip destfile="${archive.file.name}.zip">
-			<zipfileset dir="${dist.dir}/sites">
-				<include name="**" />
+		<zip destfile="${archive.file.name}.zip" filesonly="false">
+			<zipfileset dir="${dist.dir}">
+				<include name="sites/**/**" />
 			</zipfileset>
 		</zip>
-		<zip destfile="${archive.file.name}-src.zip">
+		<zip destfile="${archive.file.name}-src.zip" filesonly="false">
 			<zipfileset dir="${basedir}">
 				<exclude name="*dist/**" />
 			</zipfileset>
 		</zip>
-		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
-			<tarfileset dir="${dist.dir}/sites">
+		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz" >
+			<tarfileset dir="${dist.dir}">
+				<include name="sites/**/**" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
