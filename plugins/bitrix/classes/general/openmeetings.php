@@ -54,6 +54,11 @@ class COpenmeetings {
 				, $USER->GetEmail()
 				, $USER->GetID()) > 0) {
 			$rooms = $gate->getAvailableRooms();
+			if (isset($rooms["name"])) {
+				$tmp = $rooms;
+				$rooms = array();
+				$rooms[0] = $tmp;
+			}
 			foreach ($rooms as $room) {
 				$result[] = array("name" => $room["name"], "id" => $room["rooms_id"]);
 			}
