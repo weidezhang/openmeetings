@@ -17,13 +17,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS ['OPENMEETINGS_SAVE'] = "Save";
-$MESS ['OPENMEETINGS_RESET'] = "Reset";
-$MESS ['MAIN_RESTORE_DEFAULTS'] = "Restore defaults";
-$MESS ['OPENMEETINGS_URL'] = "Openmeetings URL:";
-$MESS ['OPENMEETINGS_CONTEXT'] = "Context of Openmeetings:";
-$MESS ['OPENMEETINGS_MODULE_KEY'] = "Openmeetings module key:";
-$MESS ['OPENMEETINGS_USER'] = "Admin user name:";
-$MESS ['OPENMEETINGS_PASSWORD'] = "Admin user password:";
+$MESS ['OPENMEETINGS_SAVE'] = "Сохранить";
+$MESS ['OPENMEETINGS_RESET'] = "Сбросить";
+$MESS ['MAIN_RESTORE_DEFAULTS'] = "Восстановить настройки по умолчанию";
+$MESS ['OPENMEETINGS_URL'] = "Адрес сервера Openmeetings:";
+$MESS ['OPENMEETINGS_CONTEXT'] = "Контекст сервера Openmeetings:";
+$MESS ['OPENMEETINGS_MODULE_KEY'] = "Ключ модуля Openmeetings:";
+$MESS ['OPENMEETINGS_USER'] = "Имя пользователя уровня Admin или SOAP:";
+$MESS ['OPENMEETINGS_PASSWORD'] = "Пароль пользователя:";
 
 ?>

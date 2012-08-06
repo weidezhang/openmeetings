@@ -136,6 +136,7 @@ Class openmeetings extends CModule {
 		//DeleteDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/openmeetings/install/themes/.default/", $_SERVER["DOCUMENT_ROOT"]."/bitrix/themes/.default");//css
 		//DeleteDirFilesEx("/bitrix/themes/.default/icons/openmeetings/");//icons
 		DeleteDirFilesEx("/bitrix/images/openmeetings/");//images
+		DeleteDirFilesEx("/bitrix/components/openmeetings");//component
 		DeleteDirFilesEx("/bitrix/js/openmeetings/");//images
 		return true;
 	}

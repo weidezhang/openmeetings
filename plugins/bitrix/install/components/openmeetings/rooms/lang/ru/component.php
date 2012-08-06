@@ -17,4 +17,5 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS ['OPENMEETINGS_MODULE_IS_NOT_INSTALLED'] = "Openmeetings module is not installed.";
+$MESS ['OPENMEETINGS_MODULE_IS_NOT_INSTALLED'] = "Модуль Openmeetings не установлен.";
+$MESS ['OPENMEETINGS_LANGUAGE'] = "9";

@@ -18,4 +18,4 @@
  * under the License.
  */
 $MESS ['OPENMEETINGS_MODULE_NAME'] = "Apache Openmeetings Incubating";
-$MESS ['OPENMEETINGS_MODULE_DESCRIPTION'] = "This module allows to use Apache Openmeetings Incubating with Bitrix.";
+$MESS ['OPENMEETINGS_MODULE_DESCRIPTION'] = "Этот модуль позволяет использовать Apache Openmeetings Incubating для работы с Битрикс.";

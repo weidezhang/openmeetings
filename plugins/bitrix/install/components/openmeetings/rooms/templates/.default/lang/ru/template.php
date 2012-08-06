@@ -17,6 +17,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS["ROOMS_DESCRIPTION"] = "Please select Room below to attend webinar";
-$MESS["ENTER_ROOM"] = "Enter room";
+$MESS["ROOMS_DESCRIPTION"] = "Пожалуйста выберите комнату из представленных ниже, чтобы посетить конференцию";
+$MESS["ENTER_ROOM"] = "Войти в комнату";
 

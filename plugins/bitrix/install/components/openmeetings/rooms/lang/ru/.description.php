@@ -17,8 +17,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS ['OPENMEETINGS_ROOMS_NAME'] = "Available Rooms";
-$MESS ['OPENMEETINGS_ROOMS_DESCRIPTION'] = "Openmeetings rooms available to attend";
+$MESS ['OPENMEETINGS_ROOMS_NAME'] = "Доступные комнаты";
+$MESS ['OPENMEETINGS_ROOMS_DESCRIPTION'] = "Комнаты Openmeetings которые можно посетить";
 $MESS ['OPENMEETINGS_NAME'] = "Openmeetings";
 ?>
 

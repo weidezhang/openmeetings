@@ -18,3 +18,4 @@
  * under the License.
  */
 $MESS ['OPENMEETINGS_MODULE_IS_NOT_INSTALLED'] = "Openmeetings module is not installed.";
+$MESS ['OPENMEETINGS_LANGUAGE'] = "1";

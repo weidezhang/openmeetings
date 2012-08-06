@@ -45,7 +45,7 @@ if ($OPENMEETINGS_RIGHT>="R") {
 			array("CONTEXT", GetMessage("OPENMEETINGS_CONTEXT"), array("text", 64)),
 			array("MODULE_KEY", GetMessage("OPENMEETINGS_MODULE_KEY"), array("text", 64)),
 			array("OM_USER", GetMessage("OPENMEETINGS_USER"), array("text", 64)),
-			array("OM_PASSWORD", GetMessage("OPENMEETINGS_PASSWORD"), array("text", 64))
+			array("OM_PASSWORD", GetMessage("OPENMEETINGS_PASSWORD"), array("password", 64))
 	);
 	
 	if($REQUEST_METHOD=="POST" && strlen($Update)>0 && COpenmeetings::IsAdmin() && check_bitrix_sessid()) {
@@ -85,6 +85,8 @@ if ($OPENMEETINGS_RIGHT>="R") {
 					?><input type="checkbox" name="<?echo htmlspecialchars($Option[0])?>" id="<?echo htmlspecialchars($Option[0])?>" value="Y"<?if($val=="Y")echo" checked";?>><?
 				elseif($type[0]=="text"):
 					?><input type="text" size="<?echo $type[1]?>" maxlength="255" value="<?echo htmlspecialchars($val)?>" name="<?echo htmlspecialchars($Option[0])?>"><?
+				elseif($type[0]=="password"):
+					?><input type="password" size="<?echo $type[1]?>" maxlength="255" value="<?echo htmlspecialchars($val)?>" name="<?echo htmlspecialchars($Option[0])?>"><?
 				elseif($type[0]=="textarea"):
 					?><textarea rows="<?echo $type[1]?>" cols="<?echo $type[2]?>" name="<?echo htmlspecialchars($Option[0])?>"><?echo htmlspecialchars($val)?></textarea><?
 				endif;
