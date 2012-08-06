@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,4 +17,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS["FOLLOW_LINK"] = "Please follow the link to enter Webinar: ";
+$MESS ['OPENMEETINGS_ROOM_ID'] = "Идентификатор комнаты Openmeetings, связанной с этим компонентом";

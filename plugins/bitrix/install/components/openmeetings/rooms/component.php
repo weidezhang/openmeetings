@@ -28,13 +28,22 @@ if (!$USER->IsAuthorized()) {
 	return;
 }
 
-if (isset($_REQUEST["ID"]) && is_numeric($_REQUEST["ID"]) && $_REQUEST["ID"] > 0) {
-	$arResult["ROOM"] = $_REQUEST["ID"];
-	$arResult["URL"] = COpenmeetings::GetOMUrl();
-	$arResult["HASH"] = COpenmeetings::GetRoomHash($_REQUEST["ID"]);
-	$arResult["LANGUAGE"] = COpenmeetings::GetString(GetMessage("OPENMEETINGS_LANGUAGE"));
-	$this->__templateName = "show_room";
-} else {
+function getRoom($id, &$arResult, &$comp) {
+	if (isset($id) && is_numeric($id) && $id > 0) {
+		$hash = COpenmeetings::GetRoomHash($id);
+		if ($hash) {
+			$arResult["ROOM"] = $id;
+			$arResult["URL"] = COpenmeetings::GetOMUrl();
+			$arResult["HASH"] = $hash;
+			$arResult["LANGUAGE"] = COpenmeetings::GetString(GetMessage("OPENMEETINGS_LANGUAGE"));
+			$comp->__templateName = "show_room";
+			return true;
+		}
+	}
+	return false;
+}
+
+if (!getRoom($arParams["ID"], $arResult, $this) && !getRoom($_REQUEST["ID"], $arResult, $this)) {
 	$arResult["ROOMS"] = COpenmeetings::GetRoomList();
 }
 

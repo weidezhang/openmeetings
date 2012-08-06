@@ -17,4 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
+if (!CModule::IncludeModule("openmeetings"))
+	return;
+
+$arComponentParameters = array(
+	"PARAMETERS" => array(
+		"ID" => array(
+			"NAME" => COpenmeetings::GetString(GetMessage("OPENMEETINGS_ROOM_ID")),
+			"TYPE" => "STRING",
+		),
+	)
+);

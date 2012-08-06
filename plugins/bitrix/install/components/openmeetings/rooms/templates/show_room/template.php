@@ -30,10 +30,6 @@ $swfurl = $arResult["URL"]
 	. "&language=" . $arResult["LANGUAGE"];
 
 ?>
-<iframe src="<?=$swfurl?>" style="width: 800px; height: 600px;">
-	<p align="center">
-		<strong><?=COpenmeetings::GetString(GetMessage("NEED_FLASH"))?><a
-			href="http://www.macromedia.com/go/getflash/"><?=COpenmeetings::GetString(GetMessage("GET_FLASH"))?></a>
-		</strong>!
-	</p>
-</iframe>
+<?=COpenmeetings::GetString(GetMessage("FOLLOW_LINK"));?><br/>
+<a href="<?=$swfurl?>" target="_BLANK"><?=$swfurl?></a>
+

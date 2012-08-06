@@ -88,7 +88,6 @@ class COpenmeetings {
 			, 0//$becomeModeratorAsInt
 			, 0//$showAudioVideoTestAsInt
 			);
-		
 		return $roomhash;
 	}
 

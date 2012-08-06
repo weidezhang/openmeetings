@@ -19,6 +19,11 @@
  */
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
+$PathInstall = str_replace("\\", "/", __FILE__);
+$PathInstall = substr($PathInstall, 0, strlen($PathInstall)-strlen(".description.php"));
+
+require_once($PathInstall . "../../../modules/openmeetings/classes/general/openmeetings.php"); //Need to get COpenmeetings::GetString method
+
 $arComponentDescription = array(
     "NAME" => COpenmeetings::GetString(GetMessage("OPENMEETINGS_ROOMS_NAME")),
     "DESCRIPTION" => COpenmeetings::GetString(GetMessage("OPENMEETINGS_ROOMS_DESCRIPTION")),

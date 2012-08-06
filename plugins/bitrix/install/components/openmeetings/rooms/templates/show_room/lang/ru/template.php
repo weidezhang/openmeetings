@@ -17,5 +17,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS["NEED_FLASH"] = "Для отображения содержимого необходим проигрыватель Flash: ";
-$MESS["GET_FLASH"] = "Скачать проигрыватель Flash";
+$MESS["FOLLOW_LINK"] = "Пожалуйста перейдите по ссылке чтобы посетить Вебинар: ";
