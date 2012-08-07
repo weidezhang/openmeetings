@@ -17,4 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-$MESS["FOLLOW_LINK"] = "Please follow the link to enter Webinar: ";
+$MESS["TEXT_GREETINGS"] = "Hello!<br/><br/>To attend the meeting click";
+$MESS["TEXT_HERE"] = "here";
+$MESS["TEXT_MIDDLE"] = ", or copy following URL to your browser.<br/>";
+$MESS["TEXT_FOOTER"] = "<br/>Please NOTE The link is one-time only<br/><br/>Please refresh this page to get new working link.";

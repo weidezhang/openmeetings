@@ -30,6 +30,7 @@ $swfurl = $arResult["URL"]
 	. "&language=" . $arResult["LANGUAGE"];
 
 ?>
-<?=COpenmeetings::GetString(GetMessage("FOLLOW_LINK"));?><br/>
-<a href="<?=$swfurl?>" target="_BLANK"><?=$swfurl?></a>
-
+<?=COpenmeetings::GetString(GetMessage("TEXT_GREETINGS"));?>
+&nbsp;<a style="font-weight: bold; text-decoration: underline;" href="<?=$swfurl?>" target="_BLANK"><?=COpenmeetings::GetString(GetMessage("TEXT_HERE"));?></a>
+<?=COpenmeetings::GetString(GetMessage("TEXT_MIDDLE"));?><?=$swfurl?><br/>
+<?=COpenmeetings::GetString(GetMessage("TEXT_FOOTER"));?>
