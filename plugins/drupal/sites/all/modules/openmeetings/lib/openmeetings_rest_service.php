@@ -17,12 +17,6 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-/*
- * Created on 03.01.2012 by eugen.schwert@gmail.com
- *
- *
- */
-
 class openmeetings_rest_service {
 	
 		var $current_call;

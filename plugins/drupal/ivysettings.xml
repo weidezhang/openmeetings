@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,20 +12,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
- <?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-	<name>drupal_7.x</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>net.sourceforge.phpeclipse.parserbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>net.sourceforge.phpeclipse.phpnature</nature>
-	</natures>
-</projectDescription>
+<ivysettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="ivysettings.xsd">
+	<settings defaultResolver="chain"/>
+	<resolvers>
+		<chain name="chain">
+			<ibiblio name="central" m2compatible="true"/>
+		</chain>
+	</resolvers>
+</ivysettings>
+

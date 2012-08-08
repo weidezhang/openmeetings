@@ -14,7 +14,9 @@
  -->
 <!DOCTYPE project>
 <project name="openmeetings drupal plugin" basedir="./" default="dist-bin" 
-	xmlns="antlib:org.apache.tools.ant">
+	xmlns="antlib:org.apache.tools.ant" 
+	xmlns:rat="antlib:org.apache.rat.anttasks" 
+	xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property name="dist.dir" value="dist" />
 	<property name="project.version" value="1.0" />
@@ -24,12 +26,12 @@
 	<target name="dist-bin" depends="clean">
 		<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-incubating-${project.version}" />
 
-		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.dir}" />
 		<copy todir="${dist.dir}">
 			<fileset dir="${basedir}">
-				<exclude name=".*"/>
-				<exclude name="dist/**"/>
-				<exclude name="build.xml"/>
+				<exclude name=".*" />
+				<exclude name="dist/**" />
+				<exclude name="build.xml" />
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip" filesonly="false">
@@ -42,7 +44,7 @@
 				<exclude name="*dist/**" />
 			</zipfileset>
 		</zip>
-		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz" >
+		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
 			<tarfileset dir="${dist.dir}">
 				<include name="sites/**/**" />
 			</tarfileset>
@@ -56,6 +58,43 @@
 
 	<target name="clean">
 		<delete includeemptydirs="true" dir="${dist.dir}" />
+	</target>
+
+	<!-- RAT -->
+	<property name="ivy.install.version" value="2.3.0-rc1" />
+	<property name="project.lib.dir" value="${dist.dir}" />
+	<property name="ivy.jar.path" value="${project.lib.dir}/ivy-${ivy.install.version}.jar" />
+
+	<available file="${ivy.jar.path}" type="file" property="ivy.installed" />
+	<target name="-download-ivy" unless="ivy.installed">
+		<mkdir dir="${project.lib.dir}" />
+		<echo message="Downloading ivy..." />
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.path}" usetimestamp="true" />
+	</target>
+
+	<path id="rat.classpath">
+		<fileset dir="${project.lib.dir}" includes="*.jar" />
+	</path>
+	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved">
+		<mkdir dir="${project.lib.dir}" />
+		<available classpathref="rat.classpath" classname="org.apache.rat.Report" property="rat.installed" />
+	</target>
+	<!-- Check for rat libraries -->
+	<target name="-retrieve-rat" unless="rat.installed" description="Retrieves the libraries if needed" depends="-availability-check, -download-ivy">
+		<taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml" classpath="${ivy.jar.path}" />
+
+		<ivy:resolve file="ivy.xml" checkIfChanged="false" transitive="false" />
+		<ivy:retrieve pattern="${project.lib.dir}/[artifact]-[type]-[revision].[ext]" />
+	</target>
+
+	<target name="report_rat" depends="-retrieve-rat">
+		<taskdef uri="antlib:org.apache.rat.anttasks" resource="org/apache/rat/anttasks/antlib.xml" classpathref="rat.classpath" />
+
+		<rat:report>
+			<fileset dir="${basedir}">
+				<exclude name="*dist/**" />
+			</fileset>
+		</rat:report>
 	</target>
 
 </project>
