@@ -842,7 +842,7 @@ function openmeetings_update($node) {
 		$room_id = $omRoomManagament->updateRoomWithModerationAndQuestions($data);
 
 		if ($room_id > 0) {
-
+		
 			db_update('openmeetings_rooms')->fields(array (
 				'nid' => $node->nid,
 				'room_id' => $room_id,
@@ -866,6 +866,7 @@ function openmeetings_update($node) {
 				'demo' => 0,
 				
 			))->condition('nid', $node->nid)->execute();
+			
 		} else {
 
 			drupal_set_message(t('Could not login User to OpenMeetings, check your OpenMeetings Module Configuration [3] '), 'error');

@@ -171,8 +171,6 @@ class openmeetings_gateway {
 							"&isModeratedRoom=".$isModeratedRoom . 
 							"&allowUserQuestions=".$allowUserQuestions;
 
-		die($url);
-
 		$result = $restService->call($url);
 
 		if ($restService->getError()) {
