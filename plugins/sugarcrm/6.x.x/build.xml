@@ -32,8 +32,8 @@
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip">
-			<zipfileset dir="${dist.dir}">
-				<include name="${plugin.name}/**/**" />
+			<zipfileset dir="${dist.dir}/${plugin.name}/">
+				<include name="**" />
 			</zipfileset>
 		</zip>
 		<zip destfile="${archive.file.name}-src.zip">
@@ -42,8 +42,8 @@
 			</zipfileset>
 		</zip>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
-			<tarfileset dir="${dist.dir}">
-				<include name="${plugin.name}/**/**" />
+			<tarfileset dir="${dist.dir}/${plugin.name}">
+				<include name="**" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
