@@ -27,6 +27,7 @@
 		<mkdir dir="${dist.dir}/${plugin.name}"/>
 		<copy todir="${dist.dir}/${plugin.name}">
 			<fileset dir="${basedir}">
+				<exclude name="dist/**"/>
 				<exclude name="build.xml"/>
 			</fileset>
 		</copy>
