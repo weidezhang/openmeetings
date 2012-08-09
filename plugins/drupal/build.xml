@@ -13,10 +13,7 @@
    limitations under the License.
  -->
 <!DOCTYPE project>
-<project name="openmeetings drupal plugin" basedir="./" default="dist-bin" 
-	xmlns="antlib:org.apache.tools.ant" 
-	xmlns:rat="antlib:org.apache.rat.anttasks" 
-	xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="openmeetings drupal plugin" basedir="./" default="dist-bin" xmlns="antlib:org.apache.tools.ant" xmlns:rat="antlib:org.apache.rat.anttasks" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property name="dist.dir" value="dist" />
 	<property name="project.version" value="1.0" />
@@ -32,11 +29,20 @@
 				<exclude name=".*" />
 				<exclude name="dist/**" />
 				<exclude name="build.xml" />
+				<exclude name="ivy.xml" />
+				<exclude name="ivysettings.xml" />
+				<exclude name="ivysettings.xsd" />
+
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip" filesonly="false">
 			<zipfileset dir="${dist.dir}">
 				<include name="sites/**/**" />
+				<include name="CHANGELOG" />
+				<include name="DISCLAIMER" />
+				<include name="LICENSE" />
+				<include name="NOTICE" />
+				<include name="README.txt" />
 			</zipfileset>
 		</zip>
 		<zip destfile="${archive.file.name}-src.zip" filesonly="false">
@@ -47,6 +53,11 @@
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
 			<tarfileset dir="${dist.dir}">
 				<include name="sites/**/**" />
+				<include name="CHANGELOG" />
+				<include name="DISCLAIMER" />
+				<include name="LICENSE" />
+				<include name="NOTICE" />
+				<include name="README.txt" />
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
@@ -54,6 +65,15 @@
 				<exclude name="*dist/**" />
 			</tarfileset>
 		</tar>
+		<delete>
+			<fileset dir="${dist.dir}">
+				<include name="CHANGELOG" />
+				<include name="DISCLAIMER" />
+				<include name="LICENSE" />
+				<include name="NOTICE" />
+				<include name="README.txt" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="clean">
