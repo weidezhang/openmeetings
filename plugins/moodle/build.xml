@@ -32,6 +32,9 @@
 				<exclude name=".*"/>
 				<exclude name="dist/**"/>
 				<exclude name="build.xml"/>
+				<exclude name="ivy.xml"/>
+				<exclude name="ivysettings.xml"/>
+				<exclude name="ivysettings.xsd"/>
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip">
