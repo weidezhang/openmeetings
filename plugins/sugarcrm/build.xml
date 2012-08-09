@@ -31,11 +31,16 @@
 			<fileset dir="${basedir}">
 				<exclude name="dist/**"/>
 				<exclude name="build.xml"/>
+				<exclude name=".*"/>
+                <exclude name="ivy.xml"/>
+                <exclude name="ivysettings.xml"/>
+                <exclude name="ivysettings.xsd"/>
 			</fileset>
 		</copy>
 		<zip destfile="${archive.file.name}.zip">
 			<zipfileset dir="${dist.dir}/${plugin.name}/">
 				<include name="**" />
+				<exclude name=".project"/>
 			</zipfileset>
 		</zip>
 		<zip destfile="${archive.file.name}-src.zip">
@@ -46,6 +51,7 @@
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}.tar.gz">
 			<tarfileset dir="${dist.dir}/${plugin.name}">
 				<include name="**" />
+				<exclude name=".project"/>
 			</tarfileset>
 		</tar>
 		<tar longfile="gnu" compression="gzip" destfile="${archive.file.name}-src.tar.gz">
