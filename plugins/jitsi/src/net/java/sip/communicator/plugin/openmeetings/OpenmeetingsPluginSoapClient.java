@@ -266,7 +266,7 @@ public class OpenmeetingsPluginSoapClient
             logger.info("SOAP proxy host " + u.getHost());
             logger.info("SOAP proxy port " + u.getPort());
             System.getProperties().put("http.proxyHost", u.getHost());
-            System.getProperties().put("http.proxyPort", u.getPort());
+            System.getProperties().put("http.proxyPort", Integer.toString(u.getPort()));
         }
     }
 
