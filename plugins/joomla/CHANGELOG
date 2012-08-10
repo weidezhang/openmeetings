@@ -1,8 +1,8 @@
 Apache OpenMeetings Joomla Plugin Change Log
 
-	* Plugin code was imported (REST instead of SOAP/NuSOAP was used, Apace licenses were added)
+	* Plugin code was imported (REST instead of SOAP/NuSOAP was used, Apache licenses were added)
 	* Code cleanup performed
 	* Build file with RAT task was added
-	* Artefacts as *.tar.gz were added
+	* Artifacts as *.tar.gz were added
 	* Plugin version is changed to be 1.0
 

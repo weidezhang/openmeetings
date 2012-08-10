@@ -21,20 +21,25 @@
 
 	<property name="dist.dir" value="dist" />
 	<property name="project.version" value="1.0" />
-	<property name="project.distname" value="openmeetings-joomla-plugin" />
+	<property name="project.distname" value="apache-openmeetings-joomla-plugin" />
+	<property name="component.distname" value="apache-openmeetings-joomla-plugin-component" />
+	<property name="module.distname" value="apache-openmeetings-joomla-plugin-module" />
 	<property name="plugin.com.name" value="com_openmeetings_conference" />
 	<property name="plugin.mod.name" value="mod_openmeetings_conference" />
 
 	<target name="dist-bin" depends="clean">
-		<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-incubating-${project.version}" />
-		<property name="com.archive.file.name" value="${dist.dir}/com-apache-${project.distname}-incubating-${project.version}" />
-		<property name="mod.archive.file.name" value="${dist.dir}/mod-apache-${project.distname}-incubating-${project.version}" />
+		<property name="archive.file.name" value="${dist.dir}/${project.distname}-${project.version}-incubating" />
+		<property name="com.archive.file.name" value="${dist.dir}/${component.distname}-${project.version}-incubating" />
+		<property name="mod.archive.file.name" value="${dist.dir}/${module.distname}-${project.version}-incubating" />
 
 		<mkdir dir="${dist.dir}"/>
 		<zip destfile="${com.archive.file.name}.zip">
 			<zipfileset dir="${basedir}">
 				<include name="**" />
 				<exclude name="*dist/**" />
+				<exclude name=".project" />
+				<exclude name="*.xml" />
+				<exclude name="*.xsd" />
 				<exclude name="*${plugin.mod.name}/**"/>
 			</zipfileset>
 		</zip>
@@ -42,6 +47,9 @@
 			<tarfileset dir="${basedir}">
 				<include name="**" />
 				<exclude name="*dist/**" />
+				<exclude name=".project" />
+				<exclude name="*.xml" />
+				<exclude name="*.xsd" />
 				<exclude name="*${plugin.mod.name}/**"/>
 			</tarfileset>
 		</tar>
@@ -49,6 +57,9 @@
 			<zipfileset dir="${basedir}">
 				<include name="**" />
 				<exclude name="*dist/**" />
+				<exclude name=".project" />
+				<exclude name="*.xml" />
+				<exclude name="*.xsd" />
 				<exclude name="*${plugin.com.name}/**"/>
 			</zipfileset>
 		</zip>
@@ -56,6 +67,9 @@
 			<tarfileset dir="${basedir}">
 				<include name="**" />
 				<exclude name="*dist/**" />
+				<exclude name=".project" />
+				<exclude name="*.xml" />
+				<exclude name="*.xsd" />
 				<exclude name="*${plugin.com.name}/**"/>
 			</tarfileset>
 		</tar>
