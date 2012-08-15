@@ -67,9 +67,9 @@ class openmeetings_gateway {
 				//echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
 				$this->session_id = $sid = $response->children('ns', true)->return->children('ax24', true)->session_id;
 								
-				$username = $system_config->settings['info_openmeetings_username'];
-				$userpass = $system_config->settings['info_openmeetings_password'];
-				$result = $restService->call("http://".$system_config->settings['info_openmeetings_url'].":".$system_config->settings['info_openmeetings_http_port']."/openmeetings/services/UserService/loginUser?SID=".$this->session_id."&username=".$username."&userpass=".$userpass);
+				$username = urlencode($system_config->settings['info_openmeetings_username']);
+				$userpass = urlencode($system_config->settings['info_openmeetings_password']);
+				$result = $restService->call("http://".urlencode($system_config->settings['info_openmeetings_url']).":".urlencode($system_config->settings['info_openmeetings_http_port'])."/openmeetings/services/UserService/loginUser?SID=".$this->session_id."&username=".$username."&userpass=".$userpass);
 				
 				if ($restService->getError()) {
 					echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>'; print_r($result); echo '</pre>';
