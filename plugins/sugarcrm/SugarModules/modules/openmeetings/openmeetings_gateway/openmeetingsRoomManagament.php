@@ -134,7 +134,7 @@ class openmeetingsRoomManagament {
 					
 				return $roomid;
 			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";			
+				die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");					
 			}
 			
 		}else{
@@ -172,7 +172,7 @@ class openmeetingsRoomManagament {
 			
 							
 			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";			
+				die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");			
 			}
 		}
 	}
@@ -239,8 +239,7 @@ class openmeetingsRoomManagament {
 			return $roomid;
 						
 		} else {
-			echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-			//exit();
+			die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
 		}
 	}
 
@@ -413,8 +412,7 @@ echo '</pre>';
 				//exit();			
 			
 			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-				//exit();
+				die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
 			}
 		}
 	}
@@ -450,8 +448,7 @@ function sendInvitationHash(&$focus, $event) {
 
 			
 			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-				//exit();
+				die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
 			}
 		}
 	}
@@ -481,7 +478,7 @@ function sendInvitationHash(&$focus, $event) {
 			return $roomid;
 						
 		} else {
-			echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
+			die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
 			
 		}
 
