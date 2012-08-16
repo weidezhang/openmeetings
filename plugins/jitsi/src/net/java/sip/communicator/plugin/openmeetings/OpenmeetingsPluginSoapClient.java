@@ -87,21 +87,23 @@ public class OpenmeetingsPluginSoapClient
         final String textContent = soapResponseBody.getFirstChild().getTextContent();
         if (!textContent.equals("1"))
             JOptionPane.showMessageDialog(null,
-                OpenmeetingsPluginActivator.resourceService
-                    .getI18NString("plugin.openmeetings.ERROR_LOGIN_MSG"));
+                    OpenmeetingsPluginActivator.resourceService
+                    .getI18NString("plugin.openmeetings.ERROR_LOGIN_MSG") 
+                    + " - Reason: " + this.getErrorCode(sid, textContent));
 
         return textContent;
     }
 
     public String getInvitationHash(final String username,
-        final String password, final String displayedName) throws Exception
+        final String password, final String displayedName, final String RoomID)
+            throws Exception
     {
         final SOAPMessage soapMessage = getSoapMessage();
         final SOAPBody soapBody = soapMessage.getSOAPBody();
         final SOAPElement requestElement =
             soapBody.addChildElement("getInvitationHash", NAMESPACE_PREFIX);
 
-        logger.info(username + ":" + password + ":" + displayedName);
+        logger.info(username + ":" + displayedName);
 
         String sid = getSID(username, password);
         String error_id = null;
@@ -120,7 +122,18 @@ public class OpenmeetingsPluginSoapClient
             return null;
         }
 
-        String room_id = getAvailableRooms(sid);
+        String room_id = RoomID;
+        if ((room_id == null) || (room_id.trim().isEmpty()))
+            room_id = getAvailableRooms(sid);
+        if (room_id == null)
+        {
+            logger.error("No rooms available in openmeetings");
+            return null;
+        } else
+        {
+            room_id = room_id.trim();
+            logger.info("Found openmeetings conference room ID " + room_id);
+        }
 
         requestElement.addChildElement("SID", NAMESPACE_PREFIX)
             .addTextNode(sid);
@@ -150,6 +163,8 @@ public class OpenmeetingsPluginSoapClient
 
         final SOAPBody soapResponseBody = getSOAPResponseBody(soapMessage, getJabberServiceUrl());
         final Node getFirstRoomResult = soapResponseBody.getFirstChild().getFirstChild();
+        if (getFirstRoomResult == null)
+            return null;
 
         String rooms_id = new String();
         final NodeList childNodes = getFirstRoomResult.getChildNodes();

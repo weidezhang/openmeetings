@@ -1,7 +1,8 @@
 package net.java.sip.communicator.plugin.openmeetings;
 
 // import net.java.sip.communicator.impl.protocol.zeroconf.MessageZeroconfImpl;
-import net.java.sip.communicator.service.configuration.ConfigurationService;
+// import net.java.sip.communicator.service.configuration.ConfigurationService;
+import org.jitsi.service.configuration.*;
 import net.java.sip.communicator.util.Logger;
 
 import org.osgi.framework.BundleContext;
@@ -23,7 +24,11 @@ public class OpenmeetingsConfigManager
 
     private String password;
 
+    private String displayedName;
+
     private String proxy;
+
+    private String RoomID;
 
     private OpenmeetingsPluginSoapClient soapClient;
 
@@ -33,14 +38,11 @@ public class OpenmeetingsConfigManager
 
     private static OpenmeetingsConfigManager instance;
 
-    private EncryptionEngine encryptionEngine;
-
     private OpenmeetingsConfigManager()
     {
 
         super();
         soapClient = new OpenmeetingsPluginSoapClient();
-        encryptionEngine = new EncryptionEngine();
     }
 
     public static OpenmeetingsConfigManager getInstance()
@@ -55,7 +57,7 @@ public class OpenmeetingsConfigManager
     public String createInvitationUrl(String hash) throws Exception
     {
         final String url =
-            "http://" + getServer() + "/openmeetings/?invitationHash=" + hash;
+            getProtoPrefix() + getServer() + getOmUriContext() +"?invitationHash=" + hash;
         System.out.println("INVITATION URL = " + url);
         return url;
     }
@@ -74,7 +76,7 @@ public class OpenmeetingsConfigManager
         {
             invitationHash =
                 soapClient.getInvitationHash(getLogin(), getPassword(),
-                    displayedName);
+                    displayedName, getRoomID());
         }
         catch (Exception e)
         {
@@ -147,15 +149,15 @@ public class OpenmeetingsConfigManager
     public void setServer(String server)
     {
         this.server = server;
-        getConfigurationService().setProperty("plugin.openmeetings.SERVER",
-            server);
+        getConfigurationService().
+                setProperty(OpenmeetingsPluginActivator.SERVER_PROP, server);
     }
 
     public String getServer()
     {
         String value =
             (String) getConfigurationService().getProperty(
-                "plugin.openmeetings.SERVER");
+                OpenmeetingsPluginActivator.SERVER_PROP);
         if (null == value)
         {
             value = "";
@@ -168,14 +170,14 @@ public class OpenmeetingsConfigManager
     {
         this.protoPrefix = protoPrefix;
         getConfigurationService().setProperty(
-            "plugin.openmeetings.PROTOCOL_PREFIX", protoPrefix);
+            OpenmeetingsPluginActivator.PROTOCOL_PREFIX_PROP, protoPrefix);
     }
 
     public String getProtoPrefix()
     {
         String value =
             (String) getConfigurationService().getProperty(
-                "plugin.openmeetings.PROTOCOL_PREFIX");
+                OpenmeetingsPluginActivator.PROTOCOL_PREFIX_PROP);
         if (null == value)
         {
             value = "";
@@ -188,14 +190,14 @@ public class OpenmeetingsConfigManager
     {
         this.omUriContext = omUriContext;
         getConfigurationService().setProperty(
-            "plugin.openmeetings.OM_URI_CONTEXT", omUriContext);
+            OpenmeetingsPluginActivator.OM_URI_CONTEXT_PROP, omUriContext);
     }
 
     public String getOmUriContext()
     {
         String value =
             (String) getConfigurationService().getProperty(
-                "plugin.openmeetings.OM_URI_CONTEXT");
+                OpenmeetingsPluginActivator.OM_URI_CONTEXT_PROP);
         if (null == value)
         {
             value = "";
@@ -211,50 +213,75 @@ public class OpenmeetingsConfigManager
     public void setLogin(String login)
     {
         this.login = login;
-        getConfigurationService().setProperty("plugin.openmeetings.LOGIN",
-            login);
+        getConfigurationService().setProperty(
+                OpenmeetingsPluginActivator.LOGIN_PROP, login);
     }
 
     public String getLogin()
     {
-        login = (String) getConfigurationService().getProperty("plugin.openmeetings.LOGIN");
+        login = (String) getConfigurationService().getProperty(
+                OpenmeetingsPluginActivator.LOGIN_PROP);
         return login;
     }
 
-    public void setPassword(String password) throws Exception
+    public boolean setPassword(String password)
     {
-        this.password = password;
         if (password == null)
-            return;
-        String encrypted = encryptionEngine.encrypt(password);
-        getConfigurationService().setProperty(
-            "plugin.openmeetings.ENCRYPTED_PASSWORD", encrypted);
+            return false;
+        return OpenmeetingsPluginActivator.getCredService().
+                storePassword("net.java.sip.communicator.plugin.openmeetings", 
+                password);
     }
 
-    public String getPassword() throws Exception
+    public String getPassword()
     {
-        String value =
-            (String) getConfigurationService().getProperty(
-                "plugin.openmeetings.ENCRYPTED_PASSWORD");
-        if (value == null)
-            return null;
-        password = encryptionEngine.decrypt(value);
-        return password;
+        return OpenmeetingsPluginActivator.getCredService().
+                loadPassword("net.java.sip.communicator.plugin.openmeetings");
     }
-    
+
+    public void setDisplayedName(String displayedName)
+    {
+        this.displayedName = displayedName.trim();
+        getConfigurationService().setProperty(
+                OpenmeetingsPluginActivator.DISPLAYED_NAME_PROP, 
+                this.displayedName);
+    }
+
+    public String getDisplayedName()
+    {
+        displayedName = (String) getConfigurationService().getProperty(
+                OpenmeetingsPluginActivator.DISPLAYED_NAME_PROP);
+        return displayedName;
+    }
+
     public void setProxy(String proxy)
     {
         this.proxy = proxy;
-        getConfigurationService().setProperty("plugin.openmeetings.PROXY",
-            proxy);
+        getConfigurationService().setProperty(
+                OpenmeetingsPluginActivator.PROXY_PROP, proxy);
     }
 
     public String getProxy()
     {
-        proxy = (String) getConfigurationService().getProperty("plugin.openmeetings.PROXY");
+        proxy = (String) getConfigurationService().getProperty(
+                OpenmeetingsPluginActivator.PROXY_PROP);
         return proxy;
     }
-    
+
+    public void setRoomID(String RoomID)
+    {
+        this.RoomID = RoomID;
+        getConfigurationService().setProperty(
+                OpenmeetingsPluginActivator.ROOM_ID_PROP, RoomID);
+    }
+
+    public String getRoomID()
+    {
+        RoomID = (String) getConfigurationService().getProperty(
+                OpenmeetingsPluginActivator.ROOM_ID_PROP);
+        return RoomID;
+    }
+
     public void setContext(BundleContext bc)
     {
         bundleContext = bc;

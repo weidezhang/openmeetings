@@ -27,7 +27,11 @@ public class OpenmeetingsConfigPanel
 
     private final JPasswordField tePassword = new JPasswordField(20);
 
+    private final JTextField tedisplayedName = new JTextField(20);
+
     private final JTextField teProxy = new JTextField(20);
+ 
+    private final JTextField teRoomID = new JTextField(20);
 
     private final JTextField fakeField = new JTextField(20);
 
@@ -40,6 +44,12 @@ public class OpenmeetingsConfigPanel
     private String login;
 
     private String password;
+
+    private String displayedName;
+
+    private String proxy;
+
+    private String RoomID;
 
     public OpenmeetingsConfigPanel()
         throws Exception
@@ -93,6 +103,18 @@ public class OpenmeetingsConfigPanel
         passwordPanel.add(lblPassword);
         passwordPanel.add(tePassword);
         
+        JPanel displayedNamePanel = new TransparentPanel();
+        displayedNamePanel.setLayout(new BoxLayout(displayedNamePanel, 
+                BoxLayout.LINE_AXIS));
+        JLabel lbldisplayedName =
+            new JLabel(
+                OpenmeetingsPluginActivator.resourceService
+                    .getI18NString("plugin.openmeetings.DISPLAYED_NAME"));
+        lbldisplayedName.setPreferredSize(prefSize);
+        displayedNamePanel.setAlignmentX(LEFT_ALIGNMENT);
+        displayedNamePanel.add(lbldisplayedName);
+        displayedNamePanel.add(tedisplayedName);
+
         JPanel proxyPanel = new TransparentPanel();
         proxyPanel.setLayout(new BoxLayout(proxyPanel, BoxLayout.LINE_AXIS));
         JLabel lblProxy =
@@ -103,6 +125,18 @@ public class OpenmeetingsConfigPanel
         proxyPanel.setAlignmentX(LEFT_ALIGNMENT);
         proxyPanel.add(lblProxy);
         proxyPanel.add(teProxy);        
+
+        JPanel RoomIDPanel = new TransparentPanel();
+        RoomIDPanel.setLayout(new BoxLayout(RoomIDPanel, 
+                BoxLayout.LINE_AXIS));
+        JLabel lblRoomID =
+            new JLabel(
+                OpenmeetingsPluginActivator.resourceService
+                    .getI18NString("plugin.openmeetings.ROOM_ID"));
+        lblRoomID.setPreferredSize(prefSize);
+        RoomIDPanel.setAlignmentX(LEFT_ALIGNMENT);
+        RoomIDPanel.add(lblRoomID);
+        RoomIDPanel.add(teRoomID);
 
         OpenmeetingsConfigManager cfg = OpenmeetingsConfigManager.getInstance();
         String serverUri = cfg.getServer();
@@ -115,9 +149,13 @@ public class OpenmeetingsConfigPanel
         teServer.setText(serverUri);
         teLogin.setText(OpenmeetingsConfigManager.getInstance().getLogin());
         tePassword.setText(OpenmeetingsConfigManager.getInstance()
-            .getPassword());
+                .getPassword());
+        tedisplayedName.setText(OpenmeetingsConfigManager.getInstance()
+                .getDisplayedName());
         teProxy.setText(OpenmeetingsConfigManager.getInstance()
-            .getProxy());
+                .getProxy());
+        teRoomID.setText(OpenmeetingsConfigManager.getInstance()
+                .getRoomID());
 
         JPanel buttonPanel = new TransparentPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
@@ -140,7 +178,11 @@ public class OpenmeetingsConfigPanel
         omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
         omPanel.add(passwordPanel);
         omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
+        omPanel.add(displayedNamePanel);
+        omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
         omPanel.add(proxyPanel);
+        omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
+        omPanel.add(RoomIDPanel);
         omPanel.add(Box.createRigidArea(new Dimension(20, 5)));
         omPanel.add(buttonPanel);
 
@@ -176,6 +218,36 @@ public class OpenmeetingsConfigPanel
     public String getPassword()
     {
         return password;
+    }
+
+    public void setDisplayedName(String displayedName)
+    {
+        this.displayedName = displayedName;
+    }
+
+    public String getDisplayedName()
+    {
+        return displayedName;
+    }
+
+    public void setProxy(String proxy)
+    {
+        this.proxy = proxy;
+    }
+
+    public String getProxy()
+    {
+        return proxy;
+    }
+
+    public void setRoomID(String RoomID)
+    {
+        this.RoomID = RoomID;
+    }
+
+    public String getRoomID()
+    {
+        return RoomID;
     }
 
     private class ButtonOkListener
@@ -214,15 +286,11 @@ public class OpenmeetingsConfigPanel
             cfg.setProtoPrefix(protoPrefix);
             cfg.setOmUriContext(uriContext);
             cfg.setLogin(teLogin.getText());
-            cfg.setProxy(teProxy.getText());
-            try
-            {
-                cfg.setPassword(new String(tePassword.getPassword()));
-            }
-            catch (Exception e1)
-            {
-                logger.error(e1);
-            }
+            cfg.setDisplayedName(tedisplayedName.getText());
+            cfg.setProxy(proxy);
+            if (!cfg.setPassword(new String(tePassword.getPassword())))
+                logger.error("Cannot set password");
+            cfg.setRoomID(teRoomID.getText());
         }
     }
 

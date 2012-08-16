@@ -52,26 +52,21 @@ public class OpenmeetingsPluginMenuItem
     {
         Logger logger = Logger.getLogger(OpenmeetingsPluginActivator.class);
 
-        ServiceReference uiServiceRef = bc.getServiceReference(UIService.class.getName());
-        UIService uiService = (UIService) bc.getService(uiServiceRef);
-        Chat chat = uiService.getChat(metaContact.getDefaultContact());
-        chat.setChatVisible(true);
-
-        ProtocolProviderService jabberProvider = OpenmeetingsPluginMenuItem.getJabberProtocol(bc, logger);
-        if (jabberProvider == null)
-        {
-            return;
-        }
-
         String invitationUrl = null;
+        String inviterDisplayedName = OpenmeetingsConfigManager.getInstance().
+                getDisplayedName().trim();
+        if (inviterDisplayedName.length() == 0)
+            inviterDisplayedName = OpenmeetingsConfigManager.getInstance()
+                    .getLogin();
 
-        logger.info("getting invitation for "
-            + OpenmeetingsConfigManager.getInstance().getLogin());
+        logger.info("getting invitation for inviter "
+            + inviterDisplayedName);
+
         try
         {
             invitationUrl =
                 OpenmeetingsConfigManager.getInstance().getInvitationUrl(
-                    OpenmeetingsConfigManager.getInstance().getLogin());
+                    inviterDisplayedName);
         }
         catch (Exception e1)
         {
@@ -96,6 +91,17 @@ public class OpenmeetingsPluginMenuItem
             logger.info(e1.getMessage());
         }
 
+        ServiceReference uiServiceRef = bc.getServiceReference(UIService.class.getName());
+        UIService uiService = (UIService) bc.getService(uiServiceRef);
+        Chat chat = uiService.getChat(metaContact.getDefaultContact());
+        chat.setChatVisible(true);
+
+        ProtocolProviderService jabberProvider = OpenmeetingsPluginMenuItem.getJabberProtocol(bc, logger);
+        if (jabberProvider == null)
+        {
+            return;
+        }
+
         OperationSetBasicInstantMessaging basicInstMsgImpl = jabberProvider
                     .getOperationSet(OperationSetBasicInstantMessaging.class);
 
@@ -112,6 +118,70 @@ public class OpenmeetingsPluginMenuItem
         chat.addMessage(null, System.currentTimeMillis(), Chat.SYSTEM_MESSAGE,
             message, "plain/text");
         
+    }
+
+    /*
+     * Sets the OpenMeetings server.
+     */
+    public void setOMserver(String OMserver)
+    {
+        OpenmeetingsConfigManager.getInstance().setServer(OMserver);
+    }
+
+    /*
+     * Sets the OpenMeetings protocol prefix.
+     */
+    public void setOMprotoPrefix(String OMprotoPrefix)
+    {
+        OpenmeetingsConfigManager.getInstance().setProtoPrefix(OMprotoPrefix);
+    }
+
+    /*
+     * Sets the OpenMeetings URI context.
+     */
+    public void setOMuriContext(String OMuriContext)
+    {
+        OpenmeetingsConfigManager.getInstance().setOmUriContext(OMuriContext);
+    }
+
+    /*
+     * Sets the OpenMeetings URI context.
+     */
+    public void setOMproxy(String OMproxy)
+    {
+        OpenmeetingsConfigManager.getInstance().setProxy(OMproxy);
+    }
+
+    /*
+     * Sets the OpenMeetings SOAP login username.
+     */
+    public void setOMlogin(String OMlogin)
+    {
+        OpenmeetingsConfigManager.getInstance().setLogin(OMlogin);
+    }
+
+    /*
+     * Sets the OpenMeetings SOAP login user password.
+     */
+    public void setOMpassword(String OMpassword)
+    {
+        OpenmeetingsConfigManager.getInstance().setPassword(OMpassword);
+    }
+
+    /*
+     * Sets the name to display for the user who invites others to a conference.
+     */
+    public void setOMdisplayedName(String displayedName)
+    {
+        OpenmeetingsConfigManager.getInstance().setDisplayedName(displayedName);
+    }
+
+    /*
+     * Sets the conference room ID.
+     */
+    public void setOMRoomID(String RoomID)
+    {
+        OpenmeetingsConfigManager.getInstance().setRoomID(RoomID);
     }
 
     /*
