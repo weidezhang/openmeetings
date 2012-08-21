@@ -45,7 +45,7 @@ $openmeetings_gateway = new openmeetings_gateway();
 	
 if ($openmeetings_gateway->openmeetings_loginuser()) {
 		
-		$picture = 	$current_user->picture;
+		$picture = $current_user->picture;
 		$first_name = $current_user->first_name;					
 		$last_name = $current_user->last_name;
 		if(empty($picture)) {

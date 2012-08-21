@@ -33,7 +33,7 @@ class openmeetingsRoomManagament {
 		$output = '<p class="error">' . $errorString .'</p>';
 			return $output;
 	}
-
+	//Deprecated 
 	function getRoomHash(&$focus, $event) {
 		
 		global $current_user;
@@ -47,13 +47,14 @@ class openmeetingsRoomManagament {
 				$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($test);
 		
 		 		$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($current_user->user_name,$current_user->first_name,
-						$current_user->last_name,$current_user->picture,$current_user->email1,/*$current_user->id,*/100 ,"openmeetings", $focus->openmeetings_roomid_c, 1, 1);
+						$current_user->last_name,$current_user->picture,$current_user->email1,$current_user->id,"SugarCRM" , $focus->openmeetings_roomid_c, 1, 1);
 				echo   "room id: $roomid";
 				echo "room hash:  $roomhash ";
 
 		}
 	}
-		
+	
+	//Deprecated please use	addUpdateRoomWithModerationExternalTypeAndTopBarOption instead.
 	function createRoomWithMod(&$focus, $event) {
 		global $sugar_config;
 		
