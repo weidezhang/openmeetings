@@ -33,73 +33,9 @@ class openmeetingsRoomManagament {
 		$output = '<p class="error">' . $errorString .'</p>';
 			return $output;
 	}
-	//Deprecated 
-	function getRoomHash(&$focus, $event) {
-		
-		global $current_user;
-		$becomemoderator = 1;	
-	
-		$openmeetings_gateway = new openmeetings_gateway();
-		
-	
-		if ($openmeetings_gateway->openmeetings_loginuser()) {
-		
-				$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($test);
-		
-		 		$roomhash = $openmeetings_gateway->openmeetings_setUserObjectAndGenerateRoomHash($current_user->user_name,$current_user->first_name,
-						$current_user->last_name,$current_user->picture,$current_user->email1,$current_user->id,"SugarCRM" , $focus->openmeetings_roomid_c, 1, 1);
-				echo   "room id: $roomid";
-				echo "room hash:  $roomhash ";
-
-		}
-	}
-	
-	//Deprecated please use	addUpdateRoomWithModerationExternalTypeAndTopBarOption instead.
-	function createRoomWithMod(&$focus, $event) {
-		global $sugar_config;
-		
-		
-		//if ($focus->openmeetings_roomname_c == "" && $focus->is_openmeetings_c == true){
-
-			$openmeetings_gateway = new openmeetings_gateway();
-			if ($openmeetings_gateway->openmeetings_loginuser()) {
-
-				$openmeetings->name = "SUGARCRM_MEETINGROOM_".$focus->id;
-				$openmeetings->roomtypes_id = 1;
-				$openmeetings->comment = 'Created by SOAP-Gateway for SUGARCM Platform';
-				$openmeetings->numberOfPartizipants = 100;
-				$openmeetings->ispublic = false;
-				$openmeetings->appointment = false;
-				$openmeetings->isDemoRoom = false;
-				$openmeetings->demoTime = 0;
-				$openmeetings->isModeratedRoom = true;
-		
-				$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($openmeetings);	
-				$focus->room_id = $roomid;
-				
-				//$focus->openmeetings_roomname_c = ""; 		
-				//$focus->openmeetings_roomname_c = $sugar_config[site_url]."/index.php?module=Openmeetings&action=room_entrance&roomid=".$focus->openmeetings_roomid_c;
-				
-				$focus->room_link = $sugar_config[site_url]."/index.php?module=openmeetings&action=room_entrance&roomid=".$focus->room_id;
-						
-			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-				//$this->displayAdminError("Errorr");
-				/*
-				echo "<pre>";
-				print_r($focus);							
-				echo "</pre>";	
-				exit();
-				*/
-				exit();
-				//$focus->room_link = "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-				//$focus->room_link = $this->displayAdminError(translate('LBL_ERORR_LOGIN', 'openmeetings'));
-				
-			}
-		//}
-	}
 	
 	
+		
 	function addUpdateRoomWithModerationExternalTypeAndTopBarOption(&$focus, $event) {		
 		global $sugar_config;		
 		if(isset($focus->room_id)){
@@ -178,86 +114,10 @@ class openmeetingsRoomManagament {
 		}
 	}
 
-/*
-	function createMyRoomWithMod(&$focus, $event) {
-		global $sugar_config;
-				
-		
-		
-		if ($sugar_config->openmeetings_username == "" & $focus->openmeetings_my_roomid_c == ""){
-
-			$openmeetings_gateway = new openmeetings_gateway();
-			if ($openmeetings_gateway->openmeetings_loginuser()) {
-		
-				$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($test);	
-				//$focus->openmeetings_roomid_c = $roomid;
-				
-				//$focus->openmeetings_roomname_c = ""; 		
-				//$focus->openmeetings_my_room_c = $sugar_config[site_url]."/index.php?module=Openmeetings&action=room_entrance&roomid=".$roomid;
-				
-				$focus->openmeetings_my_roomid_c = $roomid;
-				$focus->save(false);
-						
-			} else {
-				echo "Could not login User to OpenMeetings, check your OpenMeetings Module Configuration";
-				exit();
-			}
-		}
-	}
-
-*/
-
-	function createMyRoomWithMod() {
-		global $sugar_config;
-		global $current_user;
-
-		$openmeetings_gateway = new openmeetings_gateway();
-		if ($openmeetings_gateway->openmeetings_loginuser()) {
-
-		/*	'name' => 'SUGARCM_ROOM',
-			'roomtypes_id' => 1,
-			'comment' => 'Created by SOAP-Gateway for SUGARCM Platform',
-			'numberOfPartizipants' => 100,
-			'ispublic' => false,
-			'appointment' => false, 
-			'isDemoRoom' => false, 
-			'demoTime' => 0, 
-			'isModeratedRoom' => $isModeratedRoom
-		*/
-
-			$openmeetings->name = "SUGARCRM_MY_ROOM_".$current_user->id;
-			$openmeetings->roomtypes_id = 1;
-			$openmeetings->comment = 'Created by SOAP-Gateway for SUGARCM Platform';
-			$openmeetings->numberOfPartizipants = 100;
-			$openmeetings->ispublic = false;
-			$openmeetings->appointment = false;
-			$openmeetings->isDemoRoom = false;
-			$openmeetings->demoTime = 0;
-			$openmeetings->isModeratedRoom = true;
-		
-			$roomid = $openmeetings_gateway->openmeetings_createroomwithmod($openmeetings);	
-				
-			return $roomid;
-						
-		} else {
-			die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
-		}
-	}
 
 
 	function getInvitationHash(&$focus, $event) {
-		
-		
-		//echo "<pre>";
-		//print_r($_POST);
-		//echo $_REQUEST['send_invites'];
-	//print_r($focus);
-		//print_r($focus->conf_op0b58nigs_ida);
-		//print_r($focus->openmeetings_meetings->beans[$focus->conf_op0b58nigs_ida]->room_link);	
-		//exit;
-			
-		//echo "</pre>";
-
+				
 		global $sugar_config;
 		global $system_config;
 		global $timedate;
@@ -282,23 +142,7 @@ class openmeetingsRoomManagament {
 		$endDateString = date("d.m.Y", $date_end_timestamp); //dd.mm.yyyy
 		$endTimeString = date("H:i", $date_end_timestamp);
 		
-/*
-echo '<pre>'; 
-
-echo "startDateString ".$startDateString;
-echo "\n";
-
-echo "startTimeString ".$startTimeString;
-echo "\n";
-echo "endDateString ". $endDateString;
-echo "\n";
-echo "endTimeString ". $endTimeString;
-echo "\n";
-exit();
-
-echo '</pre>';
-*/
-		//!empty($focus->conf_op0b58nigs_ida
+		
 		if (!empty($focus->conf_op0b58nigs_ida) && isset($_REQUEST['send_invites']) && $_REQUEST['send_invites'] == 1){
 			
 			//work in sugar 2.3
@@ -325,8 +169,7 @@ echo '</pre>';
 	 				$changeNotify = true;
 					$admin->saveSetting('notify','on', 0);
 				}
-				//$notify_user = $focus->get_notification_recipients();
-
+				
 				$descriptionTemp = $focus->description;
 
 				foreach($focus->users_arr as $user_id) {
@@ -342,10 +185,6 @@ echo '</pre>';
 							"/openmeetings/?" .
 							"invitationHash=" .$invitation_hash;
 			
-
-					//$admin = new Administration();
-		 			//$admin->retrieveSettings();
-
 					$focus->description = $descriptionTemp;
 					$tempInvitationHash = "";
 					$tempInvitationHash = translate('LBL_EMAIL_TEXT', 'openmeetings')." ". $notify_user->online_meeting_url_temp;
@@ -368,10 +207,6 @@ echo '</pre>';
 							"/openmeetings/?" .
 							"invitationHash=" .$invitation_hash;
 			
-
-					//$admin = new Administration();
-		 			//$admin->retrieveSettings();
-
 					$focus->description = $descriptionTemp;
 					$tempInvitationHash = "";
 					$tempInvitationHash = translate('LBL_EMAIL_TEXT', 'openmeetings')." ". $notify_user->online_meeting_url_temp;
@@ -393,10 +228,6 @@ echo '</pre>';
 							"/openmeetings/?" .
 							"invitationHash=" .$invitation_hash;
 			
-
-					//$admin = new Administration();
-		 			//$admin->retrieveSettings();
-
 					$focus->description = $descriptionTemp;
 					$tempInvitationHash = "";
 					$tempInvitationHash = translate('LBL_EMAIL_TEXT', 'openmeetings')." ". $notify_user->online_meeting_url_temp;
@@ -407,10 +238,7 @@ echo '</pre>';
 				}
 				
 				$focus->description = $descriptionTemp;
-				
-				//return;
-				//echo "send invites: ". $_REQUEST['send_invites'];
-				//exit();			
+										
 			
 			} else {
 				die("Could not login User to OpenMeetings, check your OpenMeetings Module Configuration");	
