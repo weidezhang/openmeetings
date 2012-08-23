@@ -48,28 +48,13 @@ $openmeetings_language = $_REQUEST["openmeetings_language"];
 
   if(is_admin($current_user)){  
  
- $sq = "update config set value='$openmeetings_url' where category='info' and name='openmeetings_url'";
-global $db;
-$result= $db->query($sq, true);
+ 	$focus = new Administration();
 
-$sq = "update config set value='$openmeetings_http_port' where category='info' and name='openmeetings_http_port'";
-global $db;
-$result= $db->query($sq, true);
-
-
-$sq = "update config set value='$openmeetings_username' where category='info' and name='openmeetings_username'";
-global $db;
-$result= $db->query($sq, true);
-
-$sq = "update config set value='$openmeetings_password' where category='info' and name='openmeetings_password'";
-global $db;
-$result= $db->query($sq, true);
-
-$sq = "update config set value='$openmeetings_language' where category='info' and name='openmeetings_language'";
-global $db;
-$result= $db->query($sq, true);
-
-
+	$focus->saveSetting('info', 'openmeetings_url', $openmeetings_url);
+	$focus->saveSetting('info', 'openmeetings_http_port', $openmeetings_http_port); 
+	$focus->saveSetting('info', 'openmeetings_username', $openmeetings_username); 
+	$focus->saveSetting('info', 'openmeetings_password', $openmeetings_password); 
+	$focus->saveSetting('info', 'openmeetings_language', $openmeetings_language); 
   
   }
 
