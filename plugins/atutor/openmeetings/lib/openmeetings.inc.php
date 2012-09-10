@@ -28,17 +28,17 @@ if (!defined('AT_INCLUDE_PATH')) { exit; }
  */
 function loadDefaultValues($post){
 	$_om_config = array (
-		'openmeetings_roomtype'				=> 1,	//conference
+		'openmeetings_roomtype'			=> 1,	//conference
 		'openmeetings_num_of_participants'	=> 5,
-		'openmeetings_ispublic'				=> 1,	//true
-		'openmeetings_vid_w'				=> 270,
-		'openmeetings_vid_h'				=> 270,
-		'openmeetings_show_wb'				=> 1,	//true
-		'openmeetings_wb_w'					=> 600,
-		'openmeetings_wb_h'					=> 660,
-		'openmeetings_show_fp'				=> 1,	//true
-		'openmeetings_fp_w'					=> 270,
-		'openmeetings_fp_h'					=> 270
+		'openmeetings_ispublic'			=> 1,	//true
+		'openmeetings_vid_w'			=> 270,
+		'openmeetings_vid_h'			=> 270,
+		'openmeetings_show_wb'			=> 1,	//true
+		'openmeetings_wb_w'			=> 600,
+		'openmeetings_wb_h'			=> 660,
+		'openmeetings_show_fp'			=> 1,	//true
+		'openmeetings_fp_w'			=> 270,
+		'openmeetings_fp_h'			=> 270
 	);
 
 	//replace each key if empty

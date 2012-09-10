@@ -25,7 +25,7 @@ class REST_openmeetings {
 	function REST_openmeetings($rest) {
 	
 		$this->_rest = $rest;
-		$getSession_obj	= $this->_performAPICall();	
+		$getSession_obj	= $this->_performAPICall();
 
 		//check for session id
 		try {
@@ -35,12 +35,12 @@ class REST_openmeetings {
 			var_dump($e->getMessage());
 			exit('Error: no \'session_id\' in REST API response');
 		}
-
 	}
 
 	// make API calls w/ params
 	// NOTE: code based off of Apache OpenMeetings Moodle plug-in
 	function _performAPICall($resource='getSession', $service='UserService', $params=array()){
+
 		// This will allow you to view errors in the browser       
 		// Note: set 'display_errors' to 0 in production  
 		//ini_set('display_errors',1);  
@@ -51,46 +51,42 @@ class REST_openmeetings {
 
 		// URI used for making REST call. Each Web Service uses a unique URL.  
 		$request = $this->_rest.$service.'/'.$resource;
-						
-		// Initialize the session by passing the request as a parameter	
-		$session = curl_init($request); 
 
-		// Set curl options by passing session and flags
-		// CURLOPT_HEADER allows us to receive the HTTP header
-		curl_setopt($session, CURLOPT_HEADER, true);  
-		  
-		// CURLOPT_RETURNTRANSFER will return the response   
-		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);	
+		// build the query string
+		$qs = http_build_query($params);
+
+		try {
+			// NOTE: Need php-curl to use (sudo apt-get install php-curl)
+			// Initialize the session by passing the request as a parameter	
+			$session = curl_init($request); 
+			  
+			// CURLOPT_RETURNTRANSFER will return the response   
+			curl_setopt($session, CURLOPT_RETURNTRANSFER, true);	
+
+			// send query string
+			curl_setopt($session, CURLOPT_POSTFIELDS, $qs);	
 		
-		$temp = array();
-		//echo '<pre>'; print_r($params);echo '</pre>';
-		foreach ($params as $key => $value) {
-			array_push($temp, $key.'='.$value);
+			// Make the request  
+			$response = curl_exec($session); 		
+			  
+			// get the status code
+			$status_code = curl_getinfo($session, CURLINFO_HTTP_CODE);
+
+			// Close the curl session  
+			curl_close($session);
+
+		} catch (Exception $e) {
+			exit('Error: PHP cUrl extension not found. Must install php-curl (sudo apt-get install php-curl)');
 		}
-		$qs = implode('&', $temp);
-		$qs = str_replace(' ', '+', $qs);
-		curl_setopt($session, CURLOPT_POSTFIELDS, $qs);	
-		
-		// Make the request  
-		$response = curl_exec($session); 		
-		  
-		// Close the curl session  
-		curl_close($session);
 		
 		// Confirm that the request was transmitted to the OpenMeetings! Image Search Service  
 		if(!$response) {  
 		   //die('Request OpenMeetings! OpenMeetings Service failed and no response was returned.'); 
 		   die('Please make sure an OpenMeetings instance is running. Unable to connect to OpenMeetings.'); 
-		}  
-		
-		// Create an array to store the HTTP response codes  
-		$status_code = array();  
-		  
-		// Use regular expressions to extract the code from the header  
-		preg_match('/\d\d\d/', $response, $status_code);  
+		}  		
 		  
 		// Check the HTTP Response code and display message if status code is not 200 (OK)  
-		switch( $status_code[0] ) {  
+		switch($status_code) {  
 		        case 200:  
 		                // Success  
 		                break;  
@@ -110,17 +106,28 @@ class REST_openmeetings {
 		                     That means:  Bad request. The parameters passed to the service did not match as expected.   
 		                     The exact error is returned in the XML response.');  
 		                break;  
-		        default:  
-		        	die('Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' 
-				    . $status_code[0].' Request '.$request);  
+		        default:
+				if ($status_code) {
+					die('Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' 
+				   	 . $status_code.' Request '.$request);  
+				} else {
+					die('Your call to OpenMeetings Web Services returned no HTTP status. 
+                                             Have you installed php-curl on the ATutor server?');
+				}
+
 		} 
 		
 		// Get the XML from the response, bypassing the header
 		if (!($xml = strstr($response, '<ns'))) {
 			$xml = null;
 		} 
-		
-		// NOTE: Need php-xml to use (sudo yum install php-xml)
+
+		// uncomment these 3 lines to view raw response data from API
+		// echo '<b>Request:</b> '.$request.'<br><b>Params:</b> ';
+		// print_r($params);
+		// echo '<br><b>Code:</b> '.$status_code.'<br><b>Response:</b> '.htmlspecialchars($xml).'<br><br>';
+
+		// NOTE: Need php-xml to use (sudo apt-get install php-xml)
 		try {
 			$dom = new DOMDocument();
 		} catch (Exception $e) {
@@ -135,6 +142,7 @@ class REST_openmeetings {
 		foreach ($returnNodeList as $returnNode) {
 			$returnArray[$returnNode->localName] = $returnNode->nodeValue;
 		}
+
 		return $returnArray;
 	}
 
@@ -200,7 +208,7 @@ class REST_openmeetings {
 	}
 
 	function myErrors() {
-		// leftover function from nusoap implementation
+		// leftover function from soap implementation
 		return '';
 	}
 

@@ -39,11 +39,11 @@ if (isset($_POST['create_room']) && isset($_POST['room_id'])) {
 	$_POST['room_id'] = intval($_POST['room_id']);
 	$om_obj->om_deleteRoom($_POST['room_id']);
 	$msg->addFeedback('OPENMEETINGS_DELETE_SUCEEDED');
-} elseif (isset($_POST['delete_room']) && isset($_POST['room_id'])){
+} else if (isset($_POST['delete_room']) && isset($_POST['room_id'])){
 	$_POST['room_id'] = intval($_POST['room_id']);
 	$om_obj->om_deleteRoom($_POST['room_id']);
 	$msg->addFeedback('OPENMEETINGS_DELETE_SUCEEDED');
-} elseif (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POST['room_id']))){
+} else if (isset($_POST['create_room']) || (isset($_POST['update_room']) && isset($_POST['room_id']))){
 	//mysql escape
 	$_POST['openmeetings_roomtype']				= intval($_POST['openmeetings_roomtype']);
 	$_POST['openmeetings_num_of_participants']	= intval($_POST['openmeetings_num_of_participants']);
@@ -68,18 +68,21 @@ if (isset($_POST['create_room']) && isset($_POST['room_id'])) {
 		}
 
 		//add the room with the given parameters.
-		$om_obj->om_addRoom($room_name, $_POST);
+		if (!$om_obj->om_addRoom($room_name, $_POST)) {
+			exit('couldnt add room');
+		
+		}
 		$msg->addFeedback('OPENMEETINGS_ADDED_SUCEEDED');
 		header('Location: index.php');
 		exit;
-	} elseif (isset($_POST['update_room'])){
+	} else if (isset($_POST['update_room'])){
 		//update a room
 		$om_obj->om_updateRoom(intval($_POST['room_id']), $_POST);
 		$msg->addFeedback('OPENMEETINGS_UPDATE_SUCEEDED');
 		header('Location: index.php');
 		exit;
 	}
-} elseif (isset($_POST['edit_room']) && isset($_POST['room_id'])){
+} else if (isset($_POST['edit_room']) && isset($_POST['room_id'])){
 	//Log into the room
 	$room_id = $om_obj->om_getRoom();
 
@@ -103,11 +106,11 @@ if (isset($_POST['create_room']) && isset($_POST['room_id'])) {
 	include ('html/update_room.inc.php');
 	include (AT_INCLUDE_PATH.'footer.inc.php'); 
 	exit;
-} elseif (isset($_POST['cancel'])){
+} else if (isset($_POST['cancel'])){
 	$msg->addFeedback('OPENMEETINGS_CANCELLED');
 	header('Location: index.php');
 	exit;
-} elseif (isset($_GET['action']) && $_GET['action'] == 'view'){
+} else if (isset($_GET['action']) && $_GET['action'] == 'view'){
 	$room_id = intval($_GET['room_id']);
 	$sid	 = $addslashes($_GET['sid']);
 	header('Location: view_meetings.php?room_id='.$room_id.SEP.'sid='.$sid);

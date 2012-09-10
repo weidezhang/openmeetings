@@ -47,7 +47,7 @@ INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_confirm_delete
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_roomtype','Room Mode',NOW(),'');
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_conference','Conference Mode',NOW(),'');
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_audience','Audience Mode',NOW(),'');
-INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_create_room_instr','Adjust the following settings, then click "Create" to start the conference/audience room.  For more information on the settings, please see the <a href="http://code.google.com/p/openmeetings/wiki/SoapMethods#addRoom" target="_new">Openmeetings documentation</a>.',NOW(),'');
+INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_create_room_instr','Adjust the following settings, then click "Create" to start the conference/audience room.  For more information on the settings, please see the <a href="http://incubator.apache.org/openmeetings/RoomService.html#addRoomWithModeration" target="_new">Openmeetings documentation</a>.',NOW(),'');
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_edit_room','Edit room',NOW(),'');
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_create_room','Create new room',NOW(),'');
 INSERT INTO `language_text` VALUES ('en', '_module','openmeetings_delete_room','Remove room',NOW(),'');

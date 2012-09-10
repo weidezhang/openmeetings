@@ -38,9 +38,6 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 //Initiate Openmeeting
 $om_obj = new Openmeetings($course_id, $_SESSION['member_id']);
 
-//Login
-// failing here
-
 $om_obj->om_login();
 
 //Handles form actions
