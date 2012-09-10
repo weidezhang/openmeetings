@@ -25,7 +25,7 @@
 
 class openmeetings_rest_service {
 	
-		function call($request,$returnAttribute="return"){
+		function call($request, $returnAttribute="return"){
 			// This will allow you to view errors in the browser       
 	  		// Note: set "display_errors" to 0 in production  
 	  		//ini_set('display_errors',1);  
@@ -99,21 +99,71 @@ class openmeetings_rest_service {
 			
 			if ($returnAttribute == "") {
 				//echo "XML".$xml."<br/>";
-				return $dom;
+				return $this->getArray($dom);
 			} else {
 				$returnNodeList = $dom->getElementsByTagName($returnAttribute);
+				$ret = array();
 				foreach ($returnNodeList as $returnNode) {
-				    return $returnNode->nodeValue;
+					if ($returnNodeList->length == 1) {
+						return $this->getArray($returnNode);
+					} else {
+						$ret[] = $this->getArray($returnNode);
+					}
 				}
+				return $ret;
 			}
 			
 		}
 		
+		function getArray($node) {
+			if (is_null($node) || !is_object($node)) {
+				return $node;
+			}
+			$array = false;
+			/*
+			echo("!!!!!!!! NODE " . XML_TEXT_NODE
+					. " :: name = " . $node->nodeName
+					. " :: local = " . $node->localName 
+					. " :: childs ? " . $node->hasChildNodes() 
+					. " :: count = " . ($node->hasChildNodes() ? $node->childNodes->length : -1) 
+					. " :: type = " . $node->nodeType
+					. " :: val = " . $node->nodeValue
+					. "\n");
+			/*
+			if ($node->hasAttributes()) {
+				foreach ($node->attributes as $attr) {
+					$array[$attr->nodeName] = $attr->nodeValue;
+				}
+			}
+			*/
+			if ($node->hasChildNodes()) {
+				foreach ($node->childNodes as $childNode) {
+					if ($childNode->nodeType != XML_TEXT_NODE) {
+						if ($node->hasAttributes()) {
+							foreach ($node->attributes as $attr) {
+								if ($attr->localName == "nil") {
+									return null;
+								}
+							}
+						}
+						if ($childNode->childNodes->length == 1) {
+							$array[$childNode->localName] = $this->getArray($childNode);
+						} else {
+							$array[$childNode->localName][] = $this->getArray($childNode);
+						}
+					} else {
+						return $childNode->nodeValue;
+						//echo("!!!!!!!! TEXT " . $childNode->nodeValue . "\n");
+						//$array[$childNode->localName]
+					}
+				}
+			}
 		
-		
+			return $array;
+		}
+
 		function getError(){
 			return false;
-		
 		}
 		
 		function fault(){
