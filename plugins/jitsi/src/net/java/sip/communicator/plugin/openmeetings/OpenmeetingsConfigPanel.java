@@ -287,7 +287,7 @@ public class OpenmeetingsConfigPanel
             cfg.setOmUriContext(uriContext);
             cfg.setLogin(teLogin.getText());
             cfg.setDisplayedName(tedisplayedName.getText());
-            cfg.setProxy(proxy);
+            cfg.setProxy(teProxy.getText());
             if (!cfg.setPassword(new String(tePassword.getPassword())))
                 logger.error("Cannot set password");
             cfg.setRoomID(teRoomID.getText());
