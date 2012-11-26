@@ -1,4 +1,0 @@
-Apache OpenMeetings SugarCRM Plugin Change Log
-
-  * Refactoring to use REST instead of SOAP/NuSOAP Library
-  * Adapt data type of externalUserId to string 
