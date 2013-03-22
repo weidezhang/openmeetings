@@ -21,6 +21,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-180] - bug sending invitation
     * [OPENMEETINGS-196] - Calendar Ical / Simple Mail - double invitation mail
     * [OPENMEETINGS-212] - Activities and actions: "Deny and remove message " button is not worked
+    * [OPENMEETINGS-243] - "Updated" field in Administration -> LDAP panel contains "null" for string for empty value.
     * [OPENMEETINGS-251] - Minors layout problems when translating
     * [OPENMEETINGS-267] - missing translation
     * [OPENMEETINGS-291] - light does not indicate when the user is speaking
@@ -34,13 +35,13 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-327] - Add Restart Save Mail-Queue
     * [OPENMEETINGS-328] - screen sharing is not closing automatically
     * [OPENMEETINGS-331] - tooltip for cmd_applyforWhiteBoard room action is not set
-    * [OPENMEETINGS-343] - OM crashes if Invited guest with screen sharing rights tries to start screen sharing
+    * [OPENMEETINGS-343] - OM crashes if Inviteв guest with screen sharing rights tries to start screen sharing
     * [OPENMEETINGS-346] - Screen Sharing does not end with end of meeting
     * [OPENMEETINGS-362] - Download of profile images broken
     * [OPENMEETINGS-363] - Some minor bugs in private chat
     * [OPENMEETINGS-364] - User is not removed from user list when he leaves the room
     * [OPENMEETINGS-366] - File upload does not show images as options when doing file upload
-    * [OPENMEETINGS-376] - "Notification type" text overflows the drop down data selection area and is partly covered
+    * [OPENMEETINGS-376] - “Notification type” text overflows the drop down data selection area and is partly covered
     * [OPENMEETINGS-378] - Update Calendar email notification rules to send notification only when data relevant to the users has been changed
     * [OPENMEETINGS-379] - The Calendar ics format email notification is incorrectly formed
     * [OPENMEETINGS-380] - Calendar "Add attendee" option has a second option of itself to "Add external" but adding an external attendee does not close this dialog
@@ -113,6 +114,14 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-552] - Release blocking UI issues
     * [OPENMEETINGS-561] - Video is not removed on Whiteboard closing
     * [OPENMEETINGS-563] - "Black box" is displayed on test audio/video setup dialog
+    * [OPENMEETINGS-565] - Stackoverflow Exception when you goto your user profile and try to save it.
+    * [OPENMEETINGS-566] - No default timezone selection in registration/sign up when user is in timezone +12
+    * [OPENMEETINGS-567] - If you hit the "start upload" button twice, while the conversion is running, Openmeetings will run into an error
+    * [OPENMEETINGS-568] - OpenMeetings requests access to Cam even if there is none
+    * [OPENMEETINGS-569] - Faulty highperf settings in bat script
+    * [OPENMEETINGS-572] - Empty fields are replaced with string "null" after export&import
+    * [OPENMEETINGS-580] - Smslib 3.5.3 should be used.
+    * [OPENMEETINGS-582] - 2.0 RoomPoll and Configs restore failed
 
 
 
@@ -148,6 +157,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-535] - an update of the german language file
     * [OPENMEETINGS-541] - Updated version of French language file
     * [OPENMEETINGS-562] - To import ppt presentation delete page
+    * [OPENMEETINGS-583] - Ability to disable enhanced microphone should be added
 
 ** New Feature
     * [OPENMEETINGS-111] - Command line admin need to be created
@@ -172,6 +182,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-417] - How to add/register SIP extension in OpenMeeting ?
     * [OPENMEETINGS-446] - Create a Master backup File for last versions (including all generated data)
     * [OPENMEETINGS-522] - add Redmine Plugin Link to HomePage
+    * [OPENMEETINGS-585] - Clustering documentation
 
 
 
