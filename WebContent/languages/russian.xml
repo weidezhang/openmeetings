@@ -4644,6 +4644,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Вы действительно хотите дать слово этому участнику?</value>
   </string>
   <string id="1540" name="no_timezone">
-    <value>Please specify your timezone</value>
+    <value>Укажите Ваш часовой пояс</value>
+  </string>
+  <string id="1545" name="content_is_saving">
+    <value>Сохранение данных, подождите пожалуйста.</value>
   </string>
 </language>

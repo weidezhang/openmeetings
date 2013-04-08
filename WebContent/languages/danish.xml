@@ -4646,4 +4646,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1540" name="no_timezone">
     <value>Please specify your timezone</value>
   </string>
+  <string id="1545" name="content_is_saving">
+    <value>Content is Saving, Please wait.</value>
+  </string>
 </language>
