@@ -2572,7 +2572,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			return true;
 
 		} catch (Exception err) {
-			log.debug("[startInterviewRecording]", err);
+			log.error("[startInterviewRecording]", err);
 		}
 		return null;
 	}
@@ -2601,7 +2601,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				}
 			}
 		} catch (Exception err) {
-			log.debug("[sendRemoteCursorEvent]", err);
+			log.error("[sendRemoteCursorEvent]", err);
 		}
 		return null;
 	}
@@ -2683,7 +2683,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			return true;
 
 		} catch (Exception err) {
-			log.debug("[stopInterviewRecording]", err);
+			log.error("[stopInterviewRecording]", err);
 		}
 		return null;
 	}
@@ -2703,7 +2703,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			return sessionManager.getClientListByRoom(currentClient.getRoom_id());
 
 		} catch (Exception err) {
-			log.debug("[getClientListScope]", err);
+			log.error("[getClientListScope]", err);
 		}
 		return new ArrayList<Client>();
 	}

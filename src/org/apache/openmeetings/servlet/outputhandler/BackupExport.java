@@ -406,7 +406,7 @@ public class BackupExport {
 				try {
 					ser.write(t, listNode);
 				} catch (Exception e) {
-					log.debug("Exception While writing node of type: " + t.getClass(), e);
+					log.error("Exception While writing node of type: " + t.getClass(), e);
 				}
 			}
 		}
@@ -531,14 +531,14 @@ public class BackupExport {
 				try {
 					zos.close();
 				} catch (IOException e) {
-					log.debug("Enexpected error while closing ZipOutputStream", e);
+					log.error("Enexpected error while closing ZipOutputStream", e);
 				}
 			}
 			if (fos != null) {
 				try {
 					fos.close();
 				} catch (IOException e) {
-					log.debug("Enexpected error while closing FileOutputStream", e);
+					log.error("Enexpected error while closing FileOutputStream", e);
 				}
 			}
 		}

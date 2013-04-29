@@ -698,7 +698,7 @@ public class AppointmentDao {
 			}
 			return appointmentId;
 		} catch (Exception ex2) {
-			log.error("[deleteAppointement]: " + ex2);
+			log.error("[deleteAppointement]: ", ex2);
 		}
 		return null;
 	}

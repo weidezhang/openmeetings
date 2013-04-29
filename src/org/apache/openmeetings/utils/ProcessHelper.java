@@ -74,6 +74,7 @@ public class ProcessHelper {
 					line = br.readLine();
 				}
 			} catch (IOException ioexception) {
+				log.error("[run]", ioexception);
 				return;
 			}
 		}

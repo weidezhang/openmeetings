@@ -631,10 +631,7 @@ public class BackupImportController extends AbstractUploadController {
 					uploadCompleteMessage, info.publicSID);
 
 		} catch (Exception e) {
-
 			log.error("[ImportExport]", e);
-
-			e.printStackTrace();
 			throw new ServletException(e);
 		}
 

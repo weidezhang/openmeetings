@@ -187,7 +187,7 @@ public class FieldManager {
 
 			return returnList;
 		} catch (Exception ex2) {
-			log.error("[getConfKey]: " + ex2);
+			log.error("[getConfKey]: ", ex2);
 		}
 		return null;
 	}
@@ -257,7 +257,6 @@ public class FieldManager {
 
 		} catch (Exception ex2) {
 			log.error("[getLabelsByLanguage]: ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}

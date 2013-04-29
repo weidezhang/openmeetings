@@ -544,7 +544,6 @@ public class RoomManager {
 			}
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -917,7 +916,6 @@ public class RoomManager {
 			}
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}

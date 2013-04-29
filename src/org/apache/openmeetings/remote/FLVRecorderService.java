@@ -133,7 +133,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			return null;
 
 		} catch (Exception err) {
-			err.printStackTrace();
 			log.error("[checkForRecording]", err);
 		}
 		return null;
@@ -728,7 +727,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 		} catch (Exception err) {
 			log.error("[getFlvRecordingWithMetaData] ", err);
-			err.printStackTrace();
 		}
 		return null;
 	}
@@ -746,7 +744,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 		} catch (Exception err) {
 			log.error("[getFlvRecordingLog] ", err);
-			err.printStackTrace();
 		}
 		return null;
 	}

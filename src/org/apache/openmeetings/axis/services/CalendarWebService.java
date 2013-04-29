@@ -370,7 +370,6 @@ public class CalendarWebService {
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			err.printStackTrace();
 		}
 		return null;
 

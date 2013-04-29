@@ -25,39 +25,44 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 
 	
 public class ImageUtility {
 
-	 static {ImageIO.setUseCache(false);}
+	private static final Logger log = Red5LoggerFactory.getLogger(ImageUtility.class, OpenmeetingsVariables.webAppRootKey);
+	static {ImageIO.setUseCache(false);}
 
-	 public static java.awt.image.BufferedImage read(java.io.InputStream in) throws IOException {
-	        java.awt.image.BufferedImage image = null;  
-	        image = ImageIO.read(in);
-	        if (image == null)
-	            throw new java.io.IOException("Read fails");                  
-	        return image;
-	    }
-	 
-	    public static BufferedImage read(byte[] bytes) {
-	        try {
-	            return read(new ByteArrayInputStream(bytes));
-	        } catch (IOException e) {
-	            e.getStackTrace();
-	            return null;
-	        }
-	    } 
-
-	    public static byte[] toByteArray(BufferedImage image) {
-	        try {
-	            ByteArrayOutputStream out = new ByteArrayOutputStream();
-	            ImageIO.write(image, "jpeg", out); // write without compression                                
-	            return out.toByteArray();
-	        } catch (IOException e) {
-	            throw new RuntimeException(e);
-	        }
-	    }
-
+	public static java.awt.image.BufferedImage read(java.io.InputStream in) throws IOException {
+		java.awt.image.BufferedImage image = null;  
+		image = ImageIO.read(in);
+		if (image == null)
+			throw new java.io.IOException("Read fails");                  
+		return image;
 	}
+	 
+	public static BufferedImage read(byte[] bytes) {
+		try {
+			return read(new ByteArrayInputStream(bytes));
+		} catch (IOException e) {
+			log.error("[read]", e);
+			return null;
+		}
+	} 
+
+	public static byte[] toByteArray(BufferedImage image) {
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ImageIO.write(image, "jpeg", out); // write without compression                                
+			return out.toByteArray();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+}
 
 

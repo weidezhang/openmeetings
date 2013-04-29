@@ -23,14 +23,21 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.XMLWriter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class CreateLibraryPresentation {
+	
+	private static final Logger log = Red5LoggerFactory.
+			getLogger(CreateLibraryPresentation.class, OpenmeetingsVariables.webAppRootKey);
+	
 	public static ConverterProcessResult generateXMLDocument(File targetDirectory, String originalDocument, 
 			String pdfDocument, String swfDocument){
 		ConverterProcessResult returnMap = new ConverterProcessResult();
@@ -97,7 +104,7 @@ public class CreateLibraryPresentation {
 	        
 			return returnMap;
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("[generateXMLDocument]", err);
 			returnMap.setError(err.getMessage());
 			returnMap.setExitValue("-1");
 			return returnMap;

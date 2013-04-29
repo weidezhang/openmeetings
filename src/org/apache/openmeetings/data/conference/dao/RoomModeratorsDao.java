@@ -113,7 +113,6 @@ public class RoomModeratorsDao {
 			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByRoomId] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -128,7 +127,6 @@ public class RoomModeratorsDao {
 			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByUserAndRoomId] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -211,7 +209,6 @@ public class RoomModeratorsDao {
 
 		} catch (Exception ex2) {
 			log.error("[addRoomModeratorByUserList] ", ex2);
-			ex2.printStackTrace();
 		}
 	}
 
@@ -292,7 +289,6 @@ public class RoomModeratorsDao {
 
 		} catch (Exception ex2) {
 			log.error("[updateRoomModeratorByUserList] ", ex2);
-			ex2.printStackTrace();
 		}
 	}
 

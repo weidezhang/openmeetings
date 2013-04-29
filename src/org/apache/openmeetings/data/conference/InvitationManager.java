@@ -226,7 +226,7 @@ public class InvitationManager {
 		try {
 			user = userManager.getUserById(canceling_user_id);
 		} catch (Exception e) {
-			log.error("cancelInvitation Cancelling user cant be retrieved");
+			log.error("cancelInvitation Cancelling user cant be retrieved", e);
 			return;
 		}
 
@@ -271,6 +271,7 @@ public class InvitationManager {
 			} catch (Exception e) {
 				log.error("Error sending IcalCancelMail for User "
 						+ member.getEmail() + " : " + e.getMessage());
+				log.error("[cancelInvitation]", e);
 			}
 		}
 
@@ -299,7 +300,7 @@ public class InvitationManager {
 
 			return message;
 		} catch (Exception err) {
-			log.error("Could not format cancel message");
+			log.error("Could not format cancel message", err);
 			return "Error formatCancelMessage";
 		}
 	}
@@ -346,7 +347,7 @@ public class InvitationManager {
 
 			return message;
 		} catch (Exception err) {
-			log.error("Could not format cancel message");
+			log.error("Could not format cancel message", err);
 			return "Error formatCancelMessage";
 		}
 	}
@@ -413,6 +414,7 @@ public class InvitationManager {
 			} catch (Exception e) {
 				log.error("Error sending IcalUpdateMail for User "
 						+ member.getEmail() + " : " + e.getMessage());
+				log.error("[updateInvitation]", e);
 			}
 		}
 		}
@@ -445,7 +447,7 @@ public class InvitationManager {
 			return message;
 
 		} catch (Exception err) {
-			log.error("Could not format update subject");
+			log.error("Could not format update subject", err);
 			return "Error formatUpdateSubject";
 		}
 	}
@@ -492,7 +494,7 @@ public class InvitationManager {
 			return message;
 
 		} catch (Exception err) {
-			log.error("Could not format update message");
+			log.error("Could not format update message", err);
 			return "Error formatUpdateMessage";
 		}
 	}
@@ -709,6 +711,7 @@ public class InvitationManager {
 			return "success";
 		} catch (Exception e) {
 			log.error("sendInvitationCancelmail : " + e.getMessage());
+			log.error("[sendInvitationCancelmail]", e);
 		}
 
 		return null;
@@ -734,6 +737,7 @@ public class InvitationManager {
 			return "success";
 		} catch (Exception e) {
 			log.error("sendInvitationUpdateMail : " + e.getMessage());
+			log.error("[sendInvitationUpdateMail]", e);
 		}
 
 		return null;
@@ -1186,7 +1190,7 @@ public class InvitationManager {
 			}
 
 		} catch (Exception err) {
-
+			log.error("[updateInvitationByAppointment]", err);
 		}
 	}
 }

@@ -270,7 +270,7 @@ public class ConferenceService {
 
 			return ment;
 		} catch (Exception e) {
-			log.error("getAppointMentDataForRoom " + e.getMessage());
+			log.error("getAppointMentDataForRoom ", e);
 			return null;
 		}
 
@@ -631,7 +631,6 @@ public class ConferenceService {
 
 		} catch (Exception err) {
 			log.error("[getRoomModeratorsByRoomId]", err);
-			err.printStackTrace();
 		}
 
 		return null;

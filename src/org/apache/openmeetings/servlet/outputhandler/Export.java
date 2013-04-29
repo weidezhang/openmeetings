@@ -139,8 +139,6 @@ public class Export extends BaseHttpServlet {
 			}
 		} catch (Exception er) {
 			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
 		}
 	}
 }

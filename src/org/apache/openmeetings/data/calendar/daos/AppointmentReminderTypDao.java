@@ -140,7 +140,7 @@ public class AppointmentReminderTypDao {
 
 			return typId;
 		} catch (Exception ex2) {
-			log.error("[deleteAppointmentReminderTyp]: " + ex2);
+			log.error("[deleteAppointmentReminderTyp]: ", ex2);
 		}
 		return null;
 	}

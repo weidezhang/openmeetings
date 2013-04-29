@@ -215,7 +215,6 @@ public class CalendarService {
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			err.printStackTrace();
 		}
 		return null;
 
@@ -285,7 +284,6 @@ public class CalendarService {
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			err.printStackTrace();
 		}
 		return null;
 

@@ -67,7 +67,7 @@ public class AppointmentCategoryDao {
 
 			return appointCategory;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentCategoryById]: " + ex2);
+			log.error("[getAppointmentCategoryById]: ", ex2);
 		}
 		return null;
 	}
@@ -140,7 +140,7 @@ public class AppointmentCategoryDao {
 			}
 			return categoryId;
 		} catch (Exception ex2) {
-			log.error("[deleteAppointmentCategory]: " + ex2);
+			log.error("[deleteAppointmentCategory]: ", ex2);
 		}
 		return null;
 	}
@@ -159,7 +159,7 @@ public class AppointmentCategoryDao {
 
 			return listAppointmentCategory;
 		} catch (Exception ex2) {
-			log.error("[AppointmentCategory]: " + ex2);
+			log.error("[AppointmentCategory]: ", ex2);
 		}
 		return null;
 	}

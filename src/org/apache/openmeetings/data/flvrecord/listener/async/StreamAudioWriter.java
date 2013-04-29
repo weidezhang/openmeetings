@@ -220,9 +220,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 				writer.writeTag(tag);
 
 			}
-
-		} catch (IOException e) {
-			log.error("[packetReceived]", e);
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
 		}

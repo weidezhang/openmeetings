@@ -839,7 +839,7 @@ public class ImportInitvalues {
 			appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1),
 					"default", "default");
 		} catch (Exception e) {
-			log.error("Could not create AppointMentcategories");
+			log.error("Could not create AppointMentcategories", e);
 			return;
 		}
 
@@ -864,7 +864,7 @@ public class ImportInitvalues {
 					"iCal email");
 
 		} catch (Exception e) {
-			log.error("Could not create ReminderType");
+			log.error("Could not create ReminderType", e);
 			return;
 		}
 	}

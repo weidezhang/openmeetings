@@ -20,8 +20,14 @@ package org.apache.openmeetings.utils.crypt;
 
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class MD5CryptImplementation implements ICryptString {
 
+	private static final Logger log = Red5LoggerFactory.getLogger(MD5CryptImplementation.class, OpenmeetingsVariables.webAppRootKey);
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.apache.openmeetings.utils.crypt.ICryptString#createPassPhrase(java.lang.String)
@@ -31,7 +37,7 @@ public class MD5CryptImplementation implements ICryptString {
 		try {
 			passPhrase = MD5Crypt.crypt(userGivenPass);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			log.error("[createPassPhrase]", e);
 		} 
 		return passPhrase;
 	}
@@ -47,7 +53,7 @@ public class MD5CryptImplementation implements ICryptString {
 		try {
 			validPassword = passwdFromDb.equals(MD5Crypt.crypt(passGiven, salt));
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			log.error("[verifyPassword]", e);
 		}
 		return validPassword;
 	}

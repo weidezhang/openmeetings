@@ -136,7 +136,6 @@ public class ActivateUser extends BaseVelocityViewServlet {
 			return getBooting();
 		} catch (Exception err) {
 			log.error("[ActivateUser]", err);
-			err.printStackTrace();
 		}
 		return null;
 	}

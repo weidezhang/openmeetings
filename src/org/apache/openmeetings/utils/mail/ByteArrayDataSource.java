@@ -21,7 +21,14 @@ package org.apache.openmeetings.utils.mail;
 import java.io.*;
 import javax.activation.*;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class ByteArrayDataSource implements DataSource {
+	
+	private static final Logger log = Red5LoggerFactory.getLogger(ByteArrayDataSource.class, OpenmeetingsVariables.webAppRootKey);
+	
 	private byte[] data; // data
 
 	private String type; // content-type
@@ -38,6 +45,7 @@ public class ByteArrayDataSource implements DataSource {
 			data = os.toByteArray();
 			os.close();
 		} catch (IOException ioex) {
+			log.error("[ByteArrayDataSource]", ioex);
 		}
 	}
 

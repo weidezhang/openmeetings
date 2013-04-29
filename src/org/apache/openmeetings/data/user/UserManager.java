@@ -151,7 +151,7 @@ public class UserManager {
 				return sresult;
 			}
 		} catch (Exception ex2) {
-			log.error("[getUsersList] " + ex2);
+			log.error("[getUsersList] ", ex2);
 		}
 		return null;
 	}
@@ -192,7 +192,6 @@ public class UserManager {
 
 		} catch (Exception ex2) {
 			log.error("[getAllUserByRange] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
