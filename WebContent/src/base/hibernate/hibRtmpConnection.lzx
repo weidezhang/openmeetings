@@ -204,7 +204,7 @@
     
     <handler name="onerror" >
         <![CDATA[
-            Debug.remoteWrite("error " + this.status + " " + this.src + " " + this.lastCalled + " " + this.showKickMessage);
+            canvas.remoteLogWrite("error " + this.status + " " + this.src + " " + this.lastCalled + " " + this.showKickMessage);
             if (this.showFullMessage) {
                 new lz.labelerrorPopup(canvas,{errorlabelid:99});
                 this.showFullMessage = false;

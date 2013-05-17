@@ -115,10 +115,6 @@
         <servlet-name>ActivateUser</servlet-name>
         <servlet-class>org.apache.openmeetings.servlet.outputhandler.ActivateUser</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>ClientLogger</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ClientLogger</servlet-class>
-    </servlet>
     <!-- Axis2 Settings -->
     <servlet>
         <servlet-name>AxisServlet</servlet-name>
@@ -173,10 +169,6 @@
     <servlet-mapping>
         <servlet-name>ActivateUser</servlet-name>
         <url-pattern>/activateUser</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ClientLogger</servlet-name>
-        <url-pattern>/ClientLogger</url-pattern>
     </servlet-mapping>
     <!-- Axis2 -->
     <servlet-mapping>
