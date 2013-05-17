@@ -48,6 +48,7 @@
 
 <whitestyle name="menuStyle" textcolor="0x000000" />
              
+<dataset name="remoteLog" type="http" />
 
 <!-- main colors: 264269 -->
 <handler name="oninit">
@@ -58,6 +59,14 @@
     cmenu.hideBuiltInItems();
     if($debug) Debug.write("main.lzx/oninit:",this);
     canvas.lc = new LocalConnection();
+    
+    //init remote debug messages
+    Debug.remoteWrite = function(message) {
+    	if ($debug) Debug.write(message);
+    	remoteLog.setAttribute("src", canvas.getUrl() + "ClientLogger");
+    	remoteLog.setQueryParam("message", message);
+    	remoteLog.doRequest();
+    };
 </handler>
 
 
