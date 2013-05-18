@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.ldap;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -306,19 +308,14 @@ public class LdapLoginManagement {
 		 ***/
 
 		// Get custom Ldap attributes mapping
-		String ldap_user_attr_lastname = configData
-				.get(CONFIGKEY_LDAP_KEY_LASTNAME);
-		String ldap_user_attr_firstname = configData
-				.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
+		String ldap_user_attr_lastname = configData.get(CONFIGKEY_LDAP_KEY_LASTNAME);
+		String ldap_user_attr_firstname = configData.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
 		String ldap_user_attr_mail = configData.get(CONFIGKEY_LDAP_KEY_MAIL);
-		String ldap_user_attr_street = configData
-				.get(CONFIGKEY_LDAP_KEY_STREET);
-		String ldap_user_attr_additional_name = configData
-				.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
+		String ldap_user_attr_street = configData.get(CONFIGKEY_LDAP_KEY_STREET);
+		String ldap_user_attr_additional_name = configData.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
 		String ldap_user_attr_fax = configData.get(CONFIGKEY_LDAP_KEY_FAX);
 		String ldap_user_attr_zip = configData.get(CONFIGKEY_LDAP_KEY_ZIP);
-		String ldap_user_attr_country = configData
-				.get(CONFIGKEY_LDAP_KEY_COUNTRY);
+		String ldap_user_attr_country = configData.get(CONFIGKEY_LDAP_KEY_COUNTRY);
 		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
 		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
 		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
@@ -363,15 +360,13 @@ public class LdapLoginManagement {
 		if (ldap_user_attr_timezone == null) {
 			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
 		}
-		if (ldap_user_picture_uri == null) {
-			ldap_user_picture_uri = LDAP_KEY_PICTURE_URI;
-		}
 
 		// Auth Type
 		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
 
-		if (ldap_auth_type == null)
+		if (ldap_auth_type == null) {
 			ldap_auth_type = "";
+		}
 
 		if (!isValidAuthType(ldap_auth_type)) {
 			log.error("ConfigKey in Ldap Config contains invalid auth type : '"
@@ -381,19 +376,16 @@ public class LdapLoginManagement {
 		}
 
 		// Filter for Search of UserData
-		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "="
-				+ user + ")";
+		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "=" + user + ")";
 
-		log.debug("Searching userdata with LDAP Search Filter :"
-				+ ldap_search_filter);
+		log.debug("Searching userdata with LDAP Search Filter :" + ldap_search_filter);
 
 		// replace : -> in config = are replaced by : to be able to build valid
 		// key=value pairs
 		ldap_search_scope = ldap_search_scope.replaceAll(":", "=");
 		ldap_admin_dn = ldap_admin_dn.replaceAll(":", "=");
 
-		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn,
-				ldap_passwd, ldap_auth_type);
+		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn, ldap_passwd, ldap_auth_type);
 
 		log.debug("authenticating admin...");
 		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
@@ -407,8 +399,7 @@ public class LdapLoginManagement {
 			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(
 					ldap_search_scope, ldap_search_filter, ldap_fieldname_user_principal);
 			if (uidCnDictionary.get(user) != null) {
-				ldapUserDN = uidCnDictionary.get(user) + ","
-						+ ldap_search_scope;
+				ldapUserDN = uidCnDictionary.get(user) + "," + ldap_search_scope;
 				log.debug("Authentication with DN: " + ldapUserDN);
 			}
 			try {
@@ -422,8 +413,9 @@ public class LdapLoginManagement {
 			}
 		} else {
 			try {
-				if (!lAuth.authenticateUser(user, passwd))
+				if (!lAuth.authenticateUser(user, passwd)) {
 					return new Long(-11);
+				}
 			} catch (Exception e) {
 				log.error("Error on LdapAuth : " + e.getMessage());
 				return null;
@@ -436,7 +428,6 @@ public class LdapLoginManagement {
 
 		try {
 			u = userManager.getUserByLogin(user);
-
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}
@@ -454,7 +445,9 @@ public class LdapLoginManagement {
 		attributes.add(ldap_user_attr_town); // Town
 		attributes.add(ldap_user_attr_phone); // Phone
 		attributes.add(ldap_user_attr_timezone); // timezone
-		attributes.add(ldap_user_picture_uri); //picture uri
+		if (ldap_user_picture_uri != null) {
+			attributes.add(ldap_user_picture_uri); //picture uri
+		}
 		
 		HashMap<String, String> ldapAttrs = new HashMap<String, String>();
 		ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
@@ -468,7 +461,9 @@ public class LdapLoginManagement {
 		ldapAttrs.put("townAttr", ldap_user_attr_town);
 		ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
 		ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
-		ldapAttrs.put("pictureUri", ldap_user_picture_uri);
+		if (ldap_user_picture_uri != null) {
+			ldapAttrs.put("pictureUri", ldap_user_picture_uri);
+		}
 
 		Vector<HashMap<String, String>> result = lAuth.getData(
 				ldap_search_scope, ldap_search_filter, attributes);
@@ -479,8 +474,7 @@ public class LdapLoginManagement {
 		}
 		
 		if (result.size() > 1) {
-			log.error("Error on Ldap request - more than one result for user "
-					+ user);
+			log.error("Error on Ldap request - more than one result for user " + user);
 			return null;
 		}
 		
@@ -500,12 +494,10 @@ public class LdapLoginManagement {
 					String token = Long.toString(Math.abs(r.nextLong()), 36);
 					log.debug("Synching Ldap user to OM DB with RANDOM password: "
 							+ token);
-					userid = createUserFromLdapData(userData, token, user,
-							ldapAttrs);
+					userid = createUserFromLdapData(userData, token, user, ldapAttrs);
 				} else {
 					log.debug("Synching Ldap user to OM DB with password");
-					userid = createUserFromLdapData(userData, passwd, user,
-							ldapAttrs);
+					userid = createUserFromLdapData(userData, passwd, user, ldapAttrs);
 				}
 				log.debug("New User ID : " + userid);
 
@@ -703,8 +695,7 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					configurationDao.getConfValue("default_lang_id",
-							Long.class, "0"), // language_id
+					configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"), // language_id
 					false, // sendWelcomeMessage
 					Arrays.asList(configurationDao.getConfValue(
 							"default_domain_id", Long.class, null)), // organozation
