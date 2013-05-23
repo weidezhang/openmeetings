@@ -54,6 +54,8 @@ limitations under the License.
 <script type="text/javascript"
 	src="embed-compressed.js"></script>
 <script type="text/javascript"
+	src="http://www.google-analytics.com/ga.js"></script>
+<script type="text/javascript"
 	src="openmeetings_functions.js"></script>	
 <script type="text/javascript">
 

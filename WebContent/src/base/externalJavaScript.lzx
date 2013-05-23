@@ -35,6 +35,9 @@
 	var browserInfoReturnObject = null;
 	var browserLangReturnObject = null;
 	
+	function sendErrorReport(message) {
+		lz.Browser.callJS('sendErrorReport', null, message);
+	}
 	
 	function redirectToUrl(url, returnObject) {
 		

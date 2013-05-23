@@ -52,13 +52,16 @@
 <handler name="oninit">
 	flash.external.ExternalInterface.call("loadingComplete");
 	doDebugInit();
-    var cmenu = new LzContextMenu();
-    canvas.setDefaultContextMenu(cmenu);
-    cmenu.hideBuiltInItems();
-    if($debug) Debug.write("main.lzx/oninit:",this);
-    canvas.lc = new LocalConnection();
+	var cmenu = new LzContextMenu();
+	canvas.setDefaultContextMenu(cmenu);
+	cmenu.hideBuiltInItems();
+	if($debug) Debug.write("main.lzx/oninit:",this);
+	canvas.lc = new LocalConnection();
 </handler>
 
+<handler name="onerror" args="errmsg">
+	sendErrorReport(errmsg);
+</handler>
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 
