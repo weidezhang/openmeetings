@@ -23,20 +23,6 @@
  *  
  */ 
 
-var _gaq;
-
-function sendErrorReport(message) {
-	// Google Analytics
-	try {
-		_gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-13024987-1']);
-		_gaq.push(['_trackPageview']);
-		_gaq.push(['_trackEvent', 'Openmeetings client error', message, '', 0, true]);
-	} catch (exception) {
-		alert(exception);
-	}
-}
-
 function getBrowserInfo() {
 	//alert(navigator.userAgent);
 	document.getElementById("lzapp").getBrowserInfoCallback(navigator.userAgent);
