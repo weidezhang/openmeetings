@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.Version;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
 import org.apache.openmeetings.servlet.ServerNotInitializedException;
@@ -47,6 +48,7 @@ public class DefaultIndex extends BaseVelocityViewServlet {
 		try {
 			String template = "usual_template.vm";
 			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
+			ctx.put("REVISION", Version.getRevision());
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {
