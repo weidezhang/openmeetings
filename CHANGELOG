@@ -3,6 +3,37 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
 
+Release Notes - Openmeetings - Version 2.1.1 Apache Release
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-432] - video only room is coming with white board also
+    * [OPENMEETINGS-439] - An LDAP user can't change their own profile picture.
+    * [OPENMEETINGS-481] - When I reserve a room by sending an email, users who connected to this link from an email have the same email address as me
+    * [OPENMEETINGS-503] - Openmeetings does not logout on the Recording panel
+    * [OPENMEETINGS-507] - Error message is shown when user save the Profile settings 
+    * [OPENMEETINGS-537] - Pop menu  in conference for files shows "Delete folder"
+    * [OPENMEETINGS-586] - FileItem owner_id is not replaced with new id while system import
+    * [OPENMEETINGS-587] - Exclusive audio by hotkey is broken
+    * [OPENMEETINGS-598] - dont build trunk on JDK 1.7 x64
+    * [OPENMEETINGS-608] - Office file are uploaded but not displayed
+    * [OPENMEETINGS-609] - The end time shown under the Book Conference Room option in New Message is Incorrect
+    * [OPENMEETINGS-618] - Incorrect translation
+    * [OPENMEETINGS-625] - Profile Pictures not working on LDAP Accounts
+    * [OPENMEETINGS-634] - No menu accessable after file upload, in a special condition
+    * [OPENMEETINGS-635] - Administration / Configuration : default_lang_id documentation
+    * [OPENMEETINGS-654] - Interview room is broken
+
+** Improvement
+    * [OPENMEETINGS-589] - Configurable hot key for Mute/Unmute should be added
+
+
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
+
+
 Release Notes - Openmeetings - Version 2.1 Apache Release
 ================================================================================================================
 
