@@ -23,10 +23,11 @@ Release Notes - Openmeetings - Version 2.1.1 Apache Release
     * [OPENMEETINGS-634] - No menu accessable after file upload, in a special condition
     * [OPENMEETINGS-635] - Administration / Configuration : default_lang_id documentation
     * [OPENMEETINGS-654] - Interview room is broken
+    * [OPENMEETINGS-670] - The webinar is already closed, you wil be rediredcted to some interesting offerings in X sek
+    * [OPENMEETINGS-687] - Microphone is unmuted when user refresh video frame
 
 ** Improvement
     * [OPENMEETINGS-589] - Configurable hot key for Mute/Unmute should be added
-
 
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
