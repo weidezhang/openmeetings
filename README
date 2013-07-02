@@ -13,10 +13,13 @@ Release Notes 2.1.1
 =============
 see CHANGELOG file for detailed log
 
-Bug fix release for 2.1.0
+Bug fix release for 2.1.0.
+This release includes some improvements in user interface, fixes for the 
+interview and video only rooms, and localization issues. 
+Configurable hot key for Mute/Unmute have been added.
 
 _Known Issues_
-Video/audio SIP integration is no longer a part of this Apache release.
+Video/audio SIP integration is not a part of this Apache release.
 Check free red5sip product for this integration.
 
 Release passed reliability testing (great job, Vasily Degtyarev!)
