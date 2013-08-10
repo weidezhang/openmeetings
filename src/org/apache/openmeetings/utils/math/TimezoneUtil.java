@@ -61,6 +61,10 @@ public class TimezoneUtil {
 	
 	public TimeZone getTimeZone(String timeZoneId) {
 		
+		if (timeZoneId == null || timeZoneId.equals("")) {
+			return getDefaultTimeZone();
+		}
+		
 		//see TODO in comments
 		
 		return TimeZone.getTimeZone(timeZoneId);

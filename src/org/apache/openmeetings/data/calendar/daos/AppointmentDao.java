@@ -45,7 +45,6 @@ import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -283,6 +282,9 @@ public class AppointmentDao {
 		// update meeting members
 		List<MeetingMember> mmList = a.getMeetingMember();
 		if (mmList != null){
+			
+			
+			
 			for (MeetingMember mm : mmList){
 				String urlPostfix = (mm.getUserid().getType() == Type.contact) ? "" : "#room/" + r.getRooms_id();
 					
@@ -592,7 +594,6 @@ public class AppointmentDao {
 						// and Java around 600++
 						Long sendToUserId = 0L;
 						TimeZone timezoneMember = null;
-						OmTimeZone omTimeZone = null;
 						if (clientMember.get("userId") != null) {
 							sendToUserId = Long.valueOf(
 									clientMember.get("userId").toString())
@@ -608,7 +609,6 @@ public class AppointmentDao {
 									.getUserById(sendToUserId);
 							timezoneMember = timezoneUtil
 									.getTimezoneByUser(interalUser);
-							omTimeZone = interalUser.getOmTimeZone();
 							phone = interalUser.getPhoneForSMS();
 						} else {
 							// Get the internal-name of the timezone set in the
@@ -618,21 +618,19 @@ public class AppointmentDao {
 								log.error("jNameTimeZone not set in user object variable");
 								jName = "";
 							}
-							omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName
-									.toString());
 							timezoneMember = timezoneUtil
 									.getTimezoneByInternalJName(jName
 											.toString());
 						}
 
-						// Not In Remote List available - intern OR extern user
+						// Not In Remote List available - intern OR external user
 						meetingMemberLogic.addMeetingMember(
 								clientMember.get("firstname") == null ?
 										clientMember.get("firstname").toString() : "",
 								clientMember.get("lastname") == null ? 
 										clientMember.get("lastname").toString() : "",
 								"0", // member - Status
-								"0", // appointement - Status
+								"0", // appointment - Status
 								appointmentId,
 								null, // UserId
 								clientMember.get("email").toString(), // Email
@@ -647,7 +645,8 @@ public class AppointmentDao {
 								language_id, 
 								isPasswordProtected, 
 								password,
-								timezoneMember, omTimeZone, invitorName);
+								timezoneMember, 
+								invitorName);
 
 					}
 

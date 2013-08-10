@@ -335,8 +335,7 @@ public class InvitationManager {
 		if (us != null) {
 			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			timezone = timezoneUtil.getTimezoneByInternalJName(member
-					.getOmTimeZone().getJname());
+			timezone = timezoneUtil.getTimeZone(member.getTimeZoneId());
 		}
 
 		String subject = formatCancelSubject(language_id, appointment, user,
@@ -479,8 +478,7 @@ public class InvitationManager {
 		if (us != null) {
 			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			timezone = timezoneUtil.getTimezoneByInternalJName(member
-					.getOmTimeZone().getJname());
+			timezone = timezoneUtil.getTimeZone(member.getTimeZoneId());
 		}
 
 		// Get text messages

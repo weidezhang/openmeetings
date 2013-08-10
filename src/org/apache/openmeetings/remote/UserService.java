@@ -1211,13 +1211,13 @@ public class UserService {
 				meetingMemberDao.addMeetingMember(firstname, lastname, "0",
 						"0", appointmentId, meetingMember.getUser_id(), email,
 						meetingMember.getPhoneForSMS(), invitor,
-						meetingMember.getOmTimeZone(), isConnectedEvent);
+						timezoneUtil.getTimezoneByUser(meetingMember), isConnectedEvent);
 
 			} else {
 
 				meetingMemberDao.addMeetingMember("", "", "0", "0",
 						appointmentId, null, email, "", invitor,
-						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone),
+						timezoneUtil.getTimezoneByInternalJName(sendJNameTimeZone),
 						isConnectedEvent);
 
 			}
