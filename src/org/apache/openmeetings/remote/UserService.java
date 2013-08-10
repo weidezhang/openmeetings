@@ -1095,7 +1095,7 @@ public class UserService {
 										appointmentstart, appointmentend,
 										appointmentId, 
 										from.getFirstname() + " " + from.getLastname(),
-										from.getOmTimeZone());
+										timezoneUtil.getTimezoneByUser(from));
 
 						invitation_link = baseURL + "?invitationHash="
 								+ invitation.getHash();

@@ -50,6 +50,7 @@ import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,8 @@ public class RoomWebService {
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
 	private RoomDao roomDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -1770,7 +1773,8 @@ public class RoomWebService {
 								username, username, username, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, "", 1L, false, dFrom,
-								dTo, null, username, userManager.getUserById(users_id).getOmTimeZone());
+								dTo, null, username, 
+								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
 
 				if (invitation != null) {
 
@@ -1909,7 +1913,8 @@ public class RoomWebService {
 								baseurl, email, subject, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null, username, userManager.getUserById(users_id).getOmTimeZone());
+								sendMail, dFrom, dTo, null, username, 
+								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
 
 				if (invitation != null) {
 
@@ -2010,7 +2015,8 @@ public class RoomWebService {
 								baseurl, email, subject, room_id, "",
 								isPasswordProtected, invitationpass, valid,
 								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null, username, userManager.getUserById(users_id).getOmTimeZone());
+								sendMail, dFrom, dTo, null, username, 
+								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
 
 				if (invitation != null) {
 
