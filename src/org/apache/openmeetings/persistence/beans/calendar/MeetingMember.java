@@ -108,6 +108,7 @@ public class MeetingMember implements Serializable {
 	 * java.util.TimeZone Id
 	 */
 	@Column(name = "time_zone_id")
+	@Element(data=true, required=false)
 	private String timeZoneId;
 	
 	@Column(name="is_connected_event")
