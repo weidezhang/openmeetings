@@ -688,50 +688,6 @@ public class ConferenceService {
 		return sessionManager.getClientListByRoom(room_id);
 	}
 
-	/**
-	 * invoked in the admin interface to show the connections currently open
-	 * 
-	 * @param SID
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return - list of the connections currently open
-	 */
-	public SearchResult<Client> getRoomClientsMap(String SID, int start, int max,
-			String orderby, boolean asc) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return this.sessionManager.getListByStartAndMax(start, max,
-						orderby, asc);
-			}
-		} catch (Exception err) {
-			log.error("[getRoomClientsMap]", err);
-		}
-		return null;
-	}
-	
-	/**
-	 * Get some statistics about the current sessions handled by this instance
-	 * 
-	 * @param SID
-	 * @return - session statistics as String
-	 */
-	public String getSessionStatistics(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return this.sessionManager.getSessionStatistics();
-			}
-		} catch (Exception err) {
-			log.error("[getRoomClientsMap]", err);
-		}
-		return null;
-	}
-
 	public List<Room> getRoomsWithCurrentUsersByList(String SID, int start,
 			int max, String orderby, boolean asc) {
 		log.debug("getRooms");

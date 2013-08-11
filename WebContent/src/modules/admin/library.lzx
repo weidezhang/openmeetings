@@ -26,12 +26,9 @@
 	<include href="useradmin/" />
 	<include href="orgadmin/" />
 	<include href="roomadmin/" />
-	<include href="confadmin/" />
 	<include href="languageseditor/" />
 	<include href="ldap/" />
 	<!-- -->
-	<include href="backup/" />
-    <include href="connections/" />
 	<include href="servers/" />
 
 </library>
