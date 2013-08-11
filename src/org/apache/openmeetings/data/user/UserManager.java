@@ -37,8 +37,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -352,45 +350,6 @@ public class UserManager {
 		} catch (Exception ex2) {
 			log.error("updateLastLogin", ex2);
 		}
-	}
-
-	/**
-	 * suche eines Bentzers
-	 * 
-	 * @param user_level
-	 * @param searchstring
-	 * @param max
-	 * @param start
-	 * @return
-	 */
-	public List<User> searchUser(long user_level, String searchcriteria,
-			String searchstring, int max, int start, String orderby, boolean asc) {
-		if (authLevelUtil.checkAdminLevel(user_level)) {
-			try {
-				CriteriaBuilder cb = em.getCriteriaBuilder();
-				CriteriaQuery<User> cq = cb.createQuery(User.class);
-				Root<User> c = cq.from(User.class);
-				Expression<String> literal = cb.literal("%" + searchstring + "%");
-				Path<String> path = c.get(searchcriteria);
-				Predicate predicate = cb.like(path, literal);
-				Predicate condition = cb.notEqual(c.get("deleted"), true);
-				cq.where(condition, predicate);
-				cq.distinct(asc);
-				if (asc) {
-					cq.orderBy(cb.asc(c.get(orderby)));
-				} else {
-					cq.orderBy(cb.desc(c.get(orderby)));
-				}
-				TypedQuery<User> q = em.createQuery(cq);
-				q.setFirstResult(start);
-				q.setMaxResults(max);
-				List<User> contactsZ = q.getResultList();
-				return contactsZ;
-			} catch (Exception ex2) {
-				log.error("searchUser", ex2);
-			}
-		}
-		return null;
 	}
 
 	public List<Userdata> getUserdataDashBoard(Long user_id) {

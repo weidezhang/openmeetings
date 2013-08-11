@@ -216,27 +216,6 @@ public class UserService {
 	}
 
 	/**
-	 * 
-	 * @param SID
-	 * @param searchcriteria
-	 *            login,lastname,firstname,user_id
-	 * @param searchstring
-	 * @param max
-	 * @param start
-	 * @param orderby
-	 *            login,lastname,firstname,user_id
-	 * @param asc
-	 * @return List of the users found
-	 */
-	public List<User> searchUser(String SID, String searchcriteria,
-			String searchstring, int max, int start, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.searchUser(user_level, searchcriteria,
-				searchstring, max, start, orderby, asc);
-	}
-
-	/**
 	 * get a list of all users of an organisation
 	 * 
 	 * @param SID

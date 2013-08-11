@@ -80,7 +80,6 @@
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.remote.MainService" />
 	<bean id="printservice.service" class="org.apache.openmeetings.remote.PrintService" />
 	<bean id="pollservice.service" class="org.apache.openmeetings.remote.PollService" />
-	<bean id="organisationservice.service" class="org.apache.openmeetings.remote.OrganisationService" />
 	<bean id="meetingmemberservice.service" class="org.apache.openmeetings.remote.MeetingMemberService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.remote.InvitationService" />
