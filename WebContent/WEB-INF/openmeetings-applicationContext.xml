@@ -92,7 +92,6 @@
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter" />
 	<bean id="errorservice.service" class="org.apache.openmeetings.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
-	<bean id="configservice.service" class="org.apache.openmeetings.remote.ConfigurationService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
 	<bean id="calendarservice.service" class="org.apache.openmeetings.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.remote.FLVRecorderService" />

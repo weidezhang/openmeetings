@@ -27,7 +27,9 @@
     <include href="lzrecordcontent/" />
 	<include href="dashboard/" />
 	<include href="meetings/" />
+	<!-- 
     <include href="admin/" />
+     -->
     <include href="sipintegration/" />
     <include href="lzcalendar/" />
 
