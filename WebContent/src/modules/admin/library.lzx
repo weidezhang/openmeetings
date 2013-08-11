@@ -24,7 +24,5 @@
 <!-- admin modules -->
 <!-- -->
 	<include href="useradmin/" />
-	<!-- -->
-	<include href="servers/" />
 
 </library>
