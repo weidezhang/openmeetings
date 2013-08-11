@@ -26,7 +26,6 @@
 	<include href="useradmin/" />
 	<include href="orgadmin/" />
 	<include href="roomadmin/" />
-	<include href="ldap/" />
 	<!-- -->
 	<include href="servers/" />
 
