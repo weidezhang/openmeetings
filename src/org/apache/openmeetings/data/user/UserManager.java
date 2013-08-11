@@ -65,7 +65,6 @@ import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
-import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
@@ -1013,106 +1012,6 @@ public class UserManager {
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]", ex2);
 		}
-	}
-
-	/**
-	 * Update User by Object
-	 * 
-	 * @param user_level
-	 * @param values
-	 * @param users_id
-	 * @return
-	 */
-
-	public Long saveOrUpdateUser(Long user_level, ObjectMap<?, ?> values,
-			Long users_id) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				Long returnLong = null;
-
-				Long user_id = Long.parseLong(values.get("user_id").toString());
-
-				if (user_id != null && user_id > 0) {
-
-					returnLong = user_id;
-					User savedUser = usersDao.get(user_id);
-					savedUser.setAge((Date) values.get("age"));
-					savedUser.setFirstname(values.get("firstname").toString());
-					savedUser.setLastname(values.get("lastname").toString());
-					savedUser.setSalutations_id(Long.parseLong(values.get(
-							"salutations_id").toString()));
-
-					savedUser.setLanguage_id(Long.parseLong(values.get(
-							"languages_id").toString()));
-					savedUser.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(values.get("jnameTimeZone").toString()).getID());
-
-					String password = values.get("password").toString();
-					if (password != null && !password.isEmpty()) {
-						savedUser.updatePassword(cryptManager, configurationDao, password);
-					}
-
-					String email = values.get("email").toString();
-
-					if (!email.equals(savedUser.getAdresses().getEmail())) {
-						boolean checkEmail = usersDao.checkUserEMail(email, user_id);
-						if (!checkEmail) {
-							// mail already used by another user!
-							returnLong = new Long(-11);
-						} else {
-							savedUser.getAdresses().setEmail(email);
-						}
-					}
-
-					String phone = values.get("phone").toString();
-					savedUser.getAdresses().setPhone(phone);
-					savedUser.getAdresses().setComment(
-							values.get("comment").toString());
-					savedUser.getAdresses().setStreet(
-							values.get("street").toString());
-					savedUser.getAdresses().setTown(
-							values.get("town").toString());
-					savedUser.getAdresses().setAdditionalname(
-							values.get("additionalname").toString());
-					savedUser.getAdresses()
-							.setZip(values.get("zip").toString());
-					savedUser.setSendSMS(false);
-					savedUser.setForceTimeZoneCheck(false);
-					savedUser.getAdresses().setStates(
-							statemanagement.getStateById(Long.parseLong(values
-									.get("state_id").toString())));
-
-					savedUser.setShowContactData(Boolean.valueOf(values.get(
-							"showContactData").toString()));
-					savedUser.setShowContactDataToContacts(Boolean
-							.valueOf(values.get("showContactDataToContacts")
-									.toString()));
-					savedUser
-							.setUserOffers(values.get("userOffers").toString());
-					savedUser.setUserSearchs(values.get("userSearchs")
-							.toString());
-
-					// savedUser.setAdresses(addressmanagement.getAdressbyId(user.getAdresses().getAdresses_id()));
-
-					if (savedUser.getUser_id() == null) {
-						em.persist(savedUser);
-					} else {
-						if (!em.contains(savedUser)) {
-							em.merge(savedUser);
-						}
-					}
-
-					return returnLong;
-				}
-
-			} else {
-				log.error("[saveOrUpdateUser] invalid auth " + users_id + " "
-						+ new Date());
-			}
-		} catch (Exception ex) {
-			log.error("[saveOrUpdateUser]", ex);
-		}
-
-		return null;
 	}
 
 	/**

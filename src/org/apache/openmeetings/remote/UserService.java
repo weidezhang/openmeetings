@@ -67,7 +67,6 @@ import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
-import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -172,19 +171,6 @@ public class UserService {
 	public Object resetPassByHash(String SID, String hash, String pass) {
 		sessiondataDao.checkSession(SID);
 		return usersDao.resetPassByHash(hash, pass);
-	}
-
-	/**
-	 * get user by id, admin only
-	 * 
-	 * @param SID
-	 * @param user_id
-	 * @return User with the id given
-	 */
-	public User getUserById(String SID, long user_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.checkAdmingetUserById(user_level, user_id);
 	}
 
 	/**
@@ -305,30 +291,6 @@ public class UserService {
 			String search, int start, int max, String orderby, boolean asc) {
 		return userManager.getAllUserByRange(search, start, max, orderby,
 				asc);
-	}
-
-	/**
-	 * updates the user profile, every user can update his own profile
-	 * 
-	 * @param SID
-	 * @param values
-	 * @return user_id or NULL or negativ value (error_id)
-	 */
-	public Long updateUserSelfSmall(String SID,
-			@SuppressWarnings("rawtypes") ObjectMap values) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (user_level != null && user_level >= 1) {
-				return userManager.saveOrUpdateUser(new Long(3), values,
-						users_id);
-			} else {
-				return new Long(-2);
-			}
-		} catch (Exception err) {
-			log.error("[updateUserSelfSmall] " + err);
-			return new Long(-1);
-		}
 	}
 
 	/**
