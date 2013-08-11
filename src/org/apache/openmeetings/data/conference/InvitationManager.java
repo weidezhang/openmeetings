@@ -238,7 +238,7 @@ public class InvitationManager {
 			invitation.setInvitationWasUsed(false);
 			log.debug(baseUrl);
 			invitation.setBaseUrl(baseUrl);
-			invitation.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(createdBy.getOmTimeZone().getJname()).getID());
+			invitation.setTimeZoneId(timezoneUtil.getTimezoneByUser(createdBy).getID());
 
 			// valid period of Invitation
 			if (valid == 1) {

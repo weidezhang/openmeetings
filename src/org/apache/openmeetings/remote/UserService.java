@@ -600,7 +600,7 @@ public class UserService {
 
 				User us = userManager.getUserById(users_id);
 
-				us.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jname));
+				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
 				us.setUpdatetime(new Date());
 
@@ -1032,7 +1032,7 @@ public class UserService {
 
 					room = roomDao.get(room_id);
 
-					String sendJNameTimeZone = from.getOmTimeZone().getJname();
+					String sendJNameTimeZone = from.getTimeZoneId();
 
 					appointmentId = this.addAppointmentToUser(subject, message,
 							from, recipients, room, appointmentstart,
@@ -1042,7 +1042,7 @@ public class UserService {
 
 				recipients.add(from.getAdresses().getEmail());
 
-				String sendJNameTimeZone = from.getOmTimeZone().getJname();
+				String sendJNameTimeZone = from.getTimeZoneId();
 
 				String profile_link = baseURL + "?cuser=1";
 
@@ -1197,7 +1197,7 @@ public class UserService {
 		Long appointmentId = appointmentDao.addAppointment(subject,
 				to.getUser_id(), "", message, appointmentstart, appointmentend,
 				false, false, false, false, 1L, 2L, room, to.getLanguage_id(),
-				false, "", isConnectedEvent, sendJNameTimeZone);
+				false, "", isConnectedEvent);
 
 		for (String email : recipients) {
 

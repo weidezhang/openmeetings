@@ -212,7 +212,7 @@ public class AppointmentLogic {
 					userId, appointmentLocation, appointmentDescription,
 					appointmentstart, appointmentend, isDaily, isWeekly,
 					isMonthly, isYearly, categoryId, remind, room, language_id,
-					isPasswordProtected, password, false, user.getOmTimeZone().getJname());
+					isPasswordProtected, password, false);
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";

@@ -102,10 +102,9 @@ public class TimezoneUtil {
 	 */
 	public TimeZone getTimezoneByUser(User user) {
 
-		if (user != null && user.getOmTimeZone() != null) {
+		if (user != null && user.getTimeZoneId() != null) {
 
-			TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone()
-					.getIcal());
+			TimeZone timeZone = TimeZone.getTimeZone(user.getTimeZoneId());
 
 			if (timeZone != null) {
 				return timeZone;

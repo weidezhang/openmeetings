@@ -45,7 +45,6 @@ import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
@@ -2289,8 +2288,6 @@ public class RoomWebService {
 					return rooms_id;
 				}
 
-				User us = userManager.getUserById(users_id);
-
 				appointmentDao.addAppointment("appointmentName", users_id,
 						"appointmentLocation", "appointmentDescription", dFrom,
 						dTo, // appointmentstart, appointmentend,
@@ -2301,7 +2298,7 @@ public class RoomWebService {
 						roomDao.get(rooms_id), 1L, // language_id
 						isPasswordProtected, // isPasswordProtected
 						password, // password
-						false, us.getOmTimeZone().getJname());
+						false);
 
 				return rooms_id;
 

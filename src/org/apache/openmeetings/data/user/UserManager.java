@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -50,7 +51,6 @@ import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -66,6 +66,7 @@ import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
@@ -114,6 +115,8 @@ public class UserManager {
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * query for a list of users
@@ -476,8 +479,7 @@ public class UserManager {
 					us.setAvailible(availible);
 					us.setStatus(status);
 					us.setSalutations_id((long)salutations_id);
-					us.setOmTimeZone(omTimeZoneDaoImpl
-							.getOmTimeZone(jNameTimeZone));
+					us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jNameTimeZone).getID());
 					us.setLanguage_id(language_id);
 					us.setForceTimeZoneCheck(forceTimeZoneCheck);
 
@@ -813,7 +815,8 @@ public class UserManager {
 				town, language_id, sendWelcomeMessage,
 				organisations, phone, sendSMS, baseURL,
 				sendConfirmation,
-				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
+				timezoneUtil.getTimezoneByInternalJName(jname_timezone), 
+				forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
 				showContactDataToContacts, null);
 	}
@@ -860,7 +863,7 @@ public class UserManager {
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation,
-			OmTimeZone timezone, Boolean forceTimeZoneCheck,
+			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
 		// TODO: make phone number persistent
@@ -977,7 +980,7 @@ public class UserManager {
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash,
-			OmTimeZone timezone,
+			TimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
 		try {
@@ -997,7 +1000,7 @@ public class UserManager {
 			users.setSalutations_id(1L);
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
-			users.setOmTimeZone(timezone);
+			users.setTimeZoneId(timezone.getID());
 			users.setForceTimeZoneCheck(forceTimeZoneCheck);
 
 			users.setUserOffers(userOffers);
@@ -1087,7 +1090,7 @@ public class UserManager {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setPictureuri(pictureuri);
-			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone));
+			users.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jNameTimeZone).getID());
 
 			users.setExternalUserId(externalUserId);
 			users.setExternalUserType(externalUserType);
@@ -1174,9 +1177,7 @@ public class UserManager {
 
 					savedUser.setLanguage_id(Long.parseLong(values.get(
 							"languages_id").toString()));
-					savedUser.setOmTimeZone(omTimeZoneDaoImpl
-							.getOmTimeZone((values.get("jnameTimeZone")
-									.toString())));
+					savedUser.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(values.get("jnameTimeZone").toString()).getID());
 
 					String password = values.get("password").toString();
 					if (password != null && !password.isEmpty()) {

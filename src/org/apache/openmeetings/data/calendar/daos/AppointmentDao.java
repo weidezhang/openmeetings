@@ -204,7 +204,7 @@ public class AppointmentDao {
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
 			Long categoryId, Long remind, Room room, Long language_id,
 			Boolean isPasswordProtected, String password,
-			Boolean isConnectedEvent, String jNameTimeZone) {
+			Boolean isConnectedEvent) {
 		try {
 
 			Appointment ap = new Appointment();
@@ -450,7 +450,7 @@ public class AppointmentDao {
 			Date appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
 			@SuppressWarnings("rawtypes") List mmClient, Long users_id, String baseUrl, Long language_id,
-			Boolean isPasswordProtected, String password, String iCalTimeZone, String appointmentLocation) {
+			Boolean isPasswordProtected, String password, String appointmentLocation) {
 
 		log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
@@ -663,7 +663,7 @@ public class AppointmentDao {
 
 	public Long updateAppointmentByTime(Long appointmentId,
 			Date appointmentstart, Date appointmentend, Long users_id,
-			String baseUrl, Long language_id, String iCalTimeZone) {
+			String baseUrl, Long language_id) {
 
 		log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
