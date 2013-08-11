@@ -24,7 +24,6 @@
 <!-- admin modules -->
 <!-- -->
 	<include href="useradmin/" />
-	<include href="roomadmin/" />
 	<!-- -->
 	<include href="servers/" />
 
