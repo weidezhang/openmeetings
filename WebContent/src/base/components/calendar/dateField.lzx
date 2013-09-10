@@ -69,7 +69,7 @@
 		  width_insetResource="16" height_insetResource="16">
 		<handler name="onclick">
 			if (parent.enabled) {
-				new lz.calendarWindow(this.parent.parent,{fieldRef:this.parent._text,x:this.parent.x+(this.parent.width-200),y:this.parent.y});
+				new lz.calendarWindow(this.parent.parent,{fieldRef:this.parent._text,x:this.parent.x+(this.parent.width-200),y:this.parent.y+(this.parent.height-120)});
 			}
 		</handler>
 		<labelTooltip labelid="162" />
