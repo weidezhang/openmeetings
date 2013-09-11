@@ -547,15 +547,15 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
-				if (rp.getRoom().getRooms_id() == null) {
+				if (rp.getRoom() == null || rp.getRoom().getRooms_id() == null) {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy().getUser_id() == null) {
+				if (rp.getCreatedBy() == null || rp.getCreatedBy().getUser_id() == null) {
 					rp.setCreatedBy(null);
 				}
 				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
-					if (rpa.getVotedUser().getUser_id() == null) {
+					if (rpa.getVotedUser() == null || rpa.getVotedUser().getUser_id() == null) {
 						rpa.setVotedUser(null);
 					}
 				}
