@@ -672,27 +672,24 @@ public class ImportInitvalues {
 		}
 	}
 
-	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName, String ical_timeZone,
-			String configdefaultLang) {
+	public void loadInitUserAndOrganisation(InstallationConfig cfg) {
 		// Add user
 		try {
 
-			Long default_lang_id = Long.parseLong(configdefaultLang);
+			Long default_lang_id = Long.parseLong(cfg.defaultLangId);
 			if (default_lang_id == null)
 				default_lang_id = 1L;
 
 			// Add default group
-			Long organisation_id = organisationManager.addOrganisation(
-					defaultOrganisationName, 1);
+			Long organisation_id = organisationManager.addOrganisation(cfg.group, 1);
 
 			// BaseUrl as param is empty as we do not send an EMAIL here
 			Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
-					1, username, userpass, "lastname", "firstname", email,
+					1, cfg.username, cfg.password, "lastname", "firstname", cfg.email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
 					Arrays.asList(organisation_id), "phone", false, "", false,
-					omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone),
+					omTimeZoneDaoImpl.getOmTimeZoneByIcal(cfg.ical_timeZone),
 					false, "", "", false, true);
 
 			log.debug("Installation - User Added user-Id " + user_id);
@@ -1020,17 +1017,14 @@ public class ImportInitvalues {
 		loadConfiguration(cfg);
 	}
 
-	public void loadAll(InstallationConfig cfg, String username,
-			String userpass, String useremail, String groupame,
-			String timeZone, boolean force) throws Exception {
+	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
 		if (!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
 		loadSystem(cfg, force);
-		loadInitUserAndOrganisation(username, userpass, useremail, groupame,
-				timeZone, cfg.defaultLangId);
+		loadInitUserAndOrganisation(cfg);
 
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
 	}

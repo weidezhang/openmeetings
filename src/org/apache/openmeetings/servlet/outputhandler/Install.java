@@ -173,11 +173,11 @@ public class Install extends BaseVelocityViewServlet {
 
 					log.debug("do init installation");
 
-					String username = request.getParameter("username");
-					String userpass = request.getParameter("userpass");
-					String useremail = request.getParameter("useremail");
-					String orgname = request.getParameter("orgname");
 					InstallationConfig cfg = new InstallationConfig();
+					cfg.username = request.getParameter("username");
+					cfg.password = request.getParameter("userpass");
+					cfg.group = request.getParameter("orgname");
+					cfg.email = request.getParameter("useremail");
 					cfg.allowFrontendRegister = request.getParameter("configdefault");
 
 					cfg.mailReferer = request.getParameter("configreferer");
@@ -210,22 +210,18 @@ public class Install extends BaseVelocityViewServlet {
                     cfg.red5SipRoomPrefix = request.getParameter("red5sip_room_prefix");
                     cfg.red5SipExtenContext = request.getParameter("red5sip_exten_context");
 
-					String timeZone = request.getParameter("timeZone");
-					cfg.ical_timeZone = timeZone;
+					cfg.ical_timeZone = request.getParameter("timeZone");
 					
 					cfg.jodPath = request.getParameter("jod_path");
 
-					log.debug("step 0+ start init with values. " + username
-							+ " ***** " + useremail + " " + orgname + " "
+					log.debug("step 0+ start init with values. " + cfg.username
+							+ " ***** " + cfg.email + " " + cfg.group + " "
 							+ cfg);
 
-					cfg.urlFeed = getServletContext().getInitParameter(
-							"url_feed");
-					cfg.urlFeed2 = getServletContext().getInitParameter(
-							"url_feed2");
+					cfg.urlFeed = getServletContext().getInitParameter("url_feed");
+					cfg.urlFeed2 = getServletContext().getInitParameter("url_feed2");
 					
-					getBean(ImportInitvalues.class).loadAll(cfg, username,
-							userpass, useremail, orgname, timeZone, false);
+					getBean(ImportInitvalues.class).loadAll(cfg, false);
 
 					// update to next step
 					log.debug("add level to install file");

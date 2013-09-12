@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.cli;
 
+import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.utils.UserHelper.invalidPassword;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +39,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openjpa.jdbc.meta.MappingTool;
+import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
+import org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl;
+import org.apache.openjpa.jdbc.schema.SchemaTool;
+import org.apache.openjpa.lib.log.Log;
+import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -94,7 +102,7 @@ public class Admin {
 		options.addOption(new OmOption("i", "email", null, true, "Email of the default user (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user (mutually exclusive with 'file')"));
-		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
+		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
 		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]", true));
 		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]", true));
 		options.addOption(new OmOption("i", null, "smtp-port", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpPort + "]", true));
@@ -239,7 +247,7 @@ public class Admin {
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
 						File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
-						ConnectionPropertiesPatcher.getPatcher(dbType).patch(
+						ConnectionPropertiesPatcher.getPatcher(dbType, connectionProperties).patch(
 								srcConf
 								, conf
 								, cmdl.getOptionValue("db-host", "localhost")
@@ -247,7 +255,6 @@ public class Admin {
 								, cmdl.getOptionValue("db-name", null)
 								, cmdl.getOptionValue("db-user", null)
 								, cmdl.getOptionValue("db-pass", null)
-								, connectionProperties
 								);
 					} else {
 						//get properties from existent persistence.xml
@@ -261,11 +268,11 @@ public class Admin {
 						importInit.loadSystem(cfg, force); 
 						restoreOm(ctxName, backup);
 					} else {
-						AdminUserDetails admin = checkAdminDetails(ctxName);
+						checkAdminDetails(ctxName);
 						dropDB(connectionProperties);
 						
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadAll(cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz, force);
+						importInit.loadAll(cfg, force);
 					}					
 					
 					InstallationDocumentHandler.createDocument(3);
@@ -513,54 +520,46 @@ public class Admin {
 		return result;
 	}
 	
-	private class AdminUserDetails {
-		String login = null;
-		String email = null;
-		String group = null;
-		String pass = null;
-		String tz = null;
-	}
-	
-	private AdminUserDetails checkAdminDetails(String ctxName) throws Exception {
-		AdminUserDetails admin = new AdminUserDetails();
-		admin.login = cmdl.getOptionValue("user");
-		admin.email = cmdl.getOptionValue("email");
-		admin.group = cmdl.getOptionValue("group");
-		if (admin.login == null || admin.login.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
+	private void checkAdminDetails(String ctxName) throws Exception {
+		cfg.username = cmdl.getOptionValue("user");
+		cfg.email = cmdl.getOptionValue("email");
+		cfg.group = cmdl.getOptionValue("group");
+		if (cfg.username == null || cfg.username.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
 			System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
 			System.exit(1);
 		}
 		
 		try {
-			if (!MailUtil.matches(admin.email)) {
+			if (!MailUtil.matches(cfg.email)) {
 			    throw new AddressException("Invalid address");
 			}
-			new InternetAddress(admin.email, true);
+			new InternetAddress(cfg.email, true);
 		} catch (AddressException ae) {
-			System.out.println("Please provide non-empty valid email: '" + admin.email + "' is not valid.");
+			System.out.println("Please provide non-empty valid email: '" + cfg.email + "' is not valid.");
 			System.exit(1);
 		}
-		if (admin.group == null || admin.group.length() < 1) {
-			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + admin.group);
+		if (cfg.group == null || cfg.group.length() < 1) {
+			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
 			System.exit(1);
 		}
-		admin.pass = cmdl.getOptionValue("password");
-		if (checkPassword(admin.pass)) {
-			System.out.print("Please enter password for the user '" + admin.login + "':");
-			admin.pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
-			if (checkPassword(admin.pass)) {
-				System.out.println("Password was not provided, or too short, should be at least " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " character long.");
+		cfg.password = cmdl.getOptionValue("password");
+		ConfigurationDao cfgDao = getApplicationContext(ctxName).getBean(ConfigurationDao.class);
+		if (invalidPassword(cfg.password, cfgDao)) {
+			System.out.print("Please enter password for the user '" + cfg.username + "':");
+			cfg.password = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			if (invalidPassword(cfg.password, cfgDao)) {
+				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);
 			}
 		}
 		ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones());
-		admin.tz = null;
+		cfg.ical_timeZone = null;
 		if (cmdl.hasOption("tz")) {
-			admin.tz = cmdl.getOptionValue("tz");
-			admin.tz = tzMap.containsKey(admin.tz) ? admin.tz : null;
+			cfg.ical_timeZone = cmdl.getOptionValue("tz");
+			cfg.ical_timeZone = tzMap.containsKey(cfg.ical_timeZone) ? cfg.ical_timeZone : null;
 		}
-		if (admin.tz == null) {
+		if (cfg.ical_timeZone == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
 			
 			for (String tzIcal : tzMap.keySet()) {
@@ -568,11 +567,6 @@ public class Admin {
 			}
 			System.exit(1);
 		}
-		return admin;
-	}
-	
-	private boolean checkPassword(String pass) {
-		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
 	}
 	
 	public static void dropDB() throws Exception {
@@ -587,16 +581,29 @@ public class Admin {
 		}
 	}
 	
+	private static LogImpl getLogImpl(JDBCConfiguration conf) {
+		return (LogImpl)conf.getLog(JDBCConfiguration.LOG_SCHEMA);
+	}
+	
 	private static void immediateDropDB(ConnectionProperties props) throws Exception {
-		String[] args = {
-				"-schemaAction", "retain,drop"
-				, "-properties", new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME).getCanonicalPath()
-				, "-connectionDriverName", props.getDriver()
-				, "-connectionURL", props.getURL()
-				, "-connectionUserName", props.getLogin()
-				, "-connectionPassword", props.getPassword()
-				, "-ignoreErrors", "true"};
-		MappingTool.main(args);
+    	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
+        try {
+        	conf.setPropertiesFile(new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME));
+        	conf.setConnectionDriverName(props.getDriver());
+        	conf.setConnectionURL(props.getURL());
+        	conf.setConnectionUserName(props.getLogin());
+        	conf.setConnectionPassword(props.getPassword());
+    		//HACK to suppress all warnings
+    		getLogImpl(conf).setLevel(Log.INFO);
+    		SchemaTool st = new SchemaTool(conf, SchemaTool.ACTION_DROPDB);
+    		st.setIgnoreErrors(true);
+    		st.setOpenJPATables(true);
+    		st.setIndexes(false);
+    		st.setPrimaryKeys(false);
+    		st.run();
+        } finally {
+            conf.close();
+        }
 	}
 	
 	private File checkRestoreFile(String file) {

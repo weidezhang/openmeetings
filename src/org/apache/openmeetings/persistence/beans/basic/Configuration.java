@@ -57,6 +57,8 @@ import org.simpleframework.xml.Root;
 public class Configuration implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -6129473946508963339L;
 	public static final String DEFAUT_LANG_KEY = "default_lang_id";
+	public static final String PASS_MIN_LENGTH_KEY = "user.pass.minimum.length";
+	public static final String LOGIN_MIN_LENGTH_KEY = "user.login.minimum.length";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

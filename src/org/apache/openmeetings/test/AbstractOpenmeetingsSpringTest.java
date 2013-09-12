@@ -135,7 +135,6 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 	
 	private void makeDefaultScheme() throws Exception {
-		importInitvalues.loadAll(new InstallationConfig(), username, userpass,
-				useremail, orgname, timeZone, false);
+		importInitvalues.loadAll(new InstallationConfig(), false);
 	}
 }

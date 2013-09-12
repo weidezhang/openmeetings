@@ -18,11 +18,18 @@
  */
 package org.apache.openmeetings.installation;
 
+import java.io.Serializable;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
 
-public class InstallationConfig {
+public class InstallationConfig implements Serializable {
+	private static final long serialVersionUID = 8833208340193880562L;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
 	public static final int USER_PASSWORD_MINIMUM_LENGTH = 4;
+	public String appName = "Openmeetings";
+	public String username;
+	public String password;
+	public String email;
+	public String group;
 	public String allowFrontendRegister = "1";
 	public String createDefaultRooms = "1";
 	public String ical_timeZone = "Europe/Berlin";
@@ -42,7 +49,7 @@ public class InstallationConfig {
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";
 	public String soxPath = "";
-	public String jodPath = "./jod/lib";
+	public String jodPath = "/opt/jod/lib";
 	public String officePath = "";
 	
 	public String defaultLangId = "1";
@@ -51,7 +58,7 @@ public class InstallationConfig {
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
 	public String defaultExportFont = "TimesNewRoman";
-    public String red5SipEnable = "yes";
+    public String red5SipEnable = "no";
     public String red5SipRoomPrefix = "400";
     public String red5SipExtenContext = "rooms";
     public String replyToOrganizer = "1";
