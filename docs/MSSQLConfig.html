@@ -29,14 +29,14 @@ limitations under the License.
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
                                                     <meta name="author" content="
-			Sebastian Wagner
+			Apache OpenMeetings Documentation Team
 		">
-            <meta name="email" content="sebawagner@apache.org">
+            <meta name="email" content="solomax@apache.org">
             
            
                                     
                         
-            <title>Apache OpenMeetings - Project Team</title>
+            <title>Apache OpenMeetings - MSSQL Configuration</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -648,209 +648,100 @@ limitations under the License.
                                                                     <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="OpenMeetings Committers"><strong>OpenMeetings Committers</strong></a>
+          <a name="MSSQL Configuration"><strong>MSSQL Configuration</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Before you start"><strong>Before you start</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+					<li>You need Openmeetings 2.2 or later to use MSSQL integration</li>
+					<li>Make sure that you have set utf8 as collation for the openmeetings database
+						before you start the installation process of OpenMeetings!
+					</li>
+					<li>
+						make sure MSSQL is listening on TCP/IP connections! and username/password 
+						authentication is enabled for it
+						<br />
+						To verify if MSSQL connection is working: OpenMeetings will
+						automatically create all tables in the database and all tables
+						should have utf8 as encoding/collation!
+					</li>
+					<li>If you encounter issues, you can drop the db again and delete
+						the file $red5/webapps/openmeetings/conf/install.xml and then run
+						the web based installer again
+					</li>
+				</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="Steps todo"><strong>Steps todo</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+					<li>
+						You need to download the JDBC driver from Microsoft
+						<a href="http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774" target="_BLANK" rel="nofollow">http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774</a>
+						Unarchive appropriate file from it (sqljdbc.jar or sqljdbc4.jar) and place it into:
+						<tt>$red5/webapps/openmeetings/WEB-INF/lib/</tt>
+					</li>
+					<li>
+						Rename:
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/mssql_persistence.xml
+						<br />
+						to
+						<br />
+						$red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+					</li>
+					<li>
+						Prepare Database Settings - go to
+						openmeetings_version_no_xx/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
+						<br />
+						Alter config values in persistence.xml DB_HOST USER_NAME USER_PASS
+						with your values
+					</li>
+					<li>
+						Run red5-service and goto the web-based installer:
+						http://localhost:5080/openmeetings/install
+					</li>
+				</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr><td bgcolor="#EFEFEF">
+        <font color="#000000" face="arial,helvetica,sanserif">
+          <a name="MSSQL Sample Configuration"><strong>MSSQL Sample Configuration</strong></a>
+        </font>
+      </td></tr>
+      <tr><td>
+        <blockquote>
                                     <p>
-				The people listed below have made significant contributions to
-				Podling
-				by
-				working long and hard to make quality software for the rest
-				of the world to
-				use.
-			</p>
-                                                <p>
-				If you would like to contribute to Podling, please see the
-				<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list" target="_BLANK">https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list
-				</a>
-				to find areas where you can contribute.
-				If there is nothing in there
-				that suits your interest, but you still
-				have
-				ideas, please feel free
-				to suggest them on the mailing list.
-			</p>
-                                                <p>
-				If you would like to become a committer, please see
-				<a href="get-involved.html">Get Involved</a>
-				.
-			</p>
-                                                <table>
-                        <tr>
-                        <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Name
-    </th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Organization
-    </th>
-                                <th bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Contact/Website
-    </th>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Sebastian Wagner
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        
-						<a href="https://twitter.com/#!/dead_lock" target="_BLANK" rel="nofollow">https://twitter.com/#!/dead_lock
-						</a>
-					
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Alexei Fedotov
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Evgeny Rovinsky
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Maxim Solodovnik
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Oliver Becherer
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Eugen Schwert
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        eugen.schwert@gmail.com
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Sascha Xander
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Johnny Strom
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Timur Tleukenov
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Alvaro Bustos
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        George Kirkham
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Stephen Cottham
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Irina Arkhipets
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-                                <tr>
-                        <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Vasiliy Degtyarev
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        Independent
-    </td>
-                                <td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
-        &nbsp;
-    </td>
-            </tr>
-            </table>
-                                                <p>
-			<a href="team-list-ru.xml">Here</a> is the Russian version of this page.
-			</p>
+					There is a sample configuration for MySQL that ships with
+					every release in:
+					<br />
+					/webapps/openmeetings/WEB-INF/classes/META-INF/mssql_persistence.xml
+				</p>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
