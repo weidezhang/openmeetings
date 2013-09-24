@@ -39,7 +39,7 @@
   	<!-- invoked by clicking on the confirmation dialog after 
   		clicking on an image in the Library -->
   	<method name="addNewSyncImage" args="urlname,posx,posy,baseurl,fileName,moduleName,parentPath,room,domain">
-  		if ($debug) Debug.write("urlname: ",urlname);
+  		if ($debug) Debug.write("urlname: ",canvas.getUrl());
   		var now = new Date();
   		//This invokes a Method which is in the remoteWhiteboard.lzx
   		this.startNewObjectSyncProcess.isStarting = true;
@@ -76,7 +76,8 @@
         	//if ($debug) Debug.write("addImageToLayer ",obj,nameing,urlname,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain);
 			//if ($debug) Debug.write("addImageToLayer posx ",posx);
         	
-			var src = baseurl+'?fileName=' + encodeURIComponent(fileName) + 
+	  		if ($debug) Debug.write("addImageToLayer urlname : ", canvas.getUrl() + 'DownloadHandler');
+			var src = canvas.getUrl() + 'DownloadHandler' + '?fileName=' + encodeURIComponent(fileName) + 
 				'&moduleName=' + moduleName +
 				'&parentPath=' + encodeURIComponent(parentPath) +
 				'&room_id=' + room + 
