@@ -1359,7 +1359,7 @@ public class RoomWebService {
 				return roomManager.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, allowUserQuestions, true, true, false, "", "",
+						null, allowUserQuestions, isAudioOnly, true, false, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
