@@ -757,7 +757,7 @@ public class UserManager {
 						sendSMS, baseURL,
 						sendConfirmation, jNameTimeZone, false, "", "", false, true);
 
-				if (sendConfirmation) {
+				if (user_id > 0 && sendConfirmation) {
 					return new Long(-40);
 				}
 
