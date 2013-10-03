@@ -18,25 +18,25 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
-import java.io.IOException;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaDelta;
 import org.red5.io.ITag;
+import org.red5.io.IoConstants;
 import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
+import org.red5.server.net.rtmp.event.VideoData.FrameType;
 import org.slf4j.Logger;
 
 public class StreamAudioWriter extends BaseStreamWriter {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamAudioWriter.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioWriter.class, webAppRootKey);
 
 	private int duration = 0;
 
@@ -50,51 +50,47 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	private int lastStreamPacketTimeStamp = -1;
 
 	private long byteCount = 0;
-	
+
 	// Autowire is not possible
-	protected final FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
-	protected final FlvRecordingMetaDataDao flvRecordingMetaDataDao;
+	protected final FlvRecordingMetaDeltaDao metaDeltaDao;
+	protected final FlvRecordingMetaDataDao metaDataDao;
 
 	private boolean isInterview = false;
-	
-	public StreamAudioWriter(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview,
-			FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao,
-			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
+
+	public StreamAudioWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData,
+			boolean isInterview, FlvRecordingMetaDataDao metaDataDao, FlvRecordingMetaDeltaDao metaDeltaDao) {
 		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
-		
-		this.flvRecordingMetaDeltaDao = flvRecordingMetaDeltaDao;
-		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
-		this.isInterview  = isInterview;
-		
-		FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao.
-								getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+
+		this.metaDeltaDao = metaDeltaDao;
+		this.metaDataDao = metaDataDao;
+		this.isInterview = isInterview;
+
+		FlvRecordingMetaData flvRecordingMetaData = metaDataDao
+				.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
 		flvRecordingMetaData.setStreamReaderThreadComplete(false);
-		flvRecordingMetaDataDao.updateFlvRecordingMetaData(flvRecordingMetaData);
-		
+		metaDataDao.updateFlvRecordingMetaData(flvRecordingMetaData);
 	}
 
 	@Override
 	public void packetReceived(CachedEvent streampacket) {
 		try {
-
 			// We only care about audio at this moment
-			if (this.isInterview || streampacket.getDataType() == 8) {
-
+			if (isInterview || streampacket.getDataType() == IoConstants.TYPE_AUDIO) {
 				if (streampacket.getTimestamp() <= 0) {
 					log.warn("Negative TimeStamp");
 					return;
 				}
-
+				if (isInterview && startTimeStamp == -1 && FrameType.KEYFRAME != streampacket.getFrameType()) {
+					//skip until keyframe
+					return;
+				}
 				IoBuffer data = streampacket.getData().asReadOnlyBuffer();
-
 				if (data.limit() == 0) {
 					return;
 				}
 
-				this.byteCount += data.limit();
-				
+				byteCount += data.limit();
+
 				lastcurrentTime = streampacket.getCurrentTime();
 				int timeStamp = streampacket.getTimestamp();
 				Date virtualTime = streampacket.getCurrentTime();
@@ -104,31 +100,25 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					// Calculate the delta between the initial start and the
 					// first audio-packet data
 
-					this.initialDelta = virtualTime.getTime()
-							- this.startedSessionTimeDate.getTime();
+					initialDelta = virtualTime.getTime() - startedSessionTimeDate.getTime();
 
 					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 
-					flvRecordingMetaDelta.setDeltaTime(this.initialDelta);
-					flvRecordingMetaDelta
-							.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
+					flvRecordingMetaDelta.setDeltaTime(initialDelta);
+					flvRecordingMetaDelta.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 					flvRecordingMetaDelta.setTimeStamp(0);
 					flvRecordingMetaDelta.setDebugStatus("INIT AUDIO");
 					flvRecordingMetaDelta.setIsStartPadding(true);
 					flvRecordingMetaDelta.setIsEndPadding(false);
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
-					flvRecordingMetaDelta
-							.setReceivedAudioDataLength(this.byteCount);
-					flvRecordingMetaDelta
-							.setStartTime(this.startedSessionTimeDate);
-					flvRecordingMetaDelta.setPacketTimeStamp(streampacket
-							.getTimestamp());
+					flvRecordingMetaDelta.setReceivedAudioDataLength(byteCount);
+					flvRecordingMetaDelta.setStartTime(startedSessionTimeDate);
+					flvRecordingMetaDelta.setPacketTimeStamp(streampacket.getTimestamp());
 
-					Long deltaTimeStamp = virtualTime.getTime()
-							- this.startedSessionTimeDate.getTime();
+					Long deltaTimeStamp = virtualTime.getTime() - startedSessionTimeDate.getTime();
 
-					// this.duration = Math.max(this.duration, 0 +
-					// this.writer.getOffset());
+					// duration = Math.max(duration, 0 +
+					// writer.getOffset());
 					flvRecordingMetaDelta.setDuration(0);
 
 					Long missingTime = deltaTimeStamp - 0;
@@ -139,21 +129,18 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 
-					flvRecordingMetaDeltaDao
-							.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+					metaDeltaDao.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 
 					// That will be not bigger then long value
-					this.startTimeStamp = (streampacket.getTimestamp());
+					startTimeStamp = (streampacket.getTimestamp());
 
 					// We have to set that to bypass the initial delta
 					// lastTimeStamp = startTimeStamp;
 				}
 
-				
+				lastStreamPacketTimeStamp = streampacket.getTimestamp();
 
-				this.lastStreamPacketTimeStamp = streampacket.getTimestamp();
-
-				timeStamp -= this.startTimeStamp;
+				timeStamp -= startTimeStamp;
 
 				long deltaTime = 0;
 				if (lastTimeStamp == -1) {
@@ -163,8 +150,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					deltaTime = timeStamp - lastTimeStamp;
 				}
 
-				Long preLastTimeStamp = Long
-						.parseLong(lastTimeStamp.toString());
+				Long preLastTimeStamp = Long.parseLong(lastTimeStamp.toString());
 
 				lastTimeStamp = timeStamp;
 
@@ -173,28 +159,22 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 
 					flvRecordingMetaDelta.setDeltaTime(deltaTime);
-					flvRecordingMetaDelta
-							.setFlvRecordingMetaDataId(this.flvRecordingMetaDataId);
+					flvRecordingMetaDelta.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 					flvRecordingMetaDelta.setTimeStamp(timeStamp);
 					flvRecordingMetaDelta.setDebugStatus("RUN AUDIO");
 					flvRecordingMetaDelta.setIsStartPadding(false);
 					flvRecordingMetaDelta.setLastTimeStamp(preLastTimeStamp);
 					flvRecordingMetaDelta.setIsEndPadding(false);
 					flvRecordingMetaDelta.setDataLengthPacket(data.limit());
-					flvRecordingMetaDelta
-							.setReceivedAudioDataLength(this.byteCount);
-					flvRecordingMetaDelta
-							.setStartTime(this.startedSessionTimeDate);
-					flvRecordingMetaDelta.setPacketTimeStamp(streampacket
-							.getTimestamp());
+					flvRecordingMetaDelta.setReceivedAudioDataLength(byteCount);
+					flvRecordingMetaDelta.setStartTime(startedSessionTimeDate);
+					flvRecordingMetaDelta.setPacketTimeStamp(streampacket.getTimestamp());
 
 					Date current_date = new Date();
-					Long deltaTimeStamp = current_date.getTime()
-							- this.startedSessionTimeDate.getTime();
+					Long deltaTimeStamp = current_date.getTime() - startedSessionTimeDate.getTime();
 
-					this.duration = Math.max(this.duration, timeStamp
-							+ this.writer.getOffset());
-					flvRecordingMetaDelta.setDuration(this.duration);
+					duration = Math.max(duration, timeStamp + writer.getOffset());
+					flvRecordingMetaDelta.setDuration(duration);
 
 					Long missingTime = deltaTimeStamp - timeStamp;
 
@@ -204,8 +184,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					flvRecordingMetaDelta.setDeltaTimeStamp(deltaTimeStamp);
 					flvRecordingMetaDelta.setStartTimeStamp(startTimeStamp);
 
-					flvRecordingMetaDeltaDao
-							.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+					metaDeltaDao.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
 
 				}
 
@@ -236,12 +215,13 @@ public class StreamAudioWriter extends BaseStreamWriter {
 		try {
 			// We do not add any End Padding or count the gaps for the
 			// Screen Data, cause there is no!
-			
+
 			Date virtualTime = lastcurrentTime;
 			log.debug("virtualTime: " + virtualTime);
 			log.debug("startedSessionTimeDate: " + startedSessionTimeDate);
-			
-			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime() - startedSessionTimeDate.getTime();
+
+			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime()
+					- startedSessionTimeDate.getTime();
 
 			log.debug("lastTimeStamp :closeStream: " + lastTimeStamp);
 			log.debug("lastStreamPacketTimeStamp :closeStream: " + lastStreamPacketTimeStamp);
@@ -254,25 +234,23 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			FlvRecordingMetaDelta flvRecordingMetaDelta = new FlvRecordingMetaDelta();
 
 			flvRecordingMetaDelta.setDeltaTime(deltaTimePaddingEnd);
-			flvRecordingMetaDelta
-					.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+			flvRecordingMetaDelta.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 			flvRecordingMetaDelta.setTimeStamp(lastTimeStamp);
 			flvRecordingMetaDelta.setDebugStatus("END AUDIO");
 			flvRecordingMetaDelta.setIsStartPadding(false);
 			flvRecordingMetaDelta.setIsEndPadding(true);
 			flvRecordingMetaDelta.setDataLengthPacket(null);
-			flvRecordingMetaDelta
-					.setReceivedAudioDataLength(byteCount);
+			flvRecordingMetaDelta.setReceivedAudioDataLength(byteCount);
 			flvRecordingMetaDelta.setStartTime(startedSessionTimeDate);
 			flvRecordingMetaDelta.setCurrentTime(new Date());
 
-			flvRecordingMetaDeltaDao
-					.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
-			
-			//Write the complete Bit to the meta data, the converter task will wait for this bit!
-			FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+			metaDeltaDao.addFlvRecordingMetaDelta(flvRecordingMetaDelta);
+
+			// Write the complete Bit to the meta data, the converter task will wait for this bit!
+			FlvRecordingMetaData flvRecordingMetaData = metaDataDao
+					.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
 			flvRecordingMetaData.setStreamReaderThreadComplete(true);
-			flvRecordingMetaDataDao.updateFlvRecordingMetaData(flvRecordingMetaData);
+			metaDataDao.updateFlvRecordingMetaData(flvRecordingMetaData);
 
 		} catch (Exception err) {
 			log.error("[closeStream]", err);

@@ -39,8 +39,7 @@ import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTas
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.apache.openmeetings.data.flvrecord.listener.BaseStreamListener;
-import org.apache.openmeetings.data.flvrecord.listener.StreamAudioListener;
-import org.apache.openmeetings.data.flvrecord.listener.StreamVideoListener;
+import org.apache.openmeetings.data.flvrecord.listener.StreamListener;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
@@ -317,33 +316,21 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				return;
 			}
 			// Save the stream to disk.
-			if (isScreenData) {
-				
-				StreamVideoListener streamScreenListener = new StreamVideoListener(streamName,
-																		conn.getScope(), flvRecordingMetaDataId, isScreenData,
-																		isInterview, flvRecordingMetaDataDao);
-				
-				streamListeners.put(flvRecordingMetaDataId, streamScreenListener);
-				
-				stream.addStreamListener(streamScreenListener);
-			} else {
+			log.debug("### stream " + stream);
+			log.debug("### streamName " + streamName);
+			log.debug("### conn.getScope() " + conn.getScope());
+			log.debug("### flvRecordingMetaDataId "
+					+ flvRecordingMetaDataId);
+			log.debug("### isScreenData " + isScreenData);
+			log.debug("### isInterview " + isInterview);
 
-				log.debug("### stream " + stream);
-				log.debug("### streamName " + streamName);
-				log.debug("### conn.getScope() " + conn.getScope());
-				log.debug("### flvRecordingMetaDataId "
-						+ flvRecordingMetaDataId);
-				log.debug("### isScreenData " + isScreenData);
-				log.debug("### isInterview " + isInterview);
+			StreamListener streamListener = new StreamListener(!isScreenData, streamName,
+																conn.getScope(), flvRecordingMetaDataId, isScreenData,
+																isInterview, flvRecordingMetaDataDao, flvRecordingMetaDeltaDao);
 
-				StreamAudioListener streamAudioListener = new StreamAudioListener(streamName,
-																	conn.getScope(), flvRecordingMetaDataId, isScreenData,
-																	isInterview, flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
+			streamListeners.put(flvRecordingMetaDataId, streamListener);
 
-				streamListeners.put(flvRecordingMetaDataId, streamAudioListener);
-
-				stream.addStreamListener(streamAudioListener);
-			}
+			stream.addStreamListener(streamListener);
 			// Just for Debug Purpose
 			// stream.saveAs(streamName+"_DEBUG", false);
 		} catch (Exception e) {
