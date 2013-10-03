@@ -92,9 +92,9 @@
 	
 	<!-- compile classpath -->
 	<path id="check.classpath">
-		<fileset dir="${red5.server.lib}" includes="*.jar" />
-		<fileset dir="${red5.client.lib}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
+		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${red5.client.lib}" includes="red5_client*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />

@@ -28,12 +28,12 @@ import java.util.concurrent.TimeUnit;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.io.IStreamableFile;
-import org.red5.io.IStreamableFileFactory;
-import org.red5.io.IStreamableFileService;
 import org.red5.io.ITagWriter;
-import org.red5.io.StreamableFileFactory;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
+import org.red5.server.api.service.IStreamableFileService;
+import org.red5.server.api.stream.IStreamableFileFactory;
+import org.red5.server.stream.StreamableFileFactory;
 import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
 
@@ -91,8 +91,7 @@ public abstract class BaseStreamWriter implements Runnable {
 		file = new File(OmFileHelper.getStreamsSubDir(this.scope.getName()), this.streamName + ".flv");
 
 		IStreamableFileFactory factory = (IStreamableFileFactory) ScopeUtils
-				.getScopeService(this.scope, IStreamableFileFactory.class,
-						StreamableFileFactory.class);
+				.getScopeService(this.scope, IStreamableFileFactory.class, StreamableFileFactory.class);
 
 		if (!this.file.isFile()) {
 			// Maybe the (previously existing) file has been deleted
