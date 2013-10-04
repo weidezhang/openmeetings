@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.connector.ClientAbortException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.SessiondataDao;
@@ -300,6 +301,8 @@ public class DownloadHandler extends BaseHttpServlet {
 				log.error("ERROR DownloadHandler: not authorized FileDownload ");
 			}
 
+		} catch (ClientAbortException e) {
+			log.warn("catch ClientAbortException : ", e);			
 		} catch (ServerNotInitializedException e) {
 			return;
 		} catch (Exception er) {

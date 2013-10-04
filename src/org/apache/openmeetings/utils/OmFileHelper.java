@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
+import org.apache.catalina.connector.ClientAbortException;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
@@ -270,6 +271,8 @@ public class OmFileHelper {
 			in = new FileInputStream(f1);
 			FileHelper.copy(in, out);
 			log.debug("File copied.");
+		} catch (ClientAbortException e) {
+			log.warn("catch ClientAbortException : ", e);			
 		} catch (Exception e) {
 			log.error("[copyfile(File, File)]", e);
 		} finally {
