@@ -998,11 +998,9 @@ public class RoomManager {
 		return null;
 	}
 
-	private RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
-			long organisation_id, long rooms_id) {
+	public RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(long organisation_id, long rooms_id) {
 		try {
-			TypedQuery<RoomOrganisation> q = em.
-					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class);
+			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("organisation_id", organisation_id);
