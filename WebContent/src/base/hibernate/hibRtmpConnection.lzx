@@ -181,7 +181,9 @@
             this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
             //lz.Timer.addTimer( this.refreshDelegate, 60000 );
             lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
             
             //Load Session Data
             this.getsessiondata.callRPC();    
@@ -227,15 +229,21 @@
                 if (this.counterror<3){
                     this.counterror++;
                     //Debug.write("try ",this.counterror,"one");
-                    canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
+                    if (canvas.thishib.loaderVar.error != null) {
+                    	canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
+                    }
                     this.connect();
                 } else {
                     //Debug.write("connection failed");
-                    canvas.thishib.loaderVar.error.setAttribute('text',this.status);
+                    if (canvas.thishib.loaderVar.error != null) {
+	                    canvas.thishib.loaderVar.error.setAttribute('text',this.status);
+	                }
                     canvas.setAttribute('loadingmessage','connection failed');
                     new lz.labelerrorPopup(canvas,{errorlabelid:556});
                 }
-                canvas.thishib.loaderVar._src.setAttribute('text',src);
+                if (canvas.thishib.loaderVar._src != null) {
+                	canvas.thishib.loaderVar._src.setAttribute('text',src);
+                }
             }
         ]]>
     </handler>    
@@ -270,7 +278,9 @@
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
             canvas.publicSID = value;     
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
 			parent.getLanguages.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -288,7 +298,9 @@
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getLanguages: ",value);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
             parent.getDefaultLanguage.doCall();
         </handler>  
     </netRemoteCallHib>    
@@ -655,7 +667,9 @@
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
             parent.getTimeZones.doCall();
         </handler>  
     </netRemoteCallHib>  
@@ -664,7 +678,9 @@
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("getTimeZones: ",value);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
             parent.getGeneralOptions.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -845,7 +861,9 @@
             //Debug.write("getRoomTypes ",value);
             canvas.roomTypesInitValues = value;
             canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "getRoomTypes", [value]);
-            canvas.thishib.loaderVar.setProgress();
+            if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.setUsernameAndSession.doCall();
         </handler>  
     </netRemoteCallHib>      
@@ -858,7 +876,9 @@
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("getNavi: ",value);
-                canvas.thishib.loaderVar.close();
+	            if (canvas.thishib.loaderVar != null) {
+                	canvas.thishib.loaderVar.close();
+                }
                 //The Main-Navi will automatically init the Dashboard 
                 new lz.mainNavi(canvas._mainbgcontentNavi,{name:'navi',naviObject:value});
                 new lz.helpAndBugs(canvas._mainbgcontentNavi,{name:'help'});
@@ -1295,8 +1315,10 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);  
-                    canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
+                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);
+                    if (canvas.currentBaseConferenceRoom._screenSharingAdapter != null)
+                    	canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
+                    }
                 ]]>
             </handler>   
         </netRemoteCallHib>
