@@ -1316,7 +1316,7 @@
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
                     //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);
-                    if (canvas.currentBaseConferenceRoom._screenSharingAdapter != null)
+                    if (canvas.currentBaseConferenceRoom._screenSharingAdapter != null) {
                     	canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
                     }
                 ]]>
