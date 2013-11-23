@@ -26,19 +26,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.red5.logging.Red5LoggerFactory;
 
 public class ChatString {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ChatString.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static String htmlToText(String source) {
-		String result = source;
-		result = Strings.replaceAll(result, "<", "&lt;").toString();
-		result = Strings.replaceAll(result, ">", "&gt;").toString();
-		return result;
+		return source.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 	}
 	
 	public static LinkedList<String[]> parseChatString(String message, LinkedList<LinkedList<String>> emotFiles, boolean allowHTML) {

@@ -54,7 +54,7 @@ Port to use for the Server
 To this port the fallback is done once the default rtmport failed
 this should workaround 99% of all firewalls
  -->
-<rtmpTunnelport>8088</rtmpTunnelport>
+<rtmpTunnelport>5080</rtmpTunnelport>
 
 <rtmpsslport>443</rtmpsslport>
 <!--
