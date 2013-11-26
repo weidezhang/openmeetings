@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -752,11 +754,12 @@ public class MainService implements IPendingServiceCallback {
 			cList.add(configurationDao.get("red5sip.enable"));
 			cList.add(configurationDao.get("max_upload_size"));
 			cList.add(configurationDao.get("mute.keycode"));
+			cList.add(configurationDao.get(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY));
 			
 			return cList;
 			
 		} catch (Exception err) {
-			log.error("[getLoginOptions]",err);
+			log.error("[getGeneralOptions]",err);
 		}
 		return null;
 	}

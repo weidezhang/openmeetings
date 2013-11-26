@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
@@ -490,6 +492,9 @@ public class ImportInitvalues {
 						null,
 						"Area to be shown to the user after login. Possible values are: "
 								+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
+
+		configurationDao.addConfByKey(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
+				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
 
 		log.debug("Configuration ADDED");
 	}

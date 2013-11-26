@@ -19,6 +19,7 @@
 package org.apache.openmeetings;
 
 public class OpenmeetingsVariables {
+	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY = "redirect.url.for.external.users";
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
 }
