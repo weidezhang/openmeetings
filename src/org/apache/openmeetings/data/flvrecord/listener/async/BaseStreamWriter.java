@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -25,7 +27,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
@@ -118,7 +119,6 @@ public abstract class BaseStreamWriter implements Runnable {
 			try {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
-
 					if (dostopping) {
 						log.debug("Recording stopped but still packets to write to file!");
 					}
