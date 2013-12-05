@@ -38,7 +38,6 @@ import org.apache.openmeetings.data.flvrecord.beans.FLVRecorderObject;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
-import org.apache.openmeetings.data.flvrecord.listener.BaseStreamListener;
 import org.apache.openmeetings.data.flvrecord.listener.StreamListener;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -75,7 +74,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * But each listener has an asynchronous component that needs to be closed 
 	 * no matter how the user leaves the application!
 	 */
-	private static final Map<Long,BaseStreamListener> streamListeners = new HashMap<Long,BaseStreamListener>();
+	private static final Map<Long, StreamListener> streamListeners = new HashMap<Long, StreamListener>();
 
 	// Spring Beans
 	@Autowired
@@ -360,7 +359,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(
 					conn.getScope(), broadcastId);
 
-			BaseStreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
+			StreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
 			
 			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
 			

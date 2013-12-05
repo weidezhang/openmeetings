@@ -31,21 +31,23 @@ import org.apache.openmeetings.data.flvrecord.listener.async.StreamVideoWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
 import org.red5.server.net.rtmp.event.VideoData;
 import org.slf4j.Logger;
 
-public class StreamListener extends BaseStreamListener {
+public class StreamListener implements IStreamListener {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamListener.class, webAppRootKey);
 
 	private final BaseStreamWriter streamWriter;
 
-	public StreamListener(boolean isAudio, String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview, FlvRecordingMetaDataDao metaDataDao, FlvRecordingMetaDeltaDao metaDeltaDao) {
+	public StreamListener(boolean isAudio, String streamName, IScope scope, Long metaDataId,
+			boolean isScreenData, boolean isInterview, FlvRecordingMetaDataDao metaDataDao
+			, FlvRecordingMetaDeltaDao metaDeltaDao) {
 		streamWriter = isAudio
-				? new StreamAudioWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview,
-						metaDataDao, metaDeltaDao)
-				: new StreamVideoWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao);
+			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao
+					, metaDeltaDao)
+			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao);
 	}
 
 	public void packetReceived(IBroadcastStream broadcastStream, IStreamPacket streampacket) {
@@ -56,7 +58,7 @@ public class StreamListener extends BaseStreamListener {
 			cachedEvent.setTimestamp(streampacket.getTimestamp());
 			cachedEvent.setCurrentTime(new Date());
 			if (streampacket instanceof VideoData) {
-				cachedEvent.setFrameType(((VideoData)streampacket).getFrameType());
+				cachedEvent.setFrameType(((VideoData) streampacket).getFrameType());
 			}
 
 			streamWriter.append(cachedEvent);
@@ -65,9 +67,7 @@ public class StreamListener extends BaseStreamListener {
 		}
 	}
 
-	@Override
 	public void closeStream() {
 		streamWriter.stop();
 	}
-
 }
