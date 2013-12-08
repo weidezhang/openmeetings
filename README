@@ -8,6 +8,17 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 2.2.0
+=============
+see CHANGELOG file for detailed log
+
+Bug fix release for 2.1.1
+This release includes lots of UI and command line fixes, as well as some improvements:
+MSSQL DB support, Faster screen sharing, improved SOAP/REST call and LDAP support.
+
+_Known Issues_
+RTMPS seems to be very unstable (will try to fix it in 3.0)
+
 
 Release Notes 2.1.1
 =============

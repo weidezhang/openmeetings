@@ -2,6 +2,39 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 2.2.0 Apache Release
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-671] - Calendar is shown incompletely when book conference room
+    * [OPENMEETINGS-763] - Command line admin: --drop option is broken
+    * [OPENMEETINGS-789] - Interview room recording in 2.1.1
+    * [OPENMEETINGS-791] - Backup import is broken
+    * [OPENMEETINGS-799] - SOAP methods RoomService.{getRooms,getRoomsWithCurrentUsers} and UserService.getUsersByOrganisation are broken
+    * [OPENMEETINGS-803] - Image files are not visible for attendees on whiteboard
+    * [OPENMEETINGS-804] - updateRoomWithModerationQuestionsAudioTypeAndHideOptions sets isAudioOnly always to true
+    * [OPENMEETINGS-806] - addNewUser SOAP method doe not return valid error code
+    * [OPENMEETINGS-810] - Entering interview room doesnt have option to select camera size - it inhetits the last used size
+    * [OPENMEETINGS-811] - Recordings does not downloaded via Google Chrome browser
+    * [OPENMEETINGS-819] - Zoom is not synchronyzed on whiteboard
+    * [OPENMEETINGS-832] - SOAP doesn't work
+    * [OPENMEETINGS-835] - no proper db-type option for postgresql db (Command Line Admin)
+    * [OPENMEETINGS-837] - "Choose Device" Dialog stops working after a few Changes
+    * [OPENMEETINGS-842] - External users should not be redirected to dashboard
+    * [OPENMEETINGS-848] - RoomService.getRoomCounters REST/SOAP method is not working
+
+** Improvement
+    * [OPENMEETINGS-368] - Allow users to zoom their view of the Whiteboard by default and not being controlled by "Draw on the Whiteboard" permissions
+    * [OPENMEETINGS-556] - GSOC: Faster screen sharing
+    * [OPENMEETINGS-798] - MSSQL support should be added to OM
+    * [OPENMEETINGS-820] - No function to match user groups with rooms via SOAP
+
+** New Feature
+    * [OPENMEETINGS-491] - LDAP authentication filter
+
+** Task
+    * [OPENMEETINGS-790] - Red5 version in 2.x branch should be bumped
+
 
 Release Notes - Openmeetings - Version 2.1.1 Apache Release
 ================================================================================================================
