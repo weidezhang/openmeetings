@@ -1144,13 +1144,37 @@
 			<fileset dir="${webcontent.base.dir}/red5" includes="red5-highperf.bat" />
 		</copy>
 	</target>
+	
+	<target name="-retrieve-red5-server-resolve" description="Resolve 3rd party dependencies" depends="-install-ivy,-ant-task">
+	    <ivy:cachepath pathid="build.path">
+	    	<!--
+	        <dependency org="org.codehaus.groovy" name="groovy-all" rev="2.1.0-rc-2" conf="default"/>
+	         -->
+	        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" rev="3.3.0.201403021825-r" conf="default"/>
+	        <exclude org="org.apache.ant"/>
+	    </ivy:cachepath>
+	</target>
 
 	<!-- Check for the Red5 server libraries -->
-	<target name="-retrieve-red5-server" unless="red5.server.installed" description="Retrieves the libraries if needed" depends="-ant-task">
+	<target name="-retrieve-red5-server" unless="red5.server.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server-resolve">
+		<taskdef resource="org/eclipse/jgit/ant/ant-tasks.properties" classpathref="build.path"/>
+		<!-- Needs an empty dir to checkout to -->
+		<delete dir="${red5.server.dir}"></delete>
+		<!--
 		<svn refid="svn.settings">
-			<checkout url="https://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
+			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
 		</svn>
-		<!-- START of Tomcat 7 patch -->
+		 -->
+		<git-clone uri="https://github.com/Red5/red5-server.git" dest="${red5.server.dir}" />
+		
+		<!--
+					Requires M2_HOME to be set correctly		
+				 -->
+		<exec dir="${red5.server.dir}" executable="/bin/bash" osfamily="unix">
+		        <arg value="mvn"/>
+		        <arg line="-Dmaven.test.skip=true" />
+		</exec>
+		<!-- START of Tomcat 7 patch
 		<delete>
 			<fileset dir="${red5.server.dir}/plugins" includes="*.jar" />
 		</delete>
@@ -1158,7 +1182,8 @@
 			<param name="ivy.conf.name" value="tomcat7" />
 			<param name="ivy.lib.location" value="${red5.server.dir}/plugins" />
 		</antcall>
-		<!-- END of Tomcat 7 patch -->
+		 -->
+		<!-- END of Tomcat 7 patch
 		<xslt in="${red5.server.dir}/ivy.xml" out="${red5.server.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
 		<move file="${red5.server.dir}/ivy1.xml" tofile="${red5.server.dir}/ivy.xml" />
 		<xslt in="${red5.server.dir}/ivysettings.xml" out="${red5.server.dir}/ivysettings1.xml" style="build-red5_ivysettings.xsl" />
@@ -1169,39 +1194,62 @@
 		<delete>
 			<fileset dir="${red5.lib}/lib" includes="red5-client*.jar" />
 		</delete>
+		 -->
 	
-		<!-- START of Tomcat 7 patch -->
+		<!-- START of Tomcat 7 patch 
 		<delete file="${red5.lib}/lib/javaee-api-5.1.2.jar" />
+		-->
 		<!-- END of Tomcat 7 patch -->
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
 		<copy file="${webcontent.base.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
+		<!--
 		<copy file="${webcontent.base.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" overwrite="true" force="true" />
+		 -->
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.base.dir}/red5" includes="red5*,admin.*,network_test.sh" />
 		</copy>
-		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
+		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed)
 		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />
 		<move file="${red5.lib}/conf/red5-common1.xml" tofile="${red5.lib}/conf/red5-common.xml" />
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
+		 -->
 		<antcall target="-patch-red5-server-start-script"/> 
 		<antcall target="-patch-red5-server-highperf-script"/> 
 	</target>
 	
 	<!-- Check for the Red5 client libraries -->
 	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
+		
+		<taskdef resource="org/eclipse/jgit/ant/ant-tasks.properties" classpathref="build.path"/>
+		<!-- Needs an empty dir to checkout to -->
+		<delete dir="${red5.client.dir}"></delete>
+		
+		<git-clone uri="https://github.com/Red5/red5-client.git" dest="${red5.client.dir}" />
+				
+		<!--
+					Requires M2_HOME to be set correctly		
+				 -->
+		<exec dir="${red5.client.dir}" executable="/bin/bash" osfamily="unix">
+		        <arg value="mvn"/>
+		        <arg line="-Dmaven.test.skip=true" />
+		</exec>
+		<!--
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
+		 
 		<copy file="${red5.lib}/red5.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
 		<xslt in="${red5.client.dir}/ivy.xml" out="${red5.client.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
 		<move file="${red5.client.dir}/ivy1.xml" tofile="${red5.client.dir}/ivy.xml" />
 		<subant target="dist">
 			<fileset dir="${red5.client.dir}" includes="build.xml" />
 		</subant>
+		 -->
+		
 		<!-- START of Tomcat 7 patch -->
 		<delete file="${red5.client.lib}/lib/javaee-api-5.1.2.jar" />
 		<!-- END of Tomcat 7 patch -->
