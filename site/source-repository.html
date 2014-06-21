@@ -88,7 +88,7 @@
                 
                     
                 <ul class="nav nav-list">
-                                                                                                                                              
+                                                                                                                                                                
       <li>
   
                           <a href="#general" title="General">
@@ -101,6 +101,13 @@
                           <a href="index.html" title="Home">
           <i class="none"></i>
         Home</a>
+            </li>
+                    
+      <li>
+  
+                          <a href="demo.html" title="Demo">
+          <i class="none"></i>
+        Demo</a>
             </li>
                     
       <li>
@@ -206,7 +213,7 @@
             </li>
               </ul>
         </li>
-                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                      
       <li>
   
                           <a href="#dev" title="Development">
@@ -231,13 +238,6 @@
                           <a href="dependencies.html" title="Dependencies">
           <i class="none"></i>
         Dependencies</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependency-management.html" title="Dependency Management">
-          <i class="none"></i>
-        Dependency Management</a>
             </li>
                     
       <li>
@@ -736,17 +736,17 @@
 <h2>Web Access<a name="Web_Access"></a></h2><a name="Web_Access"></a>
 <p>The following is a link to the online source repository.</p>
 <div class="source">
-<pre><a class="externalLink" href="https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/openmeetings-server">https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/openmeetings-server</a></pre></div></div>
+<pre><a class="externalLink" href="https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp">https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp</a></pre></div></div>
 <div class="section">
 <h2>Anonymous access<a name="Anonymous_access"></a></h2><a name="Anonymous_access"></a>
 <p>The source can be checked out anonymously from SVN with this command:</p>
 <div class="source">
-<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-server openmeetings-server</pre></div></div>
+<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp openmeetings-server</pre></div></div>
 <div class="section">
 <h2>Developer access<a name="Developer_access"></a></h2><a name="Developer_access"></a>
 <p>Everyone can access the Subversion repository via HTTP, but Committers must checkout the Subversion repository via HTTPS.</p>
 <div class="source">
-<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-server openmeetings-server</pre></div>
+<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp openmeetings-server</pre></div>
 <p>To commit changes to the repository, execute the following command to commit your changes (svn will prompt you for your password)</p>
 <div class="source">
 <pre>$ svn commit --username your-username -m &quot;A message&quot;</pre></div></div>
@@ -754,7 +754,7 @@
 <h2>Access from behind a firewall<a name="Access_from_behind_a_firewall"></a></h2><a name="Access_from_behind_a_firewall"></a>
 <p>For those users who are stuck behind a corporate firewall which is blocking HTTP access to the Subversion repository, you can try to access it via the developer connection:</p>
 <div class="source">
-<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-server openmeetings-server</pre></div></div>
+<pre>$ svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp openmeetings-server</pre></div></div>
 <div class="section">
 <h2>Access through a proxy<a name="Access_through_a_proxy"></a></h2><a name="Access_through_a_proxy"></a>
 <p>The Subversion client can go through a proxy, if you configure it to do so. First, edit your &quot;servers&quot; configuration file to indicate which proxy to use. The file's location depends on your operating system. On Linux or Unix it is located in the directory &quot;~/.subversion&quot;. On Windows it is in &quot;%APPDATA%\Subversion&quot;. (Try &quot;echo %APPDATA%&quot;, note this is a hidden directory.)</p>
