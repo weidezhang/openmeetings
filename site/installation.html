@@ -930,24 +930,6 @@
 
 		
 <div class="section">
-<h2>VMWare<a name="VMWare"></a></h2>
-			
-<ul>
-				
-<li>
-					See
-					<a class="externalLink" href="http://nightly.openmeetings.de/openmeetings/builds/vmware/" rel="nofollow">http://nightly.openmeetings.de/openmeetings/builds/vmware/</a>
-				</li>
-				
-<li>
-					VMWare 1.6.1
-					<a class="externalLink" href="http://openstudio.no-ip.info/2011/01/openmeetings-1-6-rc1-vmware-appliance-using-ubuntu-server-10-04-lts/" rel="nofollow">blog-entry</a>
-				</li>
-			</ul>
-		</div>
-
-		
-<div class="section">
 <h2>Hardware Requirements<a name="Hardware_Requirements"></a></h2>
 			
 <ul>
@@ -1013,10 +995,6 @@
 				</li>
 				
 <li>
-					<a class="externalLink" href="http://aitinet.com/blog/wp-content/uploads/2009/08/TUTORIAL-PARA-INSTALACAO-DO-RED5-E-OPENMEETINGS-NO-LINUX-DEBIAN-LENNY-51.pdf" rel="nofollow">Portuguese Version for Debian Installation of 0.9 RC1</a>
-				</li>
-				
-<li>
 					<a class="externalLink" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools" rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
 				
@@ -1035,31 +1013,30 @@
 <ul>
 				
 <li>
-					Use the Debug-Application: Enter in your browser
-					<a class="externalLink" href="http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf" rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
-					for example
-					<a class="externalLink" href="http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf" rel="nofollow">http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
+					Use the Debug-Application: open <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
+					
+<div class="source">
+<pre>
+&lt;init-param&gt;
+	&lt;param-name&gt;configuration&lt;/param-name&gt;
+	&lt;param-value&gt;DEPLOYMENT&lt;/param-value&gt;
+&lt;/init-param&gt;
+					</pre></div> to be
+					
+<div class="source">
+<pre>
+&lt;init-param&gt;
+	&lt;param-name&gt;configuration&lt;/param-name&gt;
+	&lt;param-value&gt;DEVELOPMENT&lt;/param-value&gt;
+&lt;/init-param&gt;
+					</pre></div> 
+					then access your OM installation
 				</li>
 				
-<li>If you have Problems with conversion-jobs check your Red5-Log
-					output. There will be error Messages which help you. You must
+<li>If you have Problems with conversion-jobs check your openmeetings log
+					output (available at <tt>$RED5_HOME/log/openmeetings.log</tt>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
 					all conversion-Jobs correctly.
-				</li>
-				
-<li>if you have problems in converting Files check the Batch-Scripts
-					in $OPENMEETINGS_HOME/jod
-				</li>
-				
-<li>
-					If you want to use red5 as a service (without red5.bat), you need
-					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
-					some path in conf\wrapper.conf (like ..\lib\foo.jar to
-					lib\foo.jar). And finally change the register key in
-					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Red5\ImagePath
-					to point to the new wrapper.
 				</li>
 				
 <li>
