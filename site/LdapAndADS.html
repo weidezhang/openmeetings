@@ -755,32 +755,34 @@
 <div>
 				Run the commands
 				
-<blockquote>
-					<i>
-						sudo apt-get install slapd ldap-utils
-					</i>
-				</blockquote>
+<div class="source">
+<pre>
+
+sudo apt-get install slapd ldap-utils
+
+				</pre></div>
 			</div>
 			
 <div>
 				Modify file <tt>/etc/ldap/ldap.conf</tt> add highlighted attributes:
 				
-<blockquote>
-					<i>
-						#<br />
-						# LDAP Defaults<br />
-						#<br />
-						# See ldap.conf(5) for details<br />
-						# This file should be world readable but not world writable.<br />
-						<b>BASE    dc=unixmen,dc=com<br />
-						URI     ldap://192.168.1.200</b><br />
-						#SIZELIMIT      12<br />
-						#TIMELIMIT      15<br />
-						#DEREF          never<br />
-						# TLS certificates (needed for GnuTLS)<br />
-						TLS_CACERT      /etc/ssl/certs/ca-certificates.crt<br />
-					</i>
-				</blockquote>
+<div class="source">
+<pre>
+
+#
+# LDAP Defaults
+#
+# See ldap.conf(5) for details
+# This file should be world readable but not world writable.
+BASE    dc=unixmen,dc=com
+URI     ldap://192.168.1.200
+#SIZELIMIT      12
+#TIMELIMIT      15
+#DEREF          never
+# TLS certificates (needed for GnuTLS)
+TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+
+				</pre></div>
 			</div>
 			
 <div>
