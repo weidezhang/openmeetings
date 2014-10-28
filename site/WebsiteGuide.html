@@ -10,7 +10,7 @@
     <meta name="author" content="OpenMeetings Team" />
     <meta name="Date-Revision-yyyymmdd" content="20141028" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Apache OpenMeetings Project &#x2013; Release Guide</title>
+    <title>Apache OpenMeetings Project &#x2013; Website Guide</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.1.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -779,9 +779,9 @@
 					
 <ul>
 						
-<li>Sun JDK6 or 7</li>
+<li>Sun JDK7</li>
 						
-<li>Apache ANT (1.8.3 or later)</li>
+<li>Apache Maven (3.2.1 or later)</li>
 					</ul>
 				</div>
 			</div>
@@ -794,9 +794,10 @@
 					
 <p>
 						The Apache OpenMeetings HTML websites are generated from XML files. 
-						You edit the XML files, run the ANT command &quot;ant anakia&quot; that generates the HTML files 
-						and then you checkin to SVN both: XML and HTML files.
-					</p>
+						You edit the XML files, run the MAVEN command </p>
+<div class="source">
+<pre>mvn install -Dunpacked=true</pre></div> that generates the HTML files 
+						and then you copy generated HTML files into appropriate place and commit to SVN both: XML and HTML files.
 					
 <p>
 						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
