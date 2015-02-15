@@ -9,6 +9,7 @@ org.apache.openmeetings.db.dao.room
 org.apache.openmeetings.db.dao.server
 org.apache.openmeetings.db.dao.user
 org.apache.openmeetings.db.dto.basic
+org.apache.openmeetings.db.dto.calendar
 org.apache.openmeetings.db.dto.file
 org.apache.openmeetings.db.dto.record
 org.apache.openmeetings.db.dto.room

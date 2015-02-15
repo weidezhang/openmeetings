@@ -2,7 +2,6 @@ org.apache.openmeetings.core
 org.apache.openmeetings.core.batik.beans
 org.apache.openmeetings.core.converter
 org.apache.openmeetings.core.data.beans.rooms
-org.apache.openmeetings.core.data.calendar.management
 org.apache.openmeetings.core.data.conference
 org.apache.openmeetings.core.data.file
 org.apache.openmeetings.core.data.flvrecord.converter
@@ -13,7 +12,6 @@ org.apache.openmeetings.core.data.whiteboard
 org.apache.openmeetings.core.documents
 org.apache.openmeetings.core.ldap
 org.apache.openmeetings.core.mail
-org.apache.openmeetings.core.quartz.scheduler
 org.apache.openmeetings.core.remote
 org.apache.openmeetings.core.remote.red5
 org.apache.openmeetings.core.remote.util
