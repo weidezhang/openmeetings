@@ -1,182 +1,232 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.openmeetings.confluence.plugins</groupId>
+	<artifactId>openmeetingsconfluence</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.openmeetings.confluence.plugins</groupId>
-    <artifactId>openmeetingsconfluence</artifactId>
-    <version>1.0-SNAPSHOT</version>
+	<organization>
+		<name>Eugen Schwert</name>
+		<url>http://www.e-schwert.de</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <organization>
-        <name>Eugen Schwert</name>
-        <url>http://www.e-schwert.de</url>
-    </organization>
+	<name>OpenMeetings Integration Plugin</name>
+	<description>This is the OpenMeetings integration plugin for Atlassian Confluence.</description>
+	<packaging>atlassian-plugin</packaging>
 
-    <name>OpenMeetings Integration Plugin</name>
-    <description>This is the OpenMeetings integration plugin for Atlassian Confluence.</description>
-    <packaging>atlassian-plugin</packaging>
+	<properties>
+		<confluence.version>4.0</confluence.version>
+		<confluence.data.version>3.5</confluence.data.version>
+		<amps.version>6.0.6</amps.version>
+		<ao.version>0.9.6</ao.version>
+		<http.client.version>4.4.1</http.client.version>
+		<slf4j.version>1.7.12</slf4j.version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.confluence</groupId>
-            <artifactId>confluence</artifactId>
-            <version>${confluence.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.confluence.plugin</groupId>
-            <artifactId>func-test</artifactId>
-            <version>2.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.jwebunit</groupId>
-            <artifactId>jwebunit-htmlunit-plugin</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-	      <groupId>javax.servlet</groupId>
-	      <artifactId>servlet-api</artifactId>
-	      <version>2.4</version>
-	      <scope>provided</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.mockito</groupId>
-	      <artifactId>mockito-all</artifactId>
-	      <version>1.8.5</version>
-	      <scope>test</scope>
-	    </dependency>
-	    <dependency>
-	      <groupId>org.apache.httpcomponents</groupId>
-	      <artifactId>httpclient</artifactId>
-	      <version>4.1.1</version>
-	      <scope>test</scope>
-	    </dependency>
-	    <dependency>
-		  <groupId>com.atlassian.templaterenderer</groupId>
-		  <artifactId>atlassian-template-renderer-api</artifactId>
-		  <version>1.3.1</version>
-		  <scope>provided</scope>
+	<repositories>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.atlassian.sal</groupId>
-		    <artifactId>sal-api</artifactId>
-		    <version>2.0.16</version>
-		    <scope>provided</scope>
+			<groupId>com.atlassian.confluence</groupId>
+			<artifactId>confluence</artifactId>
+			<version>${confluence.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-	    <groupId>javax.ws.rs</groupId>
-	    <artifactId>jsr311-api</artifactId>
-	    <version>1.0</version>
-	    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>javax.xml.bind</groupId>
-		    <artifactId>jaxb-api</artifactId>
-		    <version>2.1</version>
-		    <scope>provided</scope>
+			<groupId>com.atlassian.templaterenderer</groupId>
+			<artifactId>atlassian-template-renderer-api</artifactId>
+			<version>1.3.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		  <groupId>com.atlassian.activeobjects</groupId>
-		  <artifactId>activeobjects-plugin</artifactId>
-		  <version>${ao.version}</version>
-		  <scope>provided</scope>
+			<groupId>com.atlassian.sal</groupId>
+			<artifactId>sal-api</artifactId>
+			<version>2.0.16</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.activeobjects</groupId>
+			<artifactId>activeobjects-plugin</artifactId>
+			<version>${ao.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Google Collections, useful utilities for manipulating collections -->
 		<dependency>
-		  <groupId>com.google.collections</groupId>
-		  <artifactId>google-collections</artifactId>
-		  <version>1.0</version>
-		  <scope>provided</scope>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		  <groupId>com.atlassian.activeobjects</groupId>
-		  <artifactId>activeobjects-test</artifactId>
-		  <version>${ao.version}</version>
-		  <scope>test</scope>
-		</dependency>		
-		<dependency>
-		  <groupId>hsqldb</groupId>
-		  <artifactId>hsqldb</artifactId>
-		  <version>1.8.0.10</version>
-		  <scope>test</scope>
-		</dependency>
-		<!--
-		<dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-simple</artifactId>
-		  <version>1.6.2</version>
-		  <scope>test</scope>
-		</dependency>	
-		-->
-		<dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-log4j12</artifactId>
-		  <version>1.6.2</version>
-		  <scope>test</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-		  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		  <version>1.2.16</version>
-		  <scope>test</scope>
+			<groupId>com.atlassian.confluence.plugin</groupId>
+			<artifactId>func-test</artifactId>
+			<version>2.6</version>
+			<scope>test</scope>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>net.sourceforge.jwebunit</groupId>
+			<artifactId>jwebunit-htmlunit-plugin</artifactId>
+			<version>3.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.22</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${http.client.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>${http.client.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.activeobjects</groupId>
+			<artifactId>activeobjects-test</artifactId>
+			<version>${ao.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-confluence-plugin</artifactId>
-                <version>3.7.2</version>
-                <extensions>true</extensions>
-                <configuration>
-                	<pluginArtifacts>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>maven-confluence-plugin</artifactId>
+				<version>${amps.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<pluginArtifacts>
 						<pluginArtifact>
 							<groupId>com.atlassian.activeobjects</groupId>
 							<artifactId>activeobjects-plugin</artifactId>
 							<version>0.9.6</version>
-							</pluginArtifact>
-							<pluginArtifact>
+						</pluginArtifact>
+						<pluginArtifact>
 							<groupId>com.atlassian.activeobjects</groupId>
 							<artifactId>activeobjects-confluence-spi</artifactId>
 							<version>0.9.6</version>
 						</pluginArtifact>
 					</pluginArtifacts>
-                    <productVersion>${confluence.version}</productVersion>
-                    <productDataVersion>${confluence.data.version}</productDataVersion>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <properties>
-        <confluence.version>4.0</confluence.version>
-        <confluence.data.version>3.5</confluence.data.version>
-        <amps.version>3.7.2</amps.version>
-        <ao.version>0.9.6</ao.version>
-    </properties>
-
+					<productVersion>${confluence.version}</productVersion>
+					<productDataVersion>${confluence.data.version}</productDataVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId></groupId>
+										<artifactId></artifactId>
+										<versionRange>[,)</versionRange>
+										<goals>
+											<goal></goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
