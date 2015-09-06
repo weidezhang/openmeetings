@@ -1223,7 +1223,8 @@
 			<arg value="assemble"/>
 			<jvmarg value="-Dmaven.test.skip=true" />
 		</artifact:mvn>
-		<untar src="${red5.server.dir}/target/red5-server-${red5.server.version}-server.tar.gz" dest="${red5.server.dir}/target" compression="gzip"/>
+		<!--untar src="${red5.server.dir}/target/red5-server-${red5.server.version}-server.tar.gz" dest="${red5.server.dir}/target" compression="gzip"/-->
+		<unzip src="${red5.server.dir}/target/red5-server-${red5.server.version}-server.zip" dest="${red5.server.dir}/target" />
 		<move todir="${red5.lib}">
 			<fileset dir="${red5.server.dir}/target/red5-server-${red5.server.version}">
 				<include name="**/*"/>
